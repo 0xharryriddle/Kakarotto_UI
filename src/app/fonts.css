@@ -1,0 +1,11 @@
+/* styles/fonts.css */
+@font-face {
+  font-family: "SaiyaFont";
+  src: url("/fonts/Saiyan-Sans.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.custom-font {
+  font-family: "SaiyaFont", sans-serif;
+}

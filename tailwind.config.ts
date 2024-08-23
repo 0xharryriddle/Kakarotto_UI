@@ -1,20 +1,127 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
+import { imageURL } from './.history/src/utils/image.util_20240808215810';
 
-const config: Config = {
+const config = {
+  darkMode: ["class"],
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+	],
+  prefix: "",
   theme: {
-    extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
       },
     },
-  },
-  plugins: [],
-};
-export default config;
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+        }
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+        full: "9999px",
+      },
+      transitionTimingFunction: {
+        'in-bounce': 'cubic-bezier(0.8, 0, 1, 1)',
+        'out-bounce': 'cubic-bezier(0, 0, 0.2, 1)',
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "wiggle": {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
+        "bounce": {
+          '0%, 100%': {
+            transform: 'translateY(-25%) in-bounce',
+          },
+          '50%': {
+            transform: 'translateY(0) out-bounce',
+          },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        'spin-slow': 'spin 3s linear infinite',
+        "wiggle": 'wiggle 1s ease-in-out infinite',
+        "bounce": 'bounce 1s infinite',
+      },
+      backgroundImage: {
+        'banner': "url(/banner.jpg)",
+        'header': "url(/header.jpg)",
+        'gokuCloud': "url(/goku_cloud.jpg)",
+        'createBackground': "url(/create_background.jpg)",
+        'panelBeige': "url(/pack-rpg-expansion/panel_beige.png)",
+        'panelBeigeLight': "url(/pack-rpg-expansion/panel_beigeLight.png)",
+        'panelBlue': "url(/pack-rpg-expansion/panel_blue.png)",
+        'panelBrown': "url(/pack-rpg-expansion/panel_brown.png)",
+        'panelInsetBeige': "url(/pack-rpg-expansion/panelInset_beige.png)",
+        'panelInsetBeigeLight': "url(/pack-rpg-expansion/panelInset_beigeLight.png)",
+        'panelInsetBlue': "url(/pack-rpg-expansion/panelInset_blue.png)",
+        'panelInsetBrown': "url(/pack-rpg-expansion/panelInset_brown.png)",
+        'buttonSquareBeige': "url(/pack-rpg-expansion/buttonSquare_beige.png)",
+        'buttonSquareBlue': "url(/pack-rpg-expansion/buttonSquare_blue.png)",
+        'buttonSquareBrown': "url(/pack-rpg-expansion/buttonSquare_brown.png)",
+        'buttonSquareGrey': "url(/pack-rpg-expansion/buttonSquare_grey.png)",
+      },
+      imageURL: {
+        
+      },
+      cursor: {
+        'default': 'url(/cursor/cursorHand_grey.png), default',
+        'pointer': 'url(/cursor/cursorGauntlet_grey.png), pointer',
+        'attack': 'url(/cursor/cursorSword_silver.png), pointer',
+      }
+    },
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config
+
+export default config
