@@ -12,9 +12,10 @@ interface CarouselCardProps {
     description: string;
     price: number;
     rarity: Rarities;
+    type: any;
 }
 
-export default function CarouselCard({ image, name, category, description, price, rarity }: CarouselCardProps) {
+export default function CarouselCard({ image, name, category, description, price, rarity, type }: CarouselCardProps) {
     return (
         <Card className="flex flex-col rounded-lg bg-gray-800">
             <CardContent className='p-0 rounded-lg'>

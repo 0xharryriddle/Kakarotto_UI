@@ -100,7 +100,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }
@@ -134,7 +134,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }
@@ -169,7 +169,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }

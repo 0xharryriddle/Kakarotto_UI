@@ -19,7 +19,7 @@ export default function MarketplaceCarousel({ data }: MarketplaceCarouselProps) 
             <CarouselContent>
                 {data.map((item, index) => {
                     return <CarouselItem key={index}>
-                        <CarouselCard image={item.data} name={item.name} type={item.type} description={item.description} price={item.price} rarity={item.rarity} />
+                        <CarouselCard image={item.data} name={item.name} type={item.type} description={item.description} price={item.price} rarity={item.rarity} category={0} />
                     </CarouselItem>
                 })}
             </CarouselContent>

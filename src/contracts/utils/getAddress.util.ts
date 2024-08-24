@@ -20,10 +20,6 @@ export const getKakarottoVaultAddress = (networkId: any) => {
     return getContractAddress(SMART_CONTRACT_ADDRESS.KakarottoVault, networkId);
 };
 
-export const getKakarottoFactoryAddress = (networkId: any) => {
-    return getContractAddress(SMART_CONTRACT_ADDRESS.KakarottoFactory, networkId);
-};
-
 export const getKakarottoItemAddress = (networkId: any) => {
     return getContractAddress(SMART_CONTRACT_ADDRESS.KakarottoItem, networkId);
 };
