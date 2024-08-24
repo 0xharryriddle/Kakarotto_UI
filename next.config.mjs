@@ -12,22 +12,22 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
+  headers: async () => {
     return [
       {
-        // matching all API routes
-        source: "https://kakarotto-backend.onrender.com/api/:path*",
+        source: "/(.*)",
         headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "GET,DELETE,PATCH,POST,PUT",
+            value: "GET,OPTIONS",
           },
           {
             key: "Access-Control-Allow-Headers",
-            value:
-              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+            value: "X-Requested-With, Content-Type, Accept",
           },
         ],
       },
