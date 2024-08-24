@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss"
-import { imageURL } from './.history/src/utils/image.util_20240808215810';
 
 const config = {
   darkMode: ["class"],
