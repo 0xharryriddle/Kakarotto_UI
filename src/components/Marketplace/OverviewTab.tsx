@@ -15,16 +15,16 @@ import {
 import { ArrowRightCircleIcon, ChartNoAxesCombinedIcon, InfoIcon, TagIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CarouselCard from '@/components/Marketplace/CarouselCard';
-import { Categories, Rarities } from '@/utils/enum.util';
+import * as Enums from '@/utils/enum.util';
 import LoadingTemplate from '@/components/LoadingTemplate';
 
 interface OverviewTabProps {
-    loading: boolean;
+    changeTabLoading: boolean;
 }
 
-export default function OverviewTab({ loading }: OverviewTabProps) {
+export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
     return (
-        <div className="flex flex-col justify-center gap-10 p-10 h-full" >
+        <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit" >
             <div className="flex flex-col justify-center gap-3">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-col justify-center gap-2 ">
@@ -33,7 +33,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                     </div>
                 </div>
                 <div className="flex flex-row items-center justify-around px-5 py-2 border-4 bg-zinc-300 text-primary rounded-lg h-32 text-xl font-bold">
-                    {loading ? <LoadingTemplate /> : <>
+                    {changeTabLoading ? <LoadingTemplate /> : <>
                         <div className="flex flex-row items-center gap-2 w-fit">
                             <TagIcon size={32} />
                             <div className="flex flex-col justify-center gap-2">
@@ -88,7 +88,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {loading ? <div className="flex items-center justify-center h-44">
+                {changeTabLoading ? <div className="flex items-center justify-center h-44">
                     <LoadingTemplate />
                 </div> : <>
                     <Carousel opts={
@@ -100,7 +100,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }
@@ -122,7 +122,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {loading ? <div className="flex items-center justify-center h-44">
+                {changeTabLoading ? <div className="flex items-center justify-center h-44">
                     <LoadingTemplate />
                 </div> : <>
                     <Carousel opts={
@@ -134,7 +134,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }
@@ -157,7 +157,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {loading ? <div className="flex items-center justify-center h-44">
+                {changeTabLoading ? <div className="flex items-center justify-center h-44">
                     <LoadingTemplate />
                 </div> : <>
                     <Carousel opts={
@@ -169,7 +169,7 @@ export default function OverviewTab({ loading }: OverviewTabProps) {
                             {
                                 Array.from({ length: 10 }).map((_, index) => {
                                     return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Rarities.Diamond} type="" />
+                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
                                     </CarouselItem>
                                 })
                             }

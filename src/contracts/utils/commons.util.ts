@@ -1,4 +1,4 @@
-import { keccak256, toHex } from "viem";
+import { keccak256, stringToHex, toHex } from "viem";
 import erc721BidABI from "../abi/ERC721Bid.abi";
 import characterABI from "../abi/KakarottoCharacter.abi";
 import erc6551AccountABI from "../abi/KakarottoERC6551Account.abi";
@@ -32,7 +32,7 @@ export const SMART_CONTRACT_ADDRESS = {
   },
   KakarottoTreasure: {
     1802203764: "0xbb859422541a58b31a15660b5e536ce156b9fc92",
-    11155111: "0x3157615193dfb2eb9cb8346074bd4a7c10b4a764",
+    11155111: "0xCF2CFF39E29Da4C0210b16be7e3E717d04ED9A7E",
   },
   KakarottoCharacter: {
     1802203764: "0xe2553f82a513ede6ec889b53a90a2ce9152c51a9",
@@ -74,7 +74,7 @@ export const CONTRACT_ACTIONS = {
     MINT_ACTION: keccak256(toHex("KAKAROTTO_ITEM_MINT")),
   },
   KakarottoTreasure: {
-    MINT_ACTION: keccak256(toHex("KAKAROTTO_MINT_TREASURE")),
-    OPEN_ACTION: keccak256(toHex("KAKAROTTO_OPEN_TREASURE"))
+    MINT_ACTION: stringToHex("KAKAROTTO_MINT_TREASURE", { size: 32 }),
+    OPEN_ACTION: stringToHex("KAKAROTTO_OPEN_TREASURE", { size: 32 })
   }
 }

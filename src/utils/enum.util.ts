@@ -8,8 +8,8 @@ enum Rarities {
 
 enum Categories {
     Character, 
-    Item,
-    Treasure
+    Treasure,
+    Item
 }
 
 export {Rarities, Categories}

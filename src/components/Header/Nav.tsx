@@ -16,7 +16,7 @@ const Nav = () => {
     return (
         <div className={` flex justify-between items-center gap-10 font-bold`
         }>
-            <Link href={"/"} className={`${saiyaFont.className} text-3xl font-bold tracking-widest`}>
+            <Link href={"/"} scroll={false} className={`${saiyaFont.className} text-3xl font-bold tracking-widest`}>
                 <span>Kakarotto</span>
             </Link>
             <div className="flex flex-row flex-wrap gap-10 justify-between items-center invisible md:visible ">

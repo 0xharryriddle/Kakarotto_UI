@@ -56,12 +56,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import Web3ButtonCustom from '../Web3ButtonCustom';
+import Web3ButtonCustom from '@/components/Web3ButtonCustom';
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { isAddress } from 'viem';
 import { Categories, Rarities } from '@/utils/enum.util';
+import { accessToPinataImage } from '@/utils/image.util';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 
 interface AssetCardProps {
     image: string;
@@ -107,6 +109,7 @@ const formSchema = z.object({
 
 export default function AssetCard({ image, name, tokenId, rarity, attributes, className, account, creator, category }: AssetCardProps) {
     const { chainId, isConnected } = useAccount();
+
     const [chooseAction, setChooseAction] = useState<{
         rootDialog: boolean,
         openDialog: boolean,
@@ -116,9 +119,11 @@ export default function AssetCard({ image, name, tokenId, rarity, attributes, cl
         openDialog: false,
         transferDialog: false,
     });
+
     const [loading, setLoading] = useState({
         transferLoading: false,
         openLoading: false,
+        imageLoading: false,
     })
 
     const { data: transferData, writeContract: transferWriteContract } = useWriteContract();
@@ -138,62 +143,80 @@ export default function AssetCard({ image, name, tokenId, rarity, attributes, cl
 
     return (
         <Dialog>
-            <DialogTrigger><HoverCard openDelay={100} closeDelay={0}>
-                <HoverCardTrigger>
-                    <Card className={`${className} border-primary border-4 w-64 h-auto lg:min-h-[410px] text-secondary bg-slate-700`}>
-                        <CardContent className='flex flex-col items-center justify-center gap-2 font-bold w-full'>
-                            <div className="flex flex-row ${rarityMap[rarity].color} bg-opacity-70 w-full">
-                                <div className={`flex flex-row items-center justify-center w-[220px] h-[220px] relative`}>
-                                    <Image src={"/item_frame.png"} alt="Item frame" width={220} height={220} className='rounded-md w-full h-full absolute' />
-                                    <Image src={image} alt="Asset Image" className='rounded-lg' width={150} height={150} />
+            <DialogTrigger className='w-fit'>
+                <HoverCard openDelay={100} closeDelay={0}>
+                    <HoverCardTrigger>
+                        <Card className={`border-primary border-4 w-64 h-auto lg:min-h-[410px] text-secondary bg-slate-700 ${className}`}>
+                            <CardContent className='flex flex-col items-center justify-center gap-2 font-bold w-full'>
+                                <div className="flex flex-row ${rarityMap[rarity].color} bg-opacity-70 w-full">
+                                    <div className={`flex flex-row items-center justify-center w-[220px] h-[220px] relative`}>
+                                        <Image src={"/item_frame.png"} alt="Item frame" width={220} height={220} className='rounded-md w-full h-full absolute' />
+                                        {
+                                            loading.imageLoading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <Image
+                                                onLoad={() => setLoading(prevData => ({
+                                                    ...prevData,
+                                                    imageLoading: true,
+                                                }))}
+                                                onLoadingComplete={() => setLoading(prevData => ({
+                                                    ...prevData,
+                                                    imageLoading: false,
+                                                }))}
+                                                src={image ? accessToPinataImage(image) : '/secret_treasure.gif'}
+                                                alt="Asset Image"
+                                                className='rounded-lg'
+                                                width={150}
+                                                height={150}
+                                                objectFit='fit'
+                                                loading='lazy'
+                                            />
+                                        }
+                                    </div>
                                 </div>
-                            </div>
+                                <span className="text-xl">{name}</span>
+                                <div className="flex flex-row items-center justify-center gap-5">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className='text-lg'>Token ID</span>
+                                        <span className='text-base'>{`#${tokenId}`}</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className='text-lg'>Rarity</span>
+                                        <span className='text-base'>{rarity.toLocaleUpperCase()}</span>
+                                    </div>
+                                </div>
+                                {
+                                    account && creator && chainId && <div className="flex flex-row items-center justify-center gap-2">
+                                        <a href={`${getExplorer(chainId)}/address/${account}`} target='blank'>
+                                            <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
+                                                <span>Account</span>
+                                                <CircleArrowOutUpRightIcon size={16} />
+                                            </Button>
+                                        </a>
+                                        <a href={`${getExplorer(chainId)}/address/${creator}`} target='blank'>
+                                            <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
+                                                <span>Creator</span>
+                                                <CircleArrowOutUpRightIcon size={16} />
+                                            </Button>
+                                        </a>
 
-                            <span className="text-2xl">{name}</span>
-                            <div className="flex flex-row items-center justify-center gap-5">
-                                <div className="flex flex-col items-center justify-center">
-                                    <span className='text-xl'>Token ID</span>
-                                    <span className='text-lg'>{`#${tokenId}`}</span>
-                                </div>
-                                <div className="flex flex-col items-center justify-center">
-                                    <span className='text-xl'>Rarity</span>
-                                    <span className='text-lg'>{rarityMap[rarity].name}</span>
-                                </div>
-                            </div>
-                            {
-                                account && creator && chainId && <div className="flex flex-row items-center justify-center gap-2">
-                                    <a href={`${getExplorer(chainId)}/address/${account}`} target='blank'>
-                                        <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
-                                            <span>Account</span>
-                                            <CircleArrowOutUpRightIcon size={16} />
-                                        </Button>
-                                    </a>
-                                    <a href={`${getExplorer(chainId)}/address/${creator}`} target='blank'>
-                                        <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
-                                            <span>Creator</span>
-                                            <CircleArrowOutUpRightIcon size={16} />
-                                        </Button>
-                                    </a>
-
-                                </div>
-                            }
-                        </CardContent>
-                    </ Card>
-                </HoverCardTrigger>
-                <HoverCardContent side='right'>
-                    <div className='flex flex-col gap-2'>
-                        <span className='text-center font-bold text-xl'>Attributes</span>
+                                    </div>
+                                }
+                            </CardContent>
+                        </ Card>
+                    </HoverCardTrigger>
+                    <HoverCardContent side='right'>
                         <div className='flex flex-col gap-2'>
-                            {attributes?.map((data, index) => {
-                                return <div key={index} className='flex flex-row gap-2'>
-                                    <span className='font-bold'>{capitalizeFirstLetter(data.key)}:</span>
-                                    <span>{data.value ? data.value : 0}</span>
-                                </div>
-                            })}
+                            <span className='text-center font-bold text-xl'>Attributes</span>
+                            <div className='flex flex-col gap-2'>
+                                {/* {attributes?.map((data, index) => {
+                                    return <div key={index} className='flex flex-row gap-2 justify-around items-center font-bold'>
+                                        <span className='text-xl'>{capitalizeFirstLetter(data.trait_type)}:</span>
+                                        <span>{data.value ? data.value : 0}</span>
+                                    </div>
+                                })} */}
+                            </div>
                         </div>
-                    </div>
-                </HoverCardContent >
-            </HoverCard ></DialogTrigger>
+                    </HoverCardContent >
+                </HoverCard ></DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Choose your action</DialogTitle>
@@ -322,7 +345,7 @@ export default function AssetCard({ image, name, tokenId, rarity, attributes, cl
                                 </div>
                             </DialogContent>
                         </Dialog>
-                        <Link href={`/treasure`}>
+                        <Link href={`/treasure`} scroll={false}>
                             <Button className="cursor-pointer">
                                 Buy more
                             </Button>

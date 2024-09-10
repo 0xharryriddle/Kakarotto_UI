@@ -8,8 +8,8 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useAccount } from 'wagmi';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@chakra-ui/react'

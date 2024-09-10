@@ -1,4 +1,6 @@
-const tokenABI = [
+import { Abi } from "viem";
+
+const tokenABI: Abi = [
     { type: "constructor", inputs: [], stateMutability: "nonpayable" },
     {
       type: "function",

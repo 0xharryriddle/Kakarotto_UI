@@ -1,6 +1,6 @@
 "use client";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { saiyaFont, inter } from "@/styles/fonts"
 

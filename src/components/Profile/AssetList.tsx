@@ -9,13 +9,12 @@ interface AssetListProps {
 
 export default function AssetList({ data }: AssetListProps) {
     const { isConnected } = useAccount();
-    const attributes: any[] = [];
 
     return (
-        <div className={`${data.length ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : ""} gap-4 w-full h-full`}>
+        <div className={`${data.length ? "grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" : ""} gap-4 w-full h-fit`}>
             {
                 data.length ? data.map((item, index) => {
-                    return <AssetCard image={item.image} name={item.name} tokenId={item.tokenId} rarity={item.rarity} attributes={item.attributes} account={item.account} creator={item.creator} category={item.category} className="hover:scale-95 transition delay-150 duration-200 ease-in-out" key={index} />
+                    return <AssetCard image={item.image} name={item.name} tokenId={item.tokenId} rarity={item.rarity} attributes={item.attributes} account={item.account} creator={item.creator} category={item.category} className="hover:scale-95 transition delay-150 duration-200 ease-in-out bg-primary/60" key={index} />
                 }) :
                     <div className="w-full h-full flex flex-col items-center justify-center gap-5">
                         <p className="text-lg font-bold">

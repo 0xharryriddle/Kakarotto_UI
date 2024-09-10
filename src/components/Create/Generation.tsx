@@ -16,8 +16,17 @@ interface GenerationProps {
     hash?: string;
     image?: any;
     account?: string;
-    ipfsHash?: string;
-    attributes?: any;
+    tokenURI?: string;
+    traits?: {
+        rarity?: string;
+        attributes?: {
+            power: string;
+            defend: string;
+            agility: string;
+            intelligence: string;
+            luck: string;
+        };
+    };
     imageLoading: boolean;
     isMinting: boolean;
 }
@@ -29,8 +38,8 @@ export default function Generation(
         hash,
         image,
         account,
-        ipfsHash,
-        attributes,
+        tokenURI,
+        traits,
         imageLoading,
         isMinting
     }: GenerationProps
@@ -50,10 +59,12 @@ export default function Generation(
                     <div className='flex flex-col gap-2'>
                         <span className='text-center font-bold text-xl'>Attributes</span>
                         <div className='flex flex-col gap-2'>
-                            {attributesTemplate.map((data, index) => {
+                            {attributesTemplate.map((data: any, index) => {
                                 return <div key={index} className='flex flex-row gap-2'>
                                     <span className='font-bold'>{capitalizeFirstLetter(data)}:</span>
-                                    <span>{attributes[data as any] ? attributes[data as any] : 0}</span>
+                                    <span>{
+                                        // (data == 'rarity') ? traits?.rarity : traits?.attributes ? traits.attributes[data] : "0"
+                                    }</span>
                                 </div>
                             })}
                         </div>

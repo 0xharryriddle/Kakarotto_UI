@@ -2,18 +2,18 @@
 import React, { useEffect } from 'react'
 import { Gamepad2Icon } from 'lucide-react'
 import { useAccount, useReadContract, useWatchContractEvent, useWriteContract, useSignMessage } from 'wagmi';
-import { decodeEventLog, encodePacked, keccak256, toBytes, DecodeEventLogReturnType, toHex } from 'viem';
+import { decodeEventLog, encodePacked, keccak256, toBytes, DecodeEventLogReturnType, toHex, stringToBytes, isAddressEqual, getAddress } from 'viem';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Faucet from '../Header/Faucet';
+import Faucet from '@/components/Header/Faucet';
 import ConnectButtonCustomOnCreate from './ConnectButtonCustomOnCreate';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { useToast } from '@chakra-ui/react'
 import { generateImage } from '@/services/actions/getCharacterImage';
 import { createNFTAPI } from '@/services/actions/createNFTCharacter';
 import createNFTCharacterMeta from '@/services/actions/createNFTCharacterMeta';
 import getABI from '@/contracts/utils/getAbi.util';
 import { getKakarottoCharacterAddress } from '@/contracts/utils/getAddress.util';
-import ConnectButtonCustom from '../Login/ConnectButtonCustom';
+import ConnectButtonCustom from '@/components/Login/ConnectButtonCustom';
 import { getCharacterAction } from '@/contracts/utils/getContractAction.util';
 
 interface InformationProps {
@@ -24,11 +24,20 @@ interface InformationProps {
     setImage: (image: string | undefined) => void;
     setHash: (hash: string | undefined) => void;
     setAccount: (account: string | undefined) => void;
-    setIpfsHash: (ipfsHash: string | undefined) => void;
-    setAttributes: (attributes: any) => void;
+    setTokenURI: (tokenURI: string | undefined) => void;
+    setTraits: (traits: any) => void;
     isMinting: boolean;
     setIsMinting: (minting: boolean) => void;
 }
+
+type KakarottoCharacterCreatedArgs = {
+    tokenId: BigInt,
+    tokenUri: string,
+    owner: string,
+    account: string
+}
+
+const pinataURL = process.env.NEXT_PUBLIC_IPFS_URL;
 
 export default function Information(
     {
@@ -39,8 +48,8 @@ export default function Information(
         setImage,
         setHash,
         setAccount,
-        setIpfsHash,
-        setAttributes,
+        setTokenURI,
+        setTraits,
         isMinting,
         setIsMinting
     }: InformationProps
@@ -106,15 +115,25 @@ export default function Information(
         abi: getABI("KakarottoCharacter"),
         eventName: "KakarottoCharacterCreated",
         onLogs(logs) {
-            const eventDecoded = decodeEventLog({
+            const eventDecoded: DecodeEventLogReturnType = decodeEventLog({
                 abi: getABI("KakarottoCharacter"),
                 data: logs[0].data,
                 topics: logs[0].topics,
+                strict: true
             });
-            console.log(eventDecoded);
-            const args = (eventDecoded as DecodeEventLogReturnType).args;
-            if (args?.at(2) == address) {
+            console.log(eventDecoded.args as object);
+            const args = eventDecoded.args as unknown as KakarottoCharacterCreatedArgs;
+            console.log(args);
+            // console.log(args ? args['owner'] : {})
+            if (isAddressEqual(getAddress(args ? args.owner : "", chainId), getAddress(address as string, chainId))) {
                 setIsMinting(false);
+                toast({
+                    title: "Mint NFT Successfully!",
+                    status: "success",
+                    duration: 2500,
+                    isClosable: true,
+                    position: "bottom-right"
+                });
                 // Call the API to save to the database
                 console.log("NFT minted successfully");
             }
@@ -220,23 +239,17 @@ export default function Information(
                         });
                         return;
                     }
-                    // Generate Metadata
-                    const metadata = await createNFTCharacterMeta({
-                        fileName: address ? address : "0x",
-                        name: "Kakarotto Character",
-                        description: "Kakarotto is comming to the world",
-                        image: image
-                    })
+                    console.log(image);
+                    const tokenURI = "Character" + "_" + keccak256(stringToBytes(address as string)) + "_" + Date.now();
                     // Sign Create NFT
-                    const signature = await signMessageCreateNFT({ tokenURI: `${metadata.data.ipfsHash}`, creator: address ? address : "0x" });
+                    const signature = await signMessageCreateNFT({ tokenURI: `${tokenURI}`, creator: address ? address : "0x" });
                     // Call the API to create the NFT
                     const relay = await createNFTAPI({
                         creator: address ? address : "0x",
                         createNFTSignature: signature,
-                        rarityNumber: metadata.data.attributesData.rarityNumber,
-                        attributes: metadata.data.attributesData.attributes,
-                        ipfsHash: metadata.data.ipfsHash,
-                        networkId: chainId ? chainId : 0
+                        tokenURI,
+                        networkId: chainId ? chainId : 0,
+                        image: `${pinataURL}/${image}`,
                     });
                     if (relay == undefined || relay.error) {
                         // Error toast
@@ -251,14 +264,12 @@ export default function Information(
                         resetStates();
                         return;
                     }
-                    setIpfsHash(relay.data.ipfsHash);
-                    setAccount(relay.data.account);
-                    setHash(relay.data.txHash);
-                    const attributes = {
-                        ...relay.data.attributes,
-                        rarity: relay.data.rarityNumber
-                    };
-                    setAttributes(attributes);
+                    const traits = relay.data.traits;
+                    const createCharacterResponse = relay.data.response;
+                    setTokenURI(tokenURI);
+                    setAccount(createCharacterResponse.account);
+                    setHash(createCharacterResponse.txHash);
+                    setTraits(traits);
                     setIsMinting(false);
                 }}
                 >Mint</Button>

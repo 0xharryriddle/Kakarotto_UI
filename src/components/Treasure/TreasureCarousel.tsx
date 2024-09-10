@@ -73,13 +73,7 @@ export default function TreasureCarousel({ listRarityTreasures }: TreasureCarous
                 <CarouselContent>
                     {listTreasures.map((data, index) => (
                         <CarouselItem key={index} className="md:basis-1/4 lg:basis-56">
-                            <div className="p-1">
-                                <Card className={`${data.color} border-8`}>
-                                    <CardContent className="flex aspect-square items-center justify-center p-6">
-                                        <Image src={"/TreasureChest.gif"} alt={`Treasure #${index}`} width={500} height={500} />
-                                    </CardContent>
-                                </Card>
-                            </div>
+                            <Image src={"/secret_treasure.gif"} alt={`Treasure #${index}`} width={400} height={400} />
                         </CarouselItem>
                     ))}
                 </CarouselContent>

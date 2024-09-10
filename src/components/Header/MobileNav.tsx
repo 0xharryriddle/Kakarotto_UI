@@ -8,7 +8,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { AlignJustifyIcon } from 'lucide-react'
-import ConnectButtonCustom from '../Login/ConnectButtonCustom'
+import ConnectButtonCustom from '@/components/Login/ConnectButtonCustom'
 
 
 const MobileNav = ({ triggerStyle }: { triggerStyle: any }) => {

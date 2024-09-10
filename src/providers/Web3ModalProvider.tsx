@@ -8,9 +8,9 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 
-export const Web3ModalProvider = (
+export default function Web3ModalProvider (
     { children }: { children: React.ReactNode }
-) => {
+) {
     const queryClient = new QueryClient();
 
     return (

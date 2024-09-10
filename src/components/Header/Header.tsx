@@ -1,7 +1,7 @@
 "use client";
 import React from 'react'
 import Nav from './Nav'
-import NavItems from '../Login/NavItems';
+import NavItems from '@/components/Login/NavItems';
 
 const Header = () => {
     return (

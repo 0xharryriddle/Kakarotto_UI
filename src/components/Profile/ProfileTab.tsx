@@ -1,5 +1,9 @@
 'use client';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query'
+import { gql, request } from 'graphql-request'
+import { getAddress, isAddressEqual } from 'viem';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import AssetList from './AssetList';
 import {
@@ -9,7 +13,7 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import {
     Slider,
@@ -20,10 +24,12 @@ import {
 } from '@chakra-ui/react'
 import { Tooltip } from '@chakra-ui/react'
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { capitalizeFirstLetter } from '../../contracts/utils/string.util';
+import { capitalizeFirstLetter } from '@/contracts/utils/string.util';
 import { Checkbox } from "@/components/ui/checkbox"
-import { Categories } from '@/utils/enum.util';
+import * as mappings from '@/utils/mapping.util';
+import { Account, Character, NFT, Treasure, TreasureAccount, Item } from '@/interface/graphql.interface';
+import { useAccount } from 'wagmi';
+import { fetchCharacterData, fetchItemData, fetchTreasureData } from '@/contracts/utils/fetchCardData.utill';
 
 const defaultRarityState = {
     bronze: false,
@@ -41,12 +47,21 @@ const defaultCharacterAttributeState = {
     luck: 0
 };
 
-const defaultItemAttributeState = {
-
-};
+const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
 
 
-export default function ProfileTab() {
+interface GraphQLData {
+    characters: Character[],
+    treasureAccounts: TreasureAccount[],
+    items: Item[]
+}
+
+interface ProfileTabProps {
+}
+
+
+export default function ProfileTab({ }: ProfileTabProps) {
+    const { address, chainId, isConnected } = useAccount();
     const [loading, setLoading] = useState(false);
     const [currentTab, setCurrentTab] = useState('all');
     const [filter, setFilter] = useState({
@@ -76,6 +91,254 @@ export default function ProfileTab() {
     )
     const [searchInput, setSearchInput] = useState('');
 
+    const query = gql` {
+        characters (where: {nft_: {searchOwner: "${address ? getAddress(address as string).toLocaleLowerCase().toLocaleLowerCase() : "0x"}"}}){
+          characterAccount {
+            id
+            contractAddress
+          }
+          nft {
+            id
+            creator
+            owner {
+              address
+            }
+            tokenId
+            tokenURI
+            contractAddress
+            category
+            amount
+            rarity
+            orders {
+              id
+              category
+              tokenId
+              transactionHash
+              owner
+              buyer
+              price
+              status
+              createdAt
+              expiresAt
+              updatedAt
+            }
+            bids {
+              id
+              category
+              tokenId
+              bidder
+              seller
+              price
+              status
+              expiresAt
+              createdAt
+              updatedAt
+            }
+            activeOrder {
+              id
+              category
+              tokenId
+              transactionHash
+              owner
+              buyer
+              price
+              status
+              createdAt
+              expiresAt
+              updatedAt
+            }
+            searchOwner
+          }
+          attributes {
+            attribute
+            value
+          }
+          level
+          exp
+        }
+        treasureAccounts (where: {account: "${address ? getAddress(address as string).toLocaleLowerCase().toLocaleLowerCase() : "0x"}"}){
+          treasure {
+            tokenId
+            tokenURI
+            nft {
+              id
+              tokenId
+              tokenURI
+              contractAddress
+              category
+              amount
+              rarity
+              orders {
+                id
+                category
+                tokenId
+                transactionHash
+                owner
+                buyer
+                price
+                status
+                createdAt
+                expiresAt
+                updatedAt
+              }
+              bids {
+                id
+                category
+                tokenId
+                bidder
+                seller
+                price
+                status
+                expiresAt
+                createdAt
+                updatedAt
+              }
+              activeOrder {
+                id
+                category
+                tokenId
+                transactionHash
+                owner
+                buyer
+                price
+                status
+                createdAt
+                expiresAt
+                updatedAt
+              }
+            }
+          }
+            balance
+        }
+        items (where: {nft_: {searchOwner: "${address ? getAddress(address as string).toLocaleLowerCase().toLocaleLowerCase() : "0x"}"}}){
+          nft {
+            id
+            creator
+            owner {
+              address
+            }
+            tokenId
+            tokenURI
+            contractAddress
+            category
+            amount
+            rarity
+            orders {
+              id
+              category
+              tokenId
+              transactionHash
+              owner
+              buyer
+              price
+              status
+              createdAt
+              expiresAt
+              updatedAt
+            }
+            bids {
+              id
+              category
+              tokenId
+              bidder
+              seller
+              price
+              status
+              expiresAt
+              createdAt
+              updatedAt
+            }
+            activeOrder {
+              id
+              category
+              tokenId
+              transactionHash
+              owner
+              buyer
+              price
+              status
+              createdAt
+              expiresAt
+              updatedAt
+            }
+          }
+          attributes {
+            attribute
+            value
+            isIncrease
+            isPercentage
+          } 
+        }
+      }`
+
+    const [nftData, setNftData] = useState<{
+        all: any[],
+        treasure: any[],
+        character: any[],
+        item: any[]
+    }>({
+        all: [],
+        treasure: [],
+        character: [],
+        item: []
+    });
+
+    const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
+        queryKey: ['data', address],
+        async queryFn() {
+            if (address) {
+                return await request(subgraph_url, query);
+            }
+            return {
+                characters: [],
+                treasureAccounts: [],
+                items: []
+            };
+        },
+        enabled: !!address
+    });
+
+    useEffect(() => {
+        if (graphqlData && address) {
+            setNftData({
+                all: [],
+                treasure: [],
+                character: [],
+                item: []
+            });
+            const { characters,
+                treasureAccounts,
+                items } = graphqlData;
+            fetchNFTData({ characters, treasureAccounts, items });
+            setLoading(false);
+        }
+    }, [graphqlData, address]);
+
+    const fetchNFTData = async (
+        {
+            treasureAccounts,
+            characters,
+            items
+        }: {
+            treasureAccounts: TreasureAccount[],
+            characters: Character[],
+            items: Item[]
+        }) => {
+        try {
+            const treasureResult = await fetchTreasureData(treasureAccounts);
+            const characterResult = await fetchCharacterData(characters);
+            const itemResult = await fetchItemData(items);
+            setNftData({
+                character: characterResult,
+                item: itemResult,
+                treasure: treasureResult,
+                all: [].concat(...characterResult).concat(...itemResult).concat(...treasureResult),
+            });
+        } catch (error) {
+            console.error("Failed to fetch metadata:", error);
+        }
+    }
+
     const getShowToolTip = (attribute: string) => {
         return (showToolTip as { [key: string]: boolean })[attribute];
     }
@@ -87,282 +350,6 @@ export default function ProfileTab() {
     const getAttributeFilter = (attribute: any) => {
         return (filter.attributes as { [key: string]: number })[attribute];
     }
-
-    // Fake data
-    const treasureFakeData: any[] = [
-        {
-            image: '/treasure.jpg',
-            name: 'Treasure Name',
-            tokenId: '1234',
-            rarity: '0',
-            category: Categories.Treasure,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: '/treasure.jpg',
-            name: 'Treasure Name',
-            tokenId: '1234',
-            rarity: '2',
-            category: Categories.Treasure,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: '/treasure.jpg',
-            name: 'Treasure Name',
-            tokenId: '1234',
-            rarity: '3',
-            category: Categories.Treasure,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: '/treasure.jpg',
-            name: 'Treasure Name',
-            tokenId: '1234',
-            rarity: '4',
-            category: Categories.Treasure,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        }, {
-            image: '/treasure.jpg',
-            name: 'Treasure Name',
-            tokenId: '1234',
-            rarity: '1',
-            category: Categories.Treasure,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        }
-    ];
-    const characterFakeData: any[] = [
-        {
-            image: '/character.jpg',
-            name: 'Character Name',
-            tokenId: '1234',
-            rarity: '0',
-            category: Categories.Character,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-            account: '0x1234',
-            creator: '0x1234'
-        },
-        {
-            image: '/character.jpg',
-            name: 'Character Name',
-            tokenId: '1234',
-            rarity: '1',
-            category: Categories.Character,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-            account: '0x1234',
-            creator: '0x1234'
-        },
-        {
-            image: '/character.jpg',
-            name: 'Character Name',
-            tokenId: '1234',
-            rarity: '2',
-            category: Categories.Character,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-            account: '0x1234',
-            creator: '0x1234'
-        },
-        {
-            image: '/character.jpg',
-            name: 'Character Name',
-            tokenId: '1234',
-            rarity: '3',
-            category: Categories.Character,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-            account: '0x1234',
-            creator: '0x1234'
-        },
-        {
-            image: '/character.jpg',
-            name: 'Character Name',
-            tokenId: '1234',
-            rarity: '4',
-            category: Categories.Character,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-            account: '0x1234',
-            creator: '0x1234'
-        },
-    ];
-    const itemFakeData: any[] = [
-        {
-            image: "/equipment/weapon/EquipmentIconsBG71.png",
-            name: 'Item Name',
-            tokenId: '1234',
-            rarity: '2',
-            category: Categories.Item,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: "/equipment/weapon/EquipmentIconsBG71.png",
-            name: 'Item Name',
-            tokenId: '1234',
-            rarity: '0',
-            category: Categories.Item,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: "/equipment/weapon/EquipmentIconsBG71.png",
-            name: 'Item Name',
-            tokenId: '1234',
-            rarity: '1',
-            category: Categories.Item,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: "/equipment/weapon/EquipmentIconsBG71.png",
-            name: 'Item Name',
-            tokenId: '1234',
-            rarity: '4',
-            category: Categories.Item,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-        {
-            image: "/equipment/weapon/EquipmentIconsBG71.png",
-            name: 'Item Name',
-            tokenId: '1234',
-            rarity: '3',
-            category: Categories.Item,
-            attributes: [
-                {
-                    key: 'Attribute 1',
-                    value: 'Value 1'
-                },
-                {
-                    key: 'Attribute 2',
-                    value: 'Value 2'
-                }
-            ],
-        },
-    ];
-    const allFakeData: any[] = [...treasureFakeData, ...characterFakeData, ...itemFakeData];
-
-    const raritiesTemplate = ["bronze", "silver", "gold", "platinum", "diamond"];
-    const attributesTemplate = ["power", "defend", "agility", "intelligence", "luck"];
 
     const resetState = () => {
         // setFilter({
@@ -404,9 +391,9 @@ export default function ProfileTab() {
                     onChange={(e) => setSearchInput(e.target.value)}
                 />
             </div>
-            <div className="flex flex-row justify-center gap-5 mt-5 w-full min-h-96 text-secondary">
+            <div className="flex flex-row gap-5 mt-5 w-full min-h-96 text-secondary h-full">
                 <div className="flex flex-col items-center justify-center w-1/4 h-fit gap-5">
-                    <Accordion type="multiple" className='h-full w-full px-5 border-2 rounded-lg text-lg' >
+                    <Accordion type="multiple" className='h-full w-full px-5 border-2 rounded-lg text-2xl text-primary bg-secondary font-bold' >
                         <AccordionItem value="rarity">
                             <AccordionTrigger className='font-bold text-lg'>Rarity</AccordionTrigger>
                             <AccordionContent >
@@ -421,7 +408,7 @@ export default function ProfileTab() {
                                         <Label htmlFor="none">None</Label>
                                     </div>
                                     {
-                                        raritiesTemplate.map((rarity, index) => {
+                                        mappings.rarities.map((rarity, index) => {
                                             return <div className="flex items-center space-x-2 px-5" key={index}>
                                                 <Checkbox onClick={() => setFilter(
                                                     {
@@ -446,7 +433,7 @@ export default function ProfileTab() {
                                     <Checkbox className='cursor-pointer' />
                                     <Label htmlFor="none">None</Label>
                                 </div>
-                                {attributesTemplate.map((attribute, index) => {
+                                {mappings.attributes.map((attribute, index) => {
                                     return (<div className="flex flex-col justify-center gap-5 px-5" key={index}>
                                         <div className="flex items-center space-x-2">
                                             <Checkbox className='cursor-pointer' />
@@ -511,17 +498,26 @@ export default function ProfileTab() {
                     </Accordion>
                     <Button className='w-40' onClick={handleApplyFilter} disabled={JSON.stringify(filter) == JSON.stringify({ rarity: defaultRarityState, attributes: defaultCharacterAttributeState })}>Apply</Button>
                 </div>
-                <TabsContent value="all" className='w-3/4 flex items-center justify-center'>
-                    {loading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={allFakeData} />}
+                <TabsContent value="all" className='w-3/4 h-full'>
+                    {loading || graphqlIsLoading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={nftData.all} />}
                 </TabsContent>
-                <TabsContent value="character" className='w-3/4 flex items-center justify-center'>
-                    {loading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={characterFakeData} />}
+                <TabsContent value="character" className='w-3/4 flex text-center justify-center'>
+                    {loading || graphqlIsLoading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={
+                        // characterFakeData
+                        nftData.character
+                    } />}
                 </TabsContent>
-                <TabsContent value="item" className='w-3/4 flex items-center justify-center'>
-                    {loading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={itemFakeData} />}
+                <TabsContent value="item" className='w-3/4'>
+                    {loading || graphqlIsLoading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={
+                        // itemFakeData
+                        nftData.item
+                    } />}
                 </TabsContent>
-                <TabsContent value="treasure" className='w-3/4 flex items-center justify-center'>
-                    {loading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={treasureFakeData} />}
+                <TabsContent value="treasure" className='w-3/4'>
+                    {loading || graphqlIsLoading ? <div><CircularProgress isIndeterminate color='green.300' /></div> : <AssetList data={
+                        // treasureFakeData
+                        nftData.treasure
+                    } />}
                 </TabsContent>
             </div>
         </Tabs >

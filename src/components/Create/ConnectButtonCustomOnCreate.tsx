@@ -1,7 +1,7 @@
 import React from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Image from 'next/image';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 
 export default function ConnectButtonCustomOnCreate() {
     return (

@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image';
 import gif from "@/../public/goku_vegeta_broly.gif";
 import { saiyaFont, inter } from "@/styles/fonts"
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import CardCollection from './CardCollection';
 import carrot from "@/../public/carrot.jpg";
 

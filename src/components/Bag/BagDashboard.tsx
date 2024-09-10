@@ -1,6 +1,6 @@
 import React from 'react'
+// import { DragDropContext } from 'react-beautiful-dnd';
 import Bag from './Bag';
-
 
 
 export default function BagDashboard() {

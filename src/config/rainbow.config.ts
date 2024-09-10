@@ -6,6 +6,8 @@ import {
 import {
   sepolia
 } from 'wagmi/chains';
+import { createConfig, http } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 const kakarotZkEVM = {
   id: 1802203764,
@@ -30,3 +32,12 @@ export const wagmiConfig = getDefaultConfig({
   chains: [sepolia, kakarotZkEVM],
   ssr: true, 
 });
+
+export const customConfig = createConfig({
+  chains: [sepolia],
+  connectors: [injected()],
+  transports: {
+    [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_URL),
+    // [kakarotZkEVM.id]: http(kakarotZkEVM.rpcUrls.default.http[0]),
+  }
+})

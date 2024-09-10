@@ -13,8 +13,8 @@ export default function CreateDashboard({ }: CreateDashboardProps) {
     const [isMinting, setIsMinting] = React.useState<boolean>(false);
     const [hash, setHash] = React.useState<string | undefined>(undefined);
     const [account, setAccount] = React.useState<string | undefined>(undefined);
-    const [ipfsHash, setIpfsHash] = React.useState<string | undefined>(undefined);
-    const [attributes, setAttributes] = React.useState<any>({});
+    const [tokenURI, setTokenURI] = React.useState<string | undefined>(undefined);
+    const [traits, setTraits] = React.useState<any>({});
     const mintLeft = 1;
 
     return (
@@ -27,22 +27,18 @@ export default function CreateDashboard({ }: CreateDashboardProps) {
                 setImage={setImage}
                 setHash={setHash}
                 setAccount={setAccount}
-                setIpfsHash={setIpfsHash}
-                setAttributes={setAttributes}
+                setTokenURI={setTokenURI}
+                setTraits={setTraits}
                 isMinting={isMinting}
                 setIsMinting={setIsMinting}
             />
-            {/* <Information
-                setImageLoading={setImageLoading}
-                setImage={setImage}
-            /> */}
             <Generation
                 imageLoading={imageLoading}
                 image={image}
                 hash={hash}
                 account={account}
-                ipfsHash={ipfsHash}
-                attributes={attributes}
+                tokenURI={tokenURI}
+                traits={traits}
                 isMinting={isMinting}
             />
         </div>

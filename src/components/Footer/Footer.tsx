@@ -1,10 +1,10 @@
 import React from 'react'
 import { saiyaFont } from "@/styles/fonts"
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 
 const Footer = () => {
     return (
-        <footer className='bg-gray-900 text-2xl text-primary w-full flex flex-row items-center justify-between pt-5 px-5 pb-2'>
+        <footer className='bg-gray-900 text-2xl text-primary w-full flex flex-row items-center pt-5 px-5 pb-2 h-24 justify-between'>
             <span className={`${saiyaFont.className} text-5xl font-bold tracking-widest`}>Kakarotto</span>
             <div className="flex flex-row items-center justify-between gap-5 font-bold text-lg">
                 <span>Privacy Policy</span>
