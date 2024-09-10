@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Account, Character, NFT, Treasure, TreasureAccount, Item } from '@/interface/graphql.interface';
-import { metadata } from '../../../.history/src/app/layout_20240730161554';
 
 const defaultRarityState = {
     bronze: false,
