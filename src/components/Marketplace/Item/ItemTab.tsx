@@ -14,71 +14,66 @@ import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contrac
 const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
 
 const query = gql`{
-    characters {
-      characterAccount {
-        id
-        contractAddress
+  items {
+    nft {
+      id
+      creator
+      owner {
+        address
       }
-      nft {
+      tokenId
+      tokenURI
+      contractAddress
+      category
+      amount
+      rarity
+      orders {
         id
-        creator
-        owner {
-          address
-        }
-        tokenId
-        tokenURI
-        contractAddress
         category
-        amount
-        rarity
-        orders {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        bids {
-          id
-          category
-          tokenId
-          bidder
-          seller
-          price
-          status
-          expiresAt
-          createdAt
-          updatedAt
-        }
-        activeOrder {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        searchOwner
+        tokenId
+        transactionHash
+        owner
+        buyer
+        price
+        status
+        createdAt
+        expiresAt
+        updatedAt
       }
-      attributes {
-        attribute
-        value
+      bids {
+        id
+        category
+        tokenId
+        bidder
+        seller
+        price
+        status
+        expiresAt
+        createdAt
+        updatedAt
       }
-      level
-      exp
+      activeOrder {
+        id
+        category
+        tokenId
+        transactionHash
+        owner
+        buyer
+        price
+        status
+        createdAt
+        expiresAt
+        updatedAt
+      }
     }
-}`
+    attributes {
+      attribute
+      value
+      isIncrease
+      isPercentage
+    } 
+  }
+}`;
 
 interface ItemTabProps {
     changeTabLoading: boolean;

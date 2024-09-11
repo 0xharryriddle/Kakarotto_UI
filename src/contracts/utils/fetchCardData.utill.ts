@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Account, Character, NFT, Treasure, TreasureAccount, Item } from '@/interface/graphql.interface';
+import { Account, Character, NFT, Treasure, TreasureAccount, Item, Order } from '@/interface/graphql.interface';
 
 const defaultRarityState = {
     bronze: false,
@@ -28,12 +28,43 @@ export type fetchCharacterDataReturnType = {
     exp: string,
 }
 
+export type fetchItemDataReturnType = {
+    id: string,
+    metadata: any,
+    tokenId: string,
+    rarity: string,
+    category: string,
+    attributes: any[],
+}
+
+export type fetchTreasureDataReturnType = {
+    id: string,
+    tokenId: string,
+    rarity: string,
+    owner: string,
+    category: string,
+    balance: string,
+    metadata: any,
+}
+
+export type fetchDetailNFTReturnType = {
+    id: string,
+    tokenId: string,
+    rarity: string,
+    creator: string,
+    owner: string,
+    category: string,
+    metadata: any,
+    attributes: any[],
+    orders: Order[],
+}
+
 export const fetchTreasureData = async (treasureAccounts: TreasureAccount[])=> {
     const length = treasureAccounts.length;
     if (length == 0) return [];
     const result: any[] = await Promise.all(
         treasureAccounts.map(async (treasureAccount: TreasureAccount) => {
-            const { treasure, balance } = treasureAccount;
+            const { account, treasure, balance } = treasureAccount;
             const { tokenId, tokenURI, nft } = treasure as Treasure;
             const { id, rarity, category } = nft as NFT;
 
@@ -53,6 +84,7 @@ export const fetchTreasureData = async (treasureAccounts: TreasureAccount[])=> {
                 id,
                 tokenId,
                 rarity,
+                owner: (account as Account).address,
                 category,
                 balance: balance ? balance : "0",
                 metadata
@@ -67,7 +99,7 @@ export const fetchCharacterData = async (characters: Character[]) => {
     const result: any[] = await Promise.all(
     characters.map(async (character: Character) => {
             const { nft, attributes, level, exp } = character;
-            const { id, tokenId, tokenURI, rarity, category } = nft as NFT;
+            const { id, tokenId, tokenURI, rarity, category, owner } = nft as NFT;
 
             let metadata = "";
 
@@ -86,6 +118,7 @@ export const fetchCharacterData = async (characters: Character[]) => {
             metadata, 
             tokenId, 
             rarity, 
+            owner: (owner as Account).address,
             category,
             attributes,
             level: level ? level : "0",
@@ -101,7 +134,7 @@ export const fetchItemData = async (items: Item[]) => {
     const result: any[] = await Promise.all(
         items.map(async (item: Item) => {
             const { nft, attributes } = item;
-            const { id, tokenId, tokenURI, rarity, category } = nft as NFT;
+            const { id, tokenId, tokenURI, rarity, category, owner } = nft as NFT;
 
             let metadata = "";
 
@@ -119,6 +152,7 @@ export const fetchItemData = async (items: Item[]) => {
                 id,
                 metadata, 
                 tokenId, 
+                owner: (owner as Account).address,
                 rarity, 
                 category,   
                 attributes,

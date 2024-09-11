@@ -9,6 +9,7 @@ import LoadingTemplate from '@/components/LoadingTemplate';
 import MyNFTsHeading from '@/components/Marketplace/MyNFTs/MyNFTsHeading';
 import MyNFTsBody from '@/components/Marketplace/MyNFTs/MyNFTsBody';
 import { fetchCharacterData, fetchItemData, fetchTreasureData } from '@/contracts/utils/fetchCardData.utill';
+import { isAddressEqual } from 'viem';
 
 const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
 
@@ -78,6 +79,9 @@ const query = gql` {
       exp
     }
     treasureAccounts {
+      account {
+        address
+      }
       treasure {
         tokenId
         tokenURI
@@ -203,7 +207,7 @@ interface GraphQLData {
 }
 
 export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);
   const [nftData, setNftData] = useState<{
     all: any[],
@@ -226,7 +230,7 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
 
   useEffect(() => {
     async function fetchData() {
-      if (graphqlData) {
+      if (graphqlData && address) {
         setLoading(true);
         setNftData({
           all: [],
@@ -240,7 +244,7 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
       }
     }
     fetchData();
-  }, [graphqlData]);
+  }, [graphqlData, address]);
 
   const fetchNFTData = async (
     {
@@ -253,9 +257,9 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
       treasureAccounts: TreasureAccount[],
     }) => {
     try {
-      const characterResult = await fetchCharacterData(characters);
-      const itemResult = await fetchItemData(items);
-      const treasureResult = await fetchTreasureData(treasureAccounts);
+      const characterResult = (await fetchCharacterData(characters)).filter((character) => isAddressEqual(character.owner, address as `0x${string}`));
+      const itemResult = (await fetchItemData(items)).filter((item) => isAddressEqual(item.owner, address as `0x${string}`));
+      const treasureResult = (await fetchTreasureData(treasureAccounts)).filter((treasure) => isAddressEqual(treasure.owner, address as `0x${string}`));
       setNftData({
         all: [...characterResult, ...itemResult, ...treasureResult],
         characters: characterResult,

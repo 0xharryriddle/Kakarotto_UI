@@ -16,16 +16,16 @@ export default function HeaderTab() {
     const pathName = usePathname();
 
     const [currentTab, setCurrentTab] = React.useState(
-        tabData.find((tab) => pathName == tab.link)?.value || 'overview'
+        tabData.find((tab) => pathName == tab.link)?.value || null
     );
 
     useEffect(() => {
-        setCurrentTab(tabData.find((tab) => pathName == tab.link)?.value || 'overview')
+        setCurrentTab(tabData.find((tab) => pathName == tab.link)?.value || null)
     }, [pathName])
 
     return (
         <div className="w-full">
-            <Tabs value={currentTab} className="w-full text-primary" onValueChange={(value) => setCurrentTab(value)} asChild>
+            <Tabs value={currentTab == null ? undefined : currentTab} className="w-full text-primary" onValueChange={(value) => setCurrentTab(value)} asChild>
                 <TabsList>
                     {
                         tabData.map((tab, index) => (

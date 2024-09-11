@@ -1,11 +1,10 @@
 import React from 'react'
 import {
-    dehydrate,
-    HydrationBoundary,
-    QueryClient,
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
 } from '@tanstack/react-query'
 import { gql, request } from 'graphql-request'
-import ItemTab from '@/components/Marketplace/Item/ItemTab';
 import MyNFTsTab from '@/components/Marketplace/MyNFTs/MyNFTsTab';
 
 const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
@@ -75,6 +74,9 @@ const query = gql`{
     exp
   }
   treasureAccounts {
+    account {
+      address
+    }
     treasure {
       tokenId
       tokenURI
@@ -190,16 +192,16 @@ const query = gql`{
 }`;
 
 export default async function MyNFTsMarketplacePage() {
-    const queryClient = new QueryClient()
-    await queryClient.prefetchQuery({
-        queryKey: ['data'],
-        async queryFn() {
-            return await request(subgraph_url, query)
-        }
-    })
-    return (
-        <HydrationBoundary state={dehydrate(queryClient)}>
-            <MyNFTsTab changeTabLoading={false} />
-        </HydrationBoundary>
-    )
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery({
+    queryKey: ['data'],
+    async queryFn() {
+      return await request(subgraph_url, query)
+    }
+  })
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <MyNFTsTab changeTabLoading={false} />
+    </HydrationBoundary>
+  )
 }

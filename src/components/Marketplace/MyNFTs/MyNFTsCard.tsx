@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { CircleArrowOutUpRightIcon } from 'lucide-react';
-import { capitalizeFirstLetter } from '@/contracts/utils/string.util';
 import getExplorer from '@/contracts/utils/getExplorer.util';
 import { useAccount, useWriteContract } from 'wagmi';
 import {
@@ -74,7 +73,7 @@ interface MyNFTsCardProps {
     creator: string;
     className?: string;
     contractAddress: string;
-    category: Categories;
+    category: string;
 }
 
 const formSchema = z.object({
@@ -125,7 +124,12 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
             <DialogTrigger className='w-fit'>
                 <HoverCard openDelay={100} closeDelay={0}>
                     <HoverCardTrigger>
-                        <Card className={`border-primary border-4 w-64 h-auto text-secondary rounded-lg bg-gray-800 group overflow-hidden hover:cursor-pointer ${className} }`} onClick={() => router.push(`/marketplace/contracts/${contractAddress}/item/${tokenId}`)}>
+                        <Card className={`border-primary border-4 w-64 h-auto text-secondary rounded-lg bg-gray-800 group overflow-hidden hover:cursor-pointer ${className} }`} onClick={() => {
+                            if (category === 'treasure') {
+                                return;
+                            }
+                            router.push(`/marketplace/contracts/${contractAddress}/item/${tokenId}`)
+                        }}>
                             <CardContent className='flex flex-col items-center justify-center gap-2 font-bold w-full'>
                                 <div className="w-full rounded-t-lg relative overflow-hidden h-60">
                                     <Image src={"/item_frame.png"} alt="Item frame" className='rounded-md w-full h-full absolute' width={500} height={500} />
@@ -185,7 +189,7 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
                     </DialogDescription>
                     <div className="flex flex-row items-center justify-around gap-2 p-5">
                         {
-                            category === Categories.Treasure && <AlertDialog>
+                            category === 'treasure' && <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button className="cursor-pointer" onClick={() => {
                                     }}>Open</Button>
