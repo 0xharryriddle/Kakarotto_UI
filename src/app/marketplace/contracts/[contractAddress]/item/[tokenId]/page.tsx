@@ -1,13 +1,14 @@
 import React from 'react'
-import {
-    dehydrate,
-    HydrationBoundary,
-    QueryClient,
-} from '@tanstack/react-query'
 import { gql, request } from 'graphql-request'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 import DetailedDashboard from '@/components/Marketplace/DetailedContract/DetailedDashboard';
 
 const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+
 const query = gql`{
   characters {
     characterAccount {
@@ -74,9 +75,6 @@ const query = gql`{
     exp
   }
   treasureAccounts {
-    account {
-      address
-    }
     treasure {
       tokenId
       tokenURI
@@ -192,22 +190,23 @@ const query = gql`{
 }`;
 
 interface ContractDetailPageProps {
-    params: {
-        contractAddress: string,
-        tokenId: string,
-    }
+  params: {
+    contractAddress: string,
+    tokenId: string,
+  }
 }
 
 export default async function ContractDetailPage({ params }: ContractDetailPageProps) {
-    const queryClient = new QueryClient()
-    await queryClient.prefetchQuery({
-        queryKey: ['data'],
-        async queryFn() {
-            return await request(subgraph_url, query)
-        }
-    })
-    const { contractAddress: contractAddressParams, tokenId: tokenIdParams } = params;
-    return <HydrationBoundary state={dehydrate(queryClient)}>
-        <DetailedDashboard contractAddress={contractAddressParams} tokenId={tokenIdParams} />
-    </HydrationBoundary>
+  const { contractAddress: contractAddressParams, tokenId: tokenIdParams } = params;
+  const queryClient = new QueryClient()
+  await queryClient.prefetchQuery({
+    queryKey: ['data'],
+    async queryFn() {
+      return await request(subgraph_url, query)
+    }
+  })
+
+  return <HydrationBoundary state={dehydrate(queryClient)}>
+    <DetailedDashboard contractAddress={contractAddressParams} tokenId={tokenIdParams} />
+  </HydrationBoundary>
 }

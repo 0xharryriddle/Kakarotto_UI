@@ -1,5 +1,7 @@
 'use client';
 import React from 'react'
+import { ArrowRightCircleIcon, ChartNoAxesCombinedIcon, InfoIcon, TagIcon } from 'lucide-react'
+
 import {
     HoverCard,
     HoverCardContent,
@@ -12,7 +14,6 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ArrowRightCircleIcon, ChartNoAxesCombinedIcon, InfoIcon, TagIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CarouselCard from '@/components/Marketplace/CarouselCard';
 import * as Enums from '@/utils/enum.util';
@@ -24,7 +25,7 @@ interface OverviewTabProps {
 
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
     return (
-        <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit" >
+        <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit w-full" >
             <div className="flex flex-col justify-center gap-3">
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-col justify-center gap-2 ">
@@ -109,7 +110,6 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                         <CarouselNext />
                     </Carousel>
                 </>}
-
             </div>
             {/* Newest */}
             <div className="flex flex-col justify-center gap-5" >

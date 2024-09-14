@@ -22,6 +22,8 @@ export type fetchCharacterDataReturnType = {
     metadata: any,
     tokenId: string,
     rarity: string,
+    owner: string | undefined,
+    creator: string | undefined,
     category: string,
     attributes: any[],
     level: string,
@@ -33,6 +35,8 @@ export type fetchItemDataReturnType = {
     metadata: any,
     tokenId: string,
     rarity: string,
+    owner: string | undefined,
+    creator: string | undefined,
     category: string,
     attributes: any[],
 }
@@ -99,7 +103,7 @@ export const fetchCharacterData = async (characters: Character[]) => {
     const result: any[] = await Promise.all(
     characters.map(async (character: Character) => {
             const { nft, attributes, level, exp } = character;
-            const { id, tokenId, tokenURI, rarity, category, owner } = nft as NFT;
+            const { id, tokenId, tokenURI, rarity, category, owner, creator } = nft as NFT;
 
             let metadata = "";
 
@@ -119,6 +123,7 @@ export const fetchCharacterData = async (characters: Character[]) => {
             tokenId, 
             rarity, 
             owner: (owner as Account).address,
+            creator,
             category,
             attributes,
             level: level ? level : "0",
@@ -134,7 +139,7 @@ export const fetchItemData = async (items: Item[]) => {
     const result: any[] = await Promise.all(
         items.map(async (item: Item) => {
             const { nft, attributes } = item;
-            const { id, tokenId, tokenURI, rarity, category, owner } = nft as NFT;
+            const { id, tokenId, tokenURI, rarity, category, owner, creator} = nft as NFT;
 
             let metadata = "";
 
@@ -153,6 +158,7 @@ export const fetchItemData = async (items: Item[]) => {
                 metadata, 
                 tokenId, 
                 owner: (owner as Account).address,
+                creator,
                 rarity, 
                 category,   
                 attributes,

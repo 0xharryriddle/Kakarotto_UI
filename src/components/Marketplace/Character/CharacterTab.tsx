@@ -111,7 +111,9 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
       }
     }
     fetchData();
-  }, [graphqlData]);
+  }, [graphqlData, changeTabLoading]);
+
+  console.log(graphqlData);
 
   const fetchNFTData = async (
     {

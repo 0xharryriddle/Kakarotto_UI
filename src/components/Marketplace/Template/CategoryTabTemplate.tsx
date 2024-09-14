@@ -52,8 +52,6 @@ export default function CategoryTabTemplate({
         attributes: []
     });
 
-    const tokenId = 1;
-
     return (
         <div className='w-full h-full min-h-96 flex flex-col gap-5 text-primary'>
             <Separator className="my-4" />
@@ -130,7 +128,7 @@ export default function CategoryTabTemplate({
                             {
                                 data.map((element, index) => {
                                     const castingElement = element as fetchCharacterDataReturnType;
-                                    return <CarouselCard key={index} image={castingElement.metadata?.image ? accessToPinataImage(castingElement.metadata?.image) : "/secret_treasure.gif"} name={castingElement.metadata?.name ? castingElement.metadata?.name : "Unknown"} category={category} description={castingElement.metadata?.description && ""} price={1.90} rarity={Mapping.rarities.findIndex((item) => item == castingElement.rarity) as Enums.Rarities} type="" className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200' onClick={() => router.push(`/marketplace/contracts/${contractAddress}/item/${tokenId}`)} />
+                                    return <CarouselCard key={index} image={castingElement.metadata?.image ? accessToPinataImage(castingElement.metadata?.image) : "/secret_treasure.gif"} name={castingElement.metadata?.name ? castingElement.metadata?.name : "Unknown"} category={category} description={castingElement.metadata?.description && ""} price={1.90} rarity={Mapping.rarities.findIndex((item) => item == castingElement.rarity) as Enums.Rarities} type="" className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200' onClick={() => router.push(`/marketplace/contracts/${contractAddress}/item/${element.tokenId}`)} />
                                 })}
                         </div>
                             :
