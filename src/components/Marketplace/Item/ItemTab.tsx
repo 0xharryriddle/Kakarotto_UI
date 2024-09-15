@@ -5,81 +5,18 @@ import { Categories } from '@/utils/enum.util';
 import CategoryTabTemplate from '@/components/Marketplace/Template/CategoryTabTemplate';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { useAccount } from 'wagmi';
-import { Item } from '@/interface/graphql.interface';
-import { gql, request } from 'graphql-request'
+import { Item } from '@/generated/graphql';
 import { useQuery } from '@tanstack/react-query'
 import { fetchItemData } from '@/contracts/utils/fetchCardData.utill';
-import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
-
-const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
-
-const query = gql`{
-  items {
-    nft {
-      id
-      creator
-      owner {
-        address
-      }
-      tokenId
-      tokenURI
-      contractAddress
-      category
-      amount
-      rarity
-      orders {
-        id
-        category
-        tokenId
-        transactionHash
-        owner
-        buyer
-        price
-        status
-        createdAt
-        expiresAt
-        updatedAt
-      }
-      bids {
-        id
-        category
-        tokenId
-        bidder
-        seller
-        price
-        status
-        expiresAt
-        createdAt
-        updatedAt
-      }
-      activeOrder {
-        id
-        category
-        tokenId
-        transactionHash
-        owner
-        buyer
-        price
-        status
-        createdAt
-        expiresAt
-        updatedAt
-      }
-    }
-    attributes {
-      attribute
-      value
-      isIncrease
-      isPercentage
-    } 
-  }
-}`;
+import { getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
+import { querySubgraphs } from '@/services/graphql/subgraphs';
+import { client } from '@/graphql/client';
 
 interface ItemTabProps {
   changeTabLoading: boolean;
 }
 
-interface GraphQLData {
+interface GraphQLDataProps {
   items: Item[],
 }
 
@@ -89,10 +26,10 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [itemData, setItemData] = useState<Item[]>([]);
 
-  const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
+  const { data: graphqlData } = useQuery({
     queryKey: ['data'],
     async queryFn() {
-      return await request(subgraph_url, query);
+      return await querySubgraphs({ client })
     }
   });
 
@@ -101,7 +38,7 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
       if (graphqlData) {
         setLoading(true);
         setItemData([]);
-        const { items } = graphqlData;
+        const { items } = graphqlData as GraphQLDataProps;
         await fetchNFTData({ items });
         setLoading(false);
       }
@@ -116,7 +53,7 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
       items: Item[],
     }) => {
     try {
-      const itemResult = await fetchItemData(items);
+      const itemResult = await fetchItemData({ items });
       setItemData(itemResult);
     } catch (error) {
       console.error("Failed to fetch metadata:", error);

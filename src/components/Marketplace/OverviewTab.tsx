@@ -34,7 +34,6 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
         },
     });
 
-    console.log(data);
     return (
         <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit w-full" >
             <div className="flex flex-col justify-center gap-3">

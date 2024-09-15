@@ -1,8 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { gql, request } from 'graphql-request'
-import { Character, TreasureAccount, Item } from '@/interface/graphql.interface';
+import { Character, TreasureAccount, Item } from '@/generated/graphql';
 import { useAccount } from 'wagmi';
 import ConnectButtonTab from '@/components/ConnectButtonTab';
 import LoadingTemplate from '@/components/LoadingTemplate';
@@ -10,197 +9,14 @@ import MyNFTsHeading from '@/components/Marketplace/MyNFTs/MyNFTsHeading';
 import MyNFTsBody from '@/components/Marketplace/MyNFTs/MyNFTsBody';
 import { fetchCharacterData, fetchItemData, fetchTreasureData } from '@/contracts/utils/fetchCardData.utill';
 import { isAddressEqual } from 'viem';
-
-const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
-
-const query = gql` {
-    characters {
-      characterAccount {
-        id
-        contractAddress
-      }
-      nft {
-        id
-        creator
-        owner {
-          address
-        }
-        tokenId
-        tokenURI
-        contractAddress
-        category
-        amount
-        rarity
-        orders {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        bids {
-          id
-          category
-          tokenId
-          bidder
-          seller
-          price
-          status
-          expiresAt
-          createdAt
-          updatedAt
-        }
-        activeOrder {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        searchOwner
-      }
-      attributes {
-        attribute
-        value
-      }
-      level
-      exp
-    }
-    treasureAccounts {
-      account {
-        address
-      }
-      treasure {
-        tokenId
-        tokenURI
-        nft {
-          id
-          tokenId
-          tokenURI
-          contractAddress
-          category
-          amount
-          rarity
-          orders {
-            id
-            category
-            tokenId
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            createdAt
-            expiresAt
-            updatedAt
-          }
-          bids {
-            id
-            category
-            tokenId
-            bidder
-            seller
-            price
-            status
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          activeOrder {
-            id
-            category
-            tokenId
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            createdAt
-            expiresAt
-            updatedAt
-          }
-        }
-      }
-        balance
-    }
-    items {
-      nft {
-        id
-        creator
-        owner {
-          address
-        }
-        tokenId
-        tokenURI
-        contractAddress
-        category
-        amount
-        rarity
-        orders {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        bids {
-          id
-          category
-          tokenId
-          bidder
-          seller
-          price
-          status
-          expiresAt
-          createdAt
-          updatedAt
-        }
-        activeOrder {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-      }
-      attributes {
-        attribute
-        value
-        isIncrease
-        isPercentage
-      } 
-    }
-  }`
+import { client } from '@/graphql/client';
+import { querySubgraphs } from '@/services/graphql/subgraphs';
 
 interface MyNFTsTabProps {
   changeTabLoading?: boolean;
 }
 
-interface GraphQLData {
+interface GraphQLDataProps {
   characters: Character[];
   items: Item[];
   treasureAccounts: TreasureAccount[];
@@ -221,10 +37,10 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
     treasures: []
   });
 
-  const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
+  const { data: graphqlData, status: graphqlStatus } = useQuery({
     queryKey: ['data'],
     async queryFn() {
-      return await request(subgraph_url, query);
+      return await querySubgraphs({ client });
     }
   });
 
@@ -238,7 +54,7 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
           items: [],
           treasures: []
         });
-        const { characters, items, treasureAccounts } = graphqlData;
+        const { characters, items, treasureAccounts } = graphqlData as GraphQLDataProps;
         await fetchNFTData({ characters, items, treasureAccounts });
         setLoading(false);
       }
@@ -257,9 +73,9 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
       treasureAccounts: TreasureAccount[],
     }) => {
     try {
-      const characterResult = (await fetchCharacterData(characters)).filter((character) => isAddressEqual(character.owner, address as `0x${string}`));
-      const itemResult = (await fetchItemData(items)).filter((item) => isAddressEqual(item.owner, address as `0x${string}`));
-      const treasureResult = (await fetchTreasureData(treasureAccounts)).filter((treasure) => isAddressEqual(treasure.owner, address as `0x${string}`));
+      const characterResult = (await fetchCharacterData({ characters })).filter((character) => isAddressEqual(character.owner, address as `0x${string}`));
+      const itemResult = (await fetchItemData({ items })).filter((item) => isAddressEqual(item.owner, address as `0x${string}`));
+      const treasureResult = (await fetchTreasureData({ treasureAccounts })).filter((treasure) => isAddressEqual(treasure.owner, address as `0x${string}`));
       setNftData({
         all: [...characterResult, ...itemResult, ...treasureResult],
         characters: characterResult,

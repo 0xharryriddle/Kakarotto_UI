@@ -37,8 +37,6 @@ const GraphqlReqSchema = z.object({
   }
 
   export async function GET(request: Request) {
-    console.log("REQUEST...");
-    console.log(request);
     return await process(request);
   }
 

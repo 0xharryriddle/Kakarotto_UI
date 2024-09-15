@@ -1,14 +1,12 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi';
-import { gql, request } from 'graphql-request'
 import { useQuery } from '@tanstack/react-query'
 import HeaderTabTemplate from '@/components/Marketplace/Template/HeaderTabTemplate'
 import { Categories } from '@/utils/enum.util';
 import CategoryTabTemplate from '@/components/Marketplace/Template/CategoryTabTemplate';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { getKakarottoCharacterAddress } from '@/contracts/utils/getAddress.util';
-// import { Character } from '@/interface/graphql.interface';
 import { fetchCharacterData } from '@/contracts/utils/fetchCardData.utill';
 import { client } from '@/graphql/client';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
@@ -36,8 +34,6 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
     },
   });
 
-  console.log(graphqlData);
-
   useEffect(() => {
     async function fetchData() {
       if (graphqlData) {
@@ -58,8 +54,8 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
       characters: Character[],
     }) => {
     try {
-      // const characterResult = await fetchCharacterData(characters);
-      // setCharacterData(characterResult);
+      const characterResult = await fetchCharacterData({ characters });
+      setCharacterData(characterResult);
     } catch (error) {
       console.error("Failed to fetch metadata:", error);
     }
