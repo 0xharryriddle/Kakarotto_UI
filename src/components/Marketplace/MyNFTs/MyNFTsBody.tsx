@@ -1,9 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import { useQuery } from '@tanstack/react-query'
-import { gql, request } from 'graphql-request'
-import { getAddress, isAddressEqual } from 'viem';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
     Accordion,
@@ -13,7 +9,6 @@ import {
 } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
-import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react'
 import {
     Slider,
     SliderTrack,
@@ -26,7 +21,7 @@ import { Label } from "@/components/ui/label"
 import { capitalizeFirstLetter } from '@/contracts/utils/string.util';
 import { Checkbox } from "@/components/ui/checkbox"
 import * as mappings from '@/utils/mapping.util';
-import { Character, TreasureAccount, Item } from '@/interface/graphql.interface';
+import { Character, TreasureAccount, Item } from '@/generated/graphql';
 import { useAccount } from 'wagmi';
 import MyNFTsList from './MyNFTsList';
 import LoadingTemplate from '@/components/LoadingTemplate';

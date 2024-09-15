@@ -18,12 +18,22 @@ import { Button } from '@/components/ui/button'
 import CarouselCard from '@/components/Marketplace/CarouselCard';
 import * as Enums from '@/utils/enum.util';
 import LoadingTemplate from '@/components/LoadingTemplate';
+import { client } from '@/graphql/client';
+import { querySubgraphs } from '@/services/graphql/subgraphs';
+import { useQuery } from '@tanstack/react-query';
 
 interface OverviewTabProps {
     changeTabLoading: boolean;
 }
 
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
+    const { data, status } = useQuery({
+        queryKey: ['data'],
+        async queryFn() {
+            return await querySubgraphs({ client });
+        },
+    });
+
     return (
         <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit w-full" >
             <div className="flex flex-col justify-center gap-3">

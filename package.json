@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "codegen.gql": "graphql-codegen --config ./graphql-codegen.ts && bun prettier --write \"src/generated/**/*\""
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",
@@ -57,6 +58,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
     "@types/node": "^20",
     "@types/p5": "^1.7.6",
     "@types/react": "^18",

@@ -56,11 +56,9 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { isAddress } from 'viem';
-import { Categories, Rarities } from '@/utils/enum.util';
 import { accessToPinataImage } from '@/utils/image.util';
-import { CircularProgress } from '@chakra-ui/react'
-import * as Enums from '@/utils/enum.util';
 import { useRouter } from 'next/navigation';
+import * as Enums from "@/utils/enum.util";
 
 
 interface MyNFTsCardProps {
@@ -82,7 +80,7 @@ const formSchema = z.object({
         invalid_type_error: "Invalid address",
     }).refine((value) => isAddress(value), "Invalid address"),
     amount: z.number().int().positive(),
-    rarity: z.nativeEnum(Rarities),
+    rarity: z.nativeEnum(Enums.Rarities),
 })
 
 export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, className, account, creator, category, contractAddress }: MyNFTsCardProps) {
@@ -111,7 +109,7 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
         defaultValues: {
             address: "0x",
             amount: 1,
-            rarity: Rarities.Bronze,
+            rarity: Enums.Rarities.Bronze,
         },
     })
 

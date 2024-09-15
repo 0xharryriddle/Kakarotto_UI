@@ -1,5 +1,5 @@
-// import { GraphQLClient } from "graphql-request";
+import { GraphQLClient } from "graphql-request";
 
-// import { env } from "@/env/server";
+import { env } from "@/env/server";
 
-// export const client = new GraphQLClient(env.ROOT_URI);
+export const client = new GraphQLClient(env.ROOT_URI);
