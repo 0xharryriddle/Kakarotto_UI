@@ -7,7 +7,7 @@ import {
 import ProfileDashboard from '@/components/Profile/ProfileDashboard'
 import { gql, request } from 'graphql-request'
 
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
 const query = gql`{
   characters {
     characterAccount {

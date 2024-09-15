@@ -8,84 +8,20 @@ import { Categories } from '@/utils/enum.util';
 import CategoryTabTemplate from '@/components/Marketplace/Template/CategoryTabTemplate';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { getKakarottoCharacterAddress } from '@/contracts/utils/getAddress.util';
-import { Character } from '@/interface/graphql.interface';
+// import { Character } from '@/interface/graphql.interface';
 import { fetchCharacterData } from '@/contracts/utils/fetchCardData.utill';
-
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
-
-const query = gql`{
-    characters {
-      characterAccount {
-        id
-        contractAddress
-      }
-      nft {
-        id
-        creator
-        owner {
-          address
-        }
-        tokenId
-        tokenURI
-        contractAddress
-        category
-        amount
-        rarity
-        orders {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        bids {
-          id
-          category
-          tokenId
-          bidder
-          seller
-          price
-          status
-          expiresAt
-          createdAt
-          updatedAt
-        }
-        activeOrder {
-          id
-          category
-          tokenId
-          transactionHash
-          owner
-          buyer
-          price
-          status
-          createdAt
-          expiresAt
-          updatedAt
-        }
-        searchOwner
-      }
-      attributes {
-        attribute
-        value
-      }
-      level
-      exp
-    }
-}`
+import { client } from '@/graphql/client';
+import { querySubgraphs } from '@/services/graphql/subgraphs';
+import { Character, Item, TreasureAccount } from '@/generated/graphql';
 
 interface CharacterTabProps {
   changeTabLoading: boolean;
 }
 
-interface GraphQLData {
+interface GraphQLDataProps {
   characters: Character[],
+  items: Item[],
+  treasureAccounts: TreasureAccount[]
 }
 
 export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
@@ -93,27 +29,27 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [characterData, setCharacterData] = useState<Character[]>([]);
 
-  const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
+  const { data: graphqlData, status: graphqlStatus } = useQuery({
     queryKey: ['data'],
     async queryFn() {
-      return await request(subgraph_url, query);
-    }
+      return await querySubgraphs({ client });
+    },
   });
+
+  console.log(graphqlData);
 
   useEffect(() => {
     async function fetchData() {
       if (graphqlData) {
         setLoading(true);
         setCharacterData([]);
-        const { characters } = graphqlData;
+        const { characters } = graphqlData as GraphQLDataProps;
         await fetchNFTData({ characters });
         setLoading(false);
       }
     }
     fetchData();
   }, [graphqlData, changeTabLoading]);
-
-  console.log(graphqlData);
 
   const fetchNFTData = async (
     {
@@ -122,8 +58,8 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
       characters: Character[],
     }) => {
     try {
-      const characterResult = await fetchCharacterData(characters);
-      setCharacterData(characterResult);
+      // const characterResult = await fetchCharacterData(characters);
+      // setCharacterData(characterResult);
     } catch (error) {
       console.error("Failed to fetch metadata:", error);
     }

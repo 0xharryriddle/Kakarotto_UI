@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchItemData } from '@/contracts/utils/fetchCardData.utill';
 import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
 
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
 
 const query = gql`{
   items {
@@ -76,67 +76,67 @@ const query = gql`{
 }`;
 
 interface ItemTabProps {
-    changeTabLoading: boolean;
+  changeTabLoading: boolean;
 }
 
 interface GraphQLData {
-    items: Item[],
+  items: Item[],
 }
 
 
 export default function ItemTab({ changeTabLoading }: ItemTabProps) {
-    const { chainId } = useAccount();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [itemData, setItemData] = useState<Item[]>([]);
+  const { chainId } = useAccount();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [itemData, setItemData] = useState<Item[]>([]);
 
-    const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
-        queryKey: ['data'],
-        async queryFn() {
-            return await request(subgraph_url, query);
-        }
-    });
-
-    useEffect(() => {
-        async function fetchData() {
-            if (graphqlData) {
-                setLoading(true);
-                setItemData([]);
-                const { items } = graphqlData;
-                await fetchNFTData({ items });
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, [graphqlData]);
-
-    const fetchNFTData = async (
-        {
-            items,
-        }: {
-            items: Item[],
-        }) => {
-        try {
-            const itemResult = await fetchItemData(items);
-            setItemData(itemResult);
-        } catch (error) {
-            console.error("Failed to fetch metadata:", error);
-        }
+  const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery<GraphQLData>({
+    queryKey: ['data'],
+    async queryFn() {
+      return await request(subgraph_url, query);
     }
+  });
 
-    return (
-        changeTabLoading
-            ? <LoadingTemplate />
-            : <div className='flex flex-col gap-5 justify-center px-5 py-2'>
-                <HeaderTabTemplate image={"/secret_treasure.gif"}
-                    name="Kakarotto Item"
-                    contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)}
-                    standard="ERC721"
-                    category={Categories.Item} />
-                <CategoryTabTemplate
-                    data={itemData}
-                    loading={loading}
-                    category={Categories.Item}
-                    contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} />
-            </div>
-    )
+  useEffect(() => {
+    async function fetchData() {
+      if (graphqlData) {
+        setLoading(true);
+        setItemData([]);
+        const { items } = graphqlData;
+        await fetchNFTData({ items });
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [graphqlData]);
+
+  const fetchNFTData = async (
+    {
+      items,
+    }: {
+      items: Item[],
+    }) => {
+    try {
+      const itemResult = await fetchItemData(items);
+      setItemData(itemResult);
+    } catch (error) {
+      console.error("Failed to fetch metadata:", error);
+    }
+  }
+
+  return (
+    changeTabLoading
+      ? <LoadingTemplate />
+      : <div className='flex flex-col gap-5 justify-center px-5 py-2'>
+        <HeaderTabTemplate image={"/secret_treasure.gif"}
+          name="Kakarotto Item"
+          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)}
+          standard="ERC721"
+          category={Categories.Item} />
+        <CategoryTabTemplate
+          data={itemData}
+          loading={loading}
+          category={Categories.Item}
+          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} />
+      </div>
+  )
 }

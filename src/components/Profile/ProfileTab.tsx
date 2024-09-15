@@ -47,7 +47,7 @@ const defaultCharacterAttributeState = {
     luck: 0
 };
 
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
 
 
 interface GraphQLData {

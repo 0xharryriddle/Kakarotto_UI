@@ -11,7 +11,7 @@ import MyNFTsBody from '@/components/Marketplace/MyNFTs/MyNFTsBody';
 import { fetchCharacterData, fetchItemData, fetchTreasureData } from '@/contracts/utils/fetchCardData.utill';
 import { isAddressEqual } from 'viem';
 
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
 
 const query = gql` {
     characters {

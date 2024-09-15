@@ -12,7 +12,7 @@ import DetailedOrder from '@/components/Marketplace/DetailedContract/DetailedOrd
 import { Character, Item } from '@/interface/graphql.interface';
 import { fetchCharacterData, fetchCharacterDataReturnType, fetchItemData, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 
-const subgraph_url: string = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
+const subgraph_url: string = process.env.NEXT_PUBLIC_ROOT_URI || ""
 
 const query = gql`{
   characters {
