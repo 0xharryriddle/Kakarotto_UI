@@ -22,8 +22,8 @@ export default function CarouselCard({ image, name, category, description, price
         <Card className={`flex flex-col rounded-lg bg-gray-800 group overflow-hidden hover:cursor-pointer ${className} `} onClick={() => onClick?.()}>
             <CardContent className='p-0 rounded-lg'>
                 <div className="w-full rounded-t-lg relative overflow-hidden h-60">
-                    <Image src={rarity == Rarities.Bronze ? "/bg-rarity/bronze.png" : rarity == Rarities.Silver ? "/bg-rarity/silver.png" : rarity == Rarities.Gold ? "/bg-rarity/gold.png" : rarity == Rarities.Platinum ? "/bg-rarity/platinum.png" : "/bg-rarity/diamond.png"} alt="carousel image" width={330} height={110} className="absolute bottom-0 w-full group-hover:scale-110 transition delay-100 duration-200 ease-in-out" />
-                    <Image src={image} alt="carousel image" width={300} height={300} className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out" />
+                    <Image src={rarity == Rarities.Bronze ? "/bg-rarity/bronze.png" : rarity == Rarities.Silver ? "/bg-rarity/silver.png" : rarity == Rarities.Gold ? "/bg-rarity/gold.png" : rarity == Rarities.Platinum ? "/bg-rarity/platinum.png" : "/bg-rarity/diamond.png"} alt="carousel image" width={330} height={110} className="absolute bottom-0 w-full group-hover:scale-110 transition delay-100 duration-200 ease-in-out" loading="lazy" />
+                    <Image src={image} alt="carousel image" width={300} height={300} className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out" loading="lazy" />
                 </div>
                 <div className="w-full p-6 pt-0 flex flex-col justify-center gap-2 text-secondary font-bold">
                     <Heading as="h2" size="md" className="mt-4">{name}</Heading>

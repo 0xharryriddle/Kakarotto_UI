@@ -20,7 +20,6 @@ interface GraphQLDataProps {
   items: Item[],
 }
 
-
 export default function ItemTab({ changeTabLoading }: ItemTabProps) {
   const { chainId } = useAccount();
   const [loading, setLoading] = useState<boolean>(false);

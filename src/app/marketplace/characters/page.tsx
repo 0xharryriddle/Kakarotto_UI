@@ -7,7 +7,6 @@ import {
 import CharacterTab from '@/components/Marketplace/Character/CharacterTab';
 import { client } from '@/graphql/ssr.client'
 import { querySubgraphs } from '@/services/graphql/subgraphs'
-import { env } from '@/env/server';
 
 export default async function CharacterMarketplacePage() {
   const queryClient = new QueryClient()

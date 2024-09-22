@@ -57,7 +57,7 @@ export default function Information(
     const { isConnected, address, chainId } = useAccount();
     const [isGenerating, setIsGenerating] = React.useState<boolean>(false);
     const toast = useToast();
-    const { isError: signMessageIsError, reset: signMessageReset, signMessageAsync } = useSignMessage();
+    const { isError: signMessageIsError, reset: signMessageReset, signMessageAsync, isPending: signMessageIsPending } = useSignMessage();
     const tokenBalance = 100;
 
     const resetStates = React.useCallback(() => {
@@ -121,10 +121,7 @@ export default function Information(
                 topics: logs[0].topics,
                 strict: true
             });
-            console.log(eventDecoded.args as object);
             const args = eventDecoded.args as unknown as KakarottoCharacterCreatedArgs;
-            console.log(args);
-            // console.log(args ? args['owner'] : {})
             if (isAddressEqual(getAddress(args ? args.owner : "", chainId), getAddress(address as string, chainId))) {
                 setIsMinting(false);
                 toast({
@@ -183,7 +180,7 @@ export default function Information(
             </div>
             <div className="flex flex-row items-center justify-between">
                 <span>Generate Image</span>
-                <Button className='transition delay-100 duration-200 ease-in-out hover:scale-90' disabled={generateConditional()} onClick={async () => {
+                <Button className='transition delay-100 duration-200 ease-in-out hover:scale-90' onClick={async () => {
                     setImage(undefined);
                     setImageLoading(true);
                     try {
@@ -219,7 +216,6 @@ export default function Information(
                         });
                     } finally {
                         setImageLoading(false);
-
                     }
                 }}
                 >Generate Image</Button>
@@ -243,6 +239,18 @@ export default function Information(
                     const tokenURI = "Character" + "_" + keccak256(stringToBytes(address as string)) + "_" + Date.now();
                     // Sign Create NFT
                     const signature = await signMessageCreateNFT({ tokenURI: `${tokenURI}`, creator: address ? address : "0x" });
+                    if (signMessageIsError || signature == undefined) {
+                        toast({
+                            title: "Sign message failed !",
+                            description: "Please try again later",
+                            status: "error",
+                            duration: 2500,
+                            isClosable: true,
+                            position: "bottom-right"
+                        });
+                        setIsMinting(false);
+                        return;
+                    }
                     // Call the API to create the NFT
                     const relay = await createNFTAPI({
                         creator: address ? address : "0x",
@@ -261,7 +269,7 @@ export default function Information(
                             isClosable: true,
                             position: "bottom-right"
                         });
-                        resetStates();
+                        setIsMinting(false);
                         return;
                     }
                     const traits = relay.data.traits;

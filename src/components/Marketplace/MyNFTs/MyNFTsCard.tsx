@@ -130,8 +130,8 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
                         }}>
                             <CardContent className='flex flex-col items-center justify-center gap-2 font-bold w-full'>
                                 <div className="w-full rounded-t-lg relative overflow-hidden h-60">
-                                    <Image src={"/item_frame.png"} alt="Item frame" className='rounded-md w-full h-full absolute' width={500} height={500} />
-                                    <Image src={image ? accessToPinataImage(image) : '/secret_treasure.gif'} alt="carousel image" width={500} height={500} className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out" />
+                                    <Image src={"/item_frame.png"} alt="Item frame" className='rounded-md w-full h-full absolute' width={500} height={500} loading="lazy" />
+                                    <Image src={image ? accessToPinataImage(image) : '/secret_treasure.gif'} alt="carousel image" width={500} height={500} className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out" loading="lazy" />
                                 </div>
                                 <span className="text-xl">{name}</span>
                                 <div className="flex flex-row items-center justify-center gap-5">

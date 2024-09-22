@@ -7,9 +7,18 @@ enum Rarities {
 }
 
 enum Categories {
-    Character, 
+    Character,
     Treasure,
     Item
 }
 
-export {Rarities, Categories}
+enum Time {
+    Seconds,
+    Minutes,
+    Hours,
+    Days,
+    Months,
+    Years,
+}
+
+export { Rarities, Categories, Time }

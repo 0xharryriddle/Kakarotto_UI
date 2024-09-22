@@ -60,6 +60,8 @@ const Subgraphs: RequestDocument = graphql(`
             updatedAt
         }
         searchOwner
+        searchOrderStatus
+        searchOrderExpiresAt
       }
       attributes {
         attribute

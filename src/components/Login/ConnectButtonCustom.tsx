@@ -55,7 +55,7 @@ export default function ConnectButtonCustom() {
                                                 className='bg-[chain.iconBackground] w-6 h-6 rounded-full overflow-hidden mr-1'
                                             >
                                                 {chain.iconUrl && (
-                                                    <Image alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} width={24} height={24} />
+                                                    <Image alt={chain.name ?? 'Chain icon'} src={chain.iconUrl} width={24} height={24} loading="lazy" />
                                                 )}
                                             </div>
                                         )}

@@ -1,6 +1,6 @@
 import { Abi, Address } from "viem"
 import getABI from "../utils/getAbi.util"
-import { getKakarottoCharacterAddress, getKakarottoTokenAddress, getKakarottoTreasureAddress } from "../utils/getAddress.util"
+import { getERC721BidAddress, getKakarottoCharacterAddress, getKakarottoMarketplaceAddress, getKakarottoTokenAddress, getKakarottoTreasureAddress } from "../utils/getAddress.util"
 
 export const kakarottoCharacterConfig = (chainId: number | undefined): {address: Address, abi: Abi | readonly unknown[]} => {
     return {
@@ -20,5 +20,19 @@ export const kakarottoTreasureConfig = (chainId: number | undefined): {address: 
     return {
         address: getKakarottoTreasureAddress(chainId),
         abi: getABI("KakarottoTreasure"),
+    }
+}
+
+export const kakarottoMarketplaceConfig = (chainId: number | undefined): {address: Address, abi: Abi | readonly unknown[]} => {
+    return {
+        address: getKakarottoMarketplaceAddress(chainId),
+        abi: getABI("KakarottoMarketplace"),
+    }
+}
+
+export const erc721BidConfig = (chainId: number | undefined): {address: Address, abi: Abi | readonly unknown[]} => {
+    return {
+        address: getERC721BidAddress(chainId),
+        abi: getABI("ERC721Bid"),
     }
 }

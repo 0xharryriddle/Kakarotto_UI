@@ -25,7 +25,7 @@ export default function HeaderTab() {
 
     return (
         <div className="w-full">
-            <Tabs value={currentTab == null ? undefined : currentTab} className="w-full text-primary" onValueChange={(value) => setCurrentTab(value)} asChild>
+            <Tabs value={currentTab == null ? undefined : currentTab} className="w-full text-primary rounded-none bg-gray-800" onValueChange={(value) => setCurrentTab(value)} asChild>
                 <TabsList>
                     {
                         tabData.map((tab, index) => (
