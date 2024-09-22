@@ -231,9 +231,9 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         })
     }
 
-    console.log(searchOrderStatus == 'open');
-    console.log(searchOrderExpiresAt != null)
-    console.log(isExpired(parseInt(searchOrderExpiresAt ? searchOrderExpiresAt : 0)));
+    // console.log(searchOrderStatus == 'open');
+    // console.log(searchOrderExpiresAt != null)
+    // console.log(isExpired(parseInt(searchOrderExpiresAt ? searchOrderExpiresAt : 0)));
 
     return (
         <Dialog>

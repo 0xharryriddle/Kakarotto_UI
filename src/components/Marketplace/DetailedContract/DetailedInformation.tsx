@@ -109,8 +109,8 @@ export default function DetailedInformation({ data, imageURL }: DetailedInformat
                                 data?.owner && // Ensure data?.owner exists
                                 isAddressEqual(address, data.owner as `0x${string}`)
                                 ? <div className="flex flex-col items-center justify-center gap-3 w-full">
-                                    <ListingDialog searchOrderStatus={data.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data.nft.tokenId} />
-                                    <CancelDialog searchOrderStatus={data.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data.nft.tokenId} />
+                                    <ListingDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data?.nft.tokenId} searchOrderExpiresAt={data?.nft.searchOrderExpiresAt} />
+                                    <CancelDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data?.nft.tokenId} />
                                 </div>
                                 : <>
                                     <span className="text-base">Buy this one directly through detailed price</span>
