@@ -33,6 +33,7 @@ const Introduction = () => {
                             width={1200}
                             height={300}
                             className='rounded-lg transition-all duration-300 ease-in-out group-hover:blur-md'
+                            loading="lazy"
                         />
                     </div>
                 </div>

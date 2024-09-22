@@ -19,9 +19,9 @@ const GraphqlReqSchema = z.object({
   });
 
   async function process(request: Request) {
-    if (!request.body) {
-      return NextResponse.json({ error: 'Request body is empty' }, { status: 400 });
-    }
+    // if (!request.body) {
+    //   return NextResponse.json({ error: 'Request body is empty' }, { status: 400 });
+    // }
 
     const body = await request.json();
 

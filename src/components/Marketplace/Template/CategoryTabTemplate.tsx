@@ -19,6 +19,7 @@ import CarouselCard from '@/components/Marketplace/CarouselCard';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { fetchCharacterDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { accessToPinataImage } from '@/utils/image.util';
+import { Button } from '@/components/ui/button';
 
 interface CategoryTabTemplateProps {
     contractAddress: `0x${string}`;
@@ -53,7 +54,7 @@ export default function CategoryTabTemplate({
     });
 
     return (
-        <div className='w-full h-full min-h-96 flex flex-col gap-5 text-primary'>
+        <div className='w-full h-full min-h-screen flex flex-col gap-5 text-primary'>
             <Separator className="my-4" />
             <div className="flex flex-row gap-5 px-10">
                 <div className="flex flex-col gap-5 w-1/5 h-full font-bold">
@@ -121,6 +122,7 @@ export default function CategoryTabTemplate({
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+                    <Button>Reset</Button>
                 </div>
                 {
                     loading ? <LoadingTemplate className='h-full w-full' /> :

@@ -13,6 +13,7 @@ import { Character, Item } from '@/generated/graphql';
 import { fetchCharacterData, fetchCharacterDataReturnType, fetchItemData, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { client } from '@/graphql/client';
+import { accessToPinataImage } from '@/utils/image.util';
 
 interface DetailedDashboardProps {
   contractAddress: string,
@@ -32,12 +33,7 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
     notFound();
   }
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [nftInfo, setNftInfo] = useState<{
-    id: string,
-    image: string,
-    metadata: any,
-  }>();
+  // const [loading, setLoading] = useState<boolean>(false);
   const [characterData, setCharacterData] = useState<fetchCharacterDataReturnType>();
   const [itemData, setItemData] = useState<fetchItemDataReturnType>();
 
@@ -51,12 +47,12 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   useEffect(() => {
     async function fetchData() {
       if (graphqlData) {
-        setLoading(true);
+        // setLoading(true);
         setCharacterData(undefined);
         setItemData(undefined);
         const { characters, items } = graphqlData as GraphQLDataProps;
-        await fetchNFTData({ characters: characters, category, items });
-        setLoading(false);
+        await fetchNFTData({ characters, category, items });
+        // setLoading(false);
       }
     }
     fetchData();
@@ -73,7 +69,7 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
       category: Enums.Categories | null,
     }) => {
     try {
-      const dataResult = (category == Enums.Categories.Character ? await fetchCharacterData({characters}) : Enums.Categories.Item ? await fetchItemData({items}) : []).filter((data) => data.tokenId == tokenId)[0];
+      const dataResult = (category == Enums.Categories.Character ? await fetchCharacterData({ characters }) : Enums.Categories.Item ? await fetchItemData({ items }) : []).filter((data) => data.tokenId == tokenId)[0];
 
       category == Enums.Categories.Character ? setCharacterData(dataResult) : category == Enums.Categories.Item ? setItemData(dataResult) : [];
     } catch (error) {
@@ -82,7 +78,6 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   }
 
   return <div className="flex flex-col items-center justify-center gap-5 px-14 py-10">
-    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} />
-    <DetailedOrder />
+    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} />
   </div>
 }

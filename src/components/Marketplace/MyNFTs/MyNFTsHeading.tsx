@@ -19,6 +19,7 @@ export default function MyNFTsHeading({ }: MyNFTsHeadingProps) {
                 width={800}
                 height={400}
                 className={`rounded-md w-full h-44 absolute ${isConnected ? "bottom-24" : "bottom-16"} `}
+                loading="lazy"
             />
             <div className="flex flex-col justify-center items-center gap-5 ml-10 mt-10 w-fit min-h-52">
                 <Avatar className="lg:w-44 lg:h-44 ">

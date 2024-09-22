@@ -52,7 +52,7 @@ export default function Generation(
                 <HoverCardTrigger>
                     <div className={`${image && "relative"} border-4 w-[360px] h-[360px] rounded-lg bg-secondary/70 ${image && 'bg-white'} flex flex-row items-center justify-center`} >
                         {imageLoading && <div><CircularProgress isIndeterminate /></div>}
-                        {image && <Image src={imageURL({ url: process.env.NEXT_PUBLIC_IPFS_URL || "", hash: image })} alt='image' layout='fill' className='rounded-lg' />}
+                        {image && <Image src={imageURL({ url: process.env.NEXT_PUBLIC_IPFS_URL || "", hash: image })} alt='image' layout='fill' className='rounded-lg' loading="lazy" />}
                     </div>
                 </HoverCardTrigger>
                 <HoverCardContent side='right'>
@@ -71,20 +71,19 @@ export default function Generation(
                     </div>
                 </HoverCardContent >
             </HoverCard >
-            {hash && account && <div className="flex flex-col items-center border-4 min-w-96 rounded-lg bg-secondary/70 gap-5">
+            {(!hash && !account) || isMinting ? <div className='flex items-center justify-center w-full'><CircularProgress isIndeterminate /></div> : <div className="flex flex-col items-center border-4 min-w-96 rounded-lg bg-secondary/70 gap-5">
                 <div className="flex flex-row items-center font-bold w-full ">
-                    <span className=''>
+                    <span className='text-primary'>
                         {`Account: `}
                     </span>
                     <div className='flex items-center justify-center w-full'><CircularProgress isIndeterminate /></div>
                     <a href={`${getExplorer(chainId)}/address/${account}`} className='text-primary underline hover:opacity-70 hover:scale-90 transition delay-100 duration-200 ease-in-out break-all text-center'>{account}</a>
                 </div>
                 <div className="flex flex-row items-center font-bold w-full break-all">
-                    <span className=''>Transaction hash: </span>
+                    <span className='text-primary'>Transaction hash: </span>
                     <a href={`${getExplorer(chainId)}/tx/${hash}`} className='text-primary underline hover:opacity-70 hover:scale-90 transition delay-100 duration-200 ease-in-out break-all text-center'>{hash}</a>
                 </div>
             </div>}
-            {isMinting && <div className='flex items-center justify-center w-full'><CircularProgress isIndeterminate /></div>}
         </div >
     )
 }

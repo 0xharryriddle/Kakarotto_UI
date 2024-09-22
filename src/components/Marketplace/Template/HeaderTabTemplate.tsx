@@ -33,7 +33,7 @@ export default function HeaderTabTemplate({
 
     return (
         <div className="flex flex-row items-center gap-4 w-fit px-10 pt-10 text-primary">
-            <Image src={image} width={200} height={200} alt='NFT image' className='rounded-lg' />
+            <Image src={image} width={200} height={200} alt='NFT image' className='rounded-lg' loading="lazy" />
             <div className="font-bold">
                 <div className="space-y-2">
                     <h4 className="text-4xl leading-none">{name}</h4>

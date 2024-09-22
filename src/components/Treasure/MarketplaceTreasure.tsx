@@ -110,7 +110,7 @@ export default function MarketplaceTreasure({ listRarityTreasures }: Marketplace
                 <Card className='w-fit h-fit'>
                     <CardContent className="flex aspect-square items-center justify-center">
                         {/* <Image src={"/TreasureChest.gif"} alt={`Treasure`} width={100} height={100} unoptimized={true} /> */}
-                        <Image src={"/secret_treasure.gif"} alt={`Treasure`} width={300} height={300} unoptimized={true} />
+                        <Image src={"/secret_treasure.gif"} alt={`Treasure`} width={300} height={300} loading="lazy" />
                     </CardContent>
                     <CardFooter>
                         <div className="flex flex-row gap-2 items-center justify-center font-bold w-fit h-fit">

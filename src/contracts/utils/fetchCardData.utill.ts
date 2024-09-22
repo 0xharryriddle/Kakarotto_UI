@@ -30,6 +30,7 @@ export type fetchCharacterDataReturnType = {
     attributes: any[],
     level: string,
     exp: string,
+    nft: Nft,
 }
 
 export type fetchItemDataReturnType = {
@@ -41,6 +42,7 @@ export type fetchItemDataReturnType = {
     creator: string | undefined,
     category: string,
     attributes: any[],
+    nft: Nft,
 }
 
 export type fetchTreasureDataReturnType = {
@@ -51,6 +53,7 @@ export type fetchTreasureDataReturnType = {
     category: string,
     balance: string,
     metadata: any,
+    nft: Nft,
 }
 
 export type fetchDetailNFTReturnType = {
@@ -92,7 +95,8 @@ export const fetchTreasureData = async ({treasureAccounts}: {treasureAccounts: T
                 owner: (account as Account).address,
                 category,
                 balance: balance ? balance : "0",
-                metadata
+                metadata, 
+                nft,
             }
         }));
     return result;
@@ -127,7 +131,8 @@ export const fetchCharacterData = async ({characters} : {characters: Character[]
             category,
             attributes,
             level: level ? level : "0",
-            exp: exp ? exp : "0"
+            exp: exp ? exp : "0",
+                nft,
         }
     }));
     return result;
@@ -161,6 +166,7 @@ export const fetchItemData = async ({items}: {items: Item[]}) => {
                 rarity, 
                 category,   
                 attributes,
+                nft,
             }
         }));
     return result;
