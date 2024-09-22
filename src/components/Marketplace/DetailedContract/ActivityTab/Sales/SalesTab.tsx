@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function SoldTab() {
+export default function SalesTab() {
     return (
         <div>SoldTab</div>
     )
