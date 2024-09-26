@@ -20,10 +20,10 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
   const { contractAddress: contractAddressParams, tokenId: tokenIdParams } = params;
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
-    queryKey: ['data'],
+    queryKey: ['details'],
     async queryFn() {
       return await querySubgraphs({ client })
-    }
+    },
   })
   return <HydrationBoundary state={dehydrate(queryClient)}>
     <DetailedDashboard contractAddress={contractAddressParams} tokenId={tokenIdParams} />

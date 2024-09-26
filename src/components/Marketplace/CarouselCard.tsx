@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import Image from 'next/image';
 import { Badge, Heading, Text } from '@chakra-ui/react';
 import { Categories, Rarities } from '@/utils/enum.util';
+import { UseQueryResult } from '@tanstack/react-query';
 interface CarouselCardProps {
     image: string;
     name: string;
@@ -15,6 +16,7 @@ interface CarouselCardProps {
     className?: string;
     tokenId?: string;
     onClick?: () => void;
+    // refetch: (options: { throwOnError: boolean, cancelRefetch: boolean }) => Promise<UseQueryResult>;
 }
 
 export default function CarouselCard({ image, name, category, description, price, rarity, type, className, tokenId, onClick }: CarouselCardProps) {
@@ -35,7 +37,6 @@ export default function CarouselCard({ image, name, category, description, price
                     </div>
                     <Badge colorScheme={rarity == Rarities.Bronze ? 'brown' : rarity == Rarities.Silver ? 'gray' : rarity == Rarities.Gold ? 'gold' : rarity == Rarities.Platinum ? 'green' : 'purple'} className='rounded-lg p-2 w-fit'>{rarity == Rarities.Bronze ? 'Bronze' : rarity == Rarities.Silver ? 'Silver' : rarity == Rarities.Gold ? 'Gold' : rarity == Rarities.Platinum ? 'Platinum' : 'Diamond'}</Badge>
                 </div>
-
             </CardContent>
         </Card >
     )

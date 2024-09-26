@@ -11,7 +11,7 @@ import { querySubgraphs } from '@/services/graphql/subgraphs'
 export default async function MarketplacePage() {
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
-    queryKey: ['data'],
+    queryKey: ['overview'],
     async queryFn() {
       return await querySubgraphs({ client })
     }

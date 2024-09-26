@@ -38,7 +38,7 @@ export default function MyNFTsTab({ changeTabLoading }: MyNFTsTabProps) {
   });
 
   const { data: graphqlData, status: graphqlStatus } = useQuery({
-    queryKey: ['data'],
+    queryKey: ['my_nfts'],
     async queryFn() {
       return await querySubgraphs({ client });
     }

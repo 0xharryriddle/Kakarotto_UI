@@ -21,6 +21,7 @@ import LoadingTemplate from '@/components/LoadingTemplate';
 import { client } from '@/graphql/client';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { useQuery } from '@tanstack/react-query';
+import { env } from "@/env/server";
 
 interface OverviewTabProps {
     changeTabLoading: boolean;
@@ -28,7 +29,7 @@ interface OverviewTabProps {
 
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
     const { data, status } = useQuery({
-        queryKey: ['data'],
+        queryKey: ['overview'],
         async queryFn() {
             return await querySubgraphs({ client });
         },

@@ -20,12 +20,14 @@ import LoadingTemplate from '@/components/LoadingTemplate';
 import { fetchCharacterDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { accessToPinataImage } from '@/utils/image.util';
 import { Button } from '@/components/ui/button';
+import { UseQueryResult } from '@tanstack/react-query';
 
 interface CategoryTabTemplateProps {
     contractAddress: `0x${string}`;
     category: Categories;
     data: any[];
     loading?: boolean;
+    // refetch: (options: { throwOnError: boolean, cancelRefetch: boolean }) => Promise<UseQueryResult>
 }
 
 type RarityFilter = {
@@ -43,6 +45,7 @@ export default function CategoryTabTemplate({
     category,
     data,
     loading,
+    // refetch
 }: CategoryTabTemplateProps) {
     const router = useRouter()
     const [filter, setFilter] = useState<{

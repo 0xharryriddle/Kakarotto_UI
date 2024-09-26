@@ -27,11 +27,11 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [characterData, setCharacterData] = useState<Character[]>([]);
 
-  const { data: graphqlData, status: graphqlStatus } = useQuery({
-    queryKey: ['data'],
+  const { data: graphqlData, error, isLoading, status: graphqlStatus, refetch: graphqlRefetch } = useQuery({
+    queryKey: ['characters'],
     async queryFn() {
       return await querySubgraphs({ client });
-    },
+    }
   });
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
   }
 
   return (
-    changeTabLoading
+    changeTabLoading || isLoading
       ? <LoadingTemplate />
       : <div className='flex flex-col gap-5 justify-center px-5 py-2'>
         <HeaderTabTemplate image={"/secret_treasure.gif"}
@@ -74,7 +74,9 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
           data={characterData}
           category={Categories.Character}
           loading={loading}
-          contractAddress={getKakarottoCharacterAddress(chainId) ? getKakarottoCharacterAddress(chainId) : getKakarottoCharacterAddress(11155111)} />
+          contractAddress={getKakarottoCharacterAddress(chainId) ? getKakarottoCharacterAddress(chainId) : getKakarottoCharacterAddress(11155111)}
+        // refetch={graphqlRefetch}
+        />
       </div>
   )
 }
