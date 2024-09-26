@@ -192,5 +192,11 @@ export type QuerySubgraphsArgs = {
 export async function querySubgraphs({
   client
 }: QuerySubgraphsArgs) {
-  return await client.request(Subgraphs);
+  try {
+    const data = await client.request(Subgraphs);
+    return data;
+  } catch (error) {
+    console.error("Error fetching subgraphs:", error);
+    throw error; // Rethrow the error to handle it in the component
+  }
 }

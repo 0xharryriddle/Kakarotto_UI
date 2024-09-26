@@ -1,6 +1,7 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { isServer, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 
 function buildQueryClient() {
     return new QueryClient({
@@ -14,7 +15,7 @@ function buildQueryClient() {
 let browserQueryClient: QueryClient | undefined = undefined;
 
 function getQueryClient() {
-    if (typeof window === 'undefined') {
+    if (isServer) {
         return buildQueryClient();
     } else {
         if (!browserQueryClient) {
@@ -32,5 +33,9 @@ export default function SubgraphProvider({
 }>) {
     const queryClient = getQueryClient();
 
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return <QueryClientProvider client={queryClient}>
+        <ReactQueryStreamedHydration>
+            {children}
+        </ReactQueryStreamedHydration>
+    </QueryClientProvider>;
 }

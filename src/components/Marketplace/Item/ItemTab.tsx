@@ -26,7 +26,7 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
   const [itemData, setItemData] = useState<Item[]>([]);
 
   const { data: graphqlData } = useQuery({
-    queryKey: ['data'],
+    queryKey: ['items'],
     async queryFn() {
       return await querySubgraphs({ client })
     }

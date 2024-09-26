@@ -11,11 +11,12 @@ import { querySubgraphs } from '@/services/graphql/subgraphs'
 export default async function CharacterMarketplacePage() {
   const queryClient = new QueryClient()
   await queryClient.prefetchQuery({
-    queryKey: ['data'],
+    queryKey: ['characters'],
     async queryFn() {
       return await querySubgraphs({ client })
-    }
+    },
   })
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <CharacterTab changeTabLoading={false} />

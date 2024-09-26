@@ -1,11 +1,10 @@
 'use client';
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { ReactP5Wrapper, type Sketch, } from "@p5-wrapper/react";
+import { type Sketch } from "@p5-wrapper/react";
+import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { ArrowLeftCircleIcon } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
-import LoadingTemplate from '@/components/LoadingTemplate';
 import { fetchCharacterDataReturnType, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -14,26 +13,22 @@ import ActivityTabs from '@/components/Marketplace/DetailedContract/ActivityTab/
 import { useAccount } from 'wagmi';
 import { formatEther, isAddressEqual } from 'viem';
 import ListingDialog from './Dialog/ListingDialog';
-import CancelDialog from './Dialog/CancelDialog';
+import CancelListingDialog from './Dialog/CancelListingDialog';
 import { isExpired, timeLeft } from '@/utils/date.util';
 import BuyDialog from './Dialog/BuyDialog';
 import OfferDialog from './Dialog/OfferDialog';
+import * as Enums from "@/utils/enum.util";
 
 interface DetailedInformationProps {
     // loading: boolean;
     data: fetchCharacterDataReturnType | fetchItemDataReturnType | undefined;
     imageURL: string;
+    category: Enums.Categories;
 }
 
-export default function DetailedInformation({ data, imageURL }: DetailedInformationProps) {
+export default function DetailedInformation({ data, imageURL, category }: DetailedInformationProps) {
     const { address, chain } = useAccount();
     const router = useRouter();
-    const [isAction, setIsAction] = useState({
-        listing: false,
-        cancel: false,
-        offer: false,
-        buy: false,
-    })
     const size = 400;
     const totalFrames = 500;
 
@@ -67,9 +62,7 @@ export default function DetailedInformation({ data, imageURL }: DetailedInformat
             </div>
             <div className="w-full flex flex-row justify-between gap-5">
                 <div className="rounded-lg overflow-hidden h-fit w-fit">
-                    <ReactP5Wrapper sketch={sketch} loading={() => {
-                        return <LoadingTemplate className='w-full' />
-                    }} />
+                    <NextReactP5Wrapper sketch={sketch} />
                 </div>
                 <div className="flex flex-col justify-center text-secondary gap-5 p-5 rounded-lg bg-transparent/40 w-1/2">
                     <span className='text-3xl font-bold'>{data?.metadata.name}</span>
@@ -109,8 +102,19 @@ export default function DetailedInformation({ data, imageURL }: DetailedInformat
                                 data?.owner && // Ensure data?.owner exists
                                 isAddressEqual(address, data.owner as `0x${string}`)
                                 ? <div className="flex flex-col items-center justify-center gap-3 w-full">
-                                    <ListingDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data?.nft.tokenId} searchOrderExpiresAt={data?.nft.searchOrderExpiresAt} />
-                                    <CancelDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data.nft.contractAddress} tokenId={data?.nft.tokenId} />
+                                    <ListingDialog
+                                        searchOrderStatus={data?.nft.searchOrderStatus}
+                                        contractAddress={data.nft.contractAddress}
+                                        tokenId={data?.nft.tokenId}
+                                        searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
+                                        category={category}
+                                    />
+                                    <CancelListingDialog
+                                        searchOrderStatus={data?.nft.searchOrderStatus}
+                                        searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
+                                        contractAddress={data.nft.contractAddress}
+                                        tokenId={data?.nft.tokenId}
+                                    />
                                 </div>
                                 : <>
                                     <span className="text-base">Buy this one directly through detailed price</span>
@@ -125,9 +129,22 @@ export default function DetailedInformation({ data, imageURL }: DetailedInformat
                                     }
                                     <div className="flex flex-col items-center justify-center gap-3 w-full">
                                         {/* Buy */}
-                                        <BuyDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data?.nft.contractAddress} tokenId={data?.nft.tokenId} searchOrderExpiresAt={data?.nft.searchOrderExpiresAt} />
+                                        <BuyDialog
+                                            searchOrderStatus={data?.nft.searchOrderStatus}
+                                            contractAddress={data?.nft.contractAddress}
+                                            tokenId={data?.nft.tokenId}
+                                            searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
+                                        />
                                         {/* Make Offer */}
-                                        <OfferDialog searchOrderStatus={data?.nft.searchOrderStatus} contractAddress={data?.nft.contractAddress} tokenId={data?.nft.tokenId} searchOrderExpiresAt={data?.nft.searchOrderExpiresAt} />
+                                        <OfferDialog
+                                            searchOrderStatus={data?.nft.searchOrderStatus}
+                                            contractAddress={data?.nft.contractAddress}
+                                            tokenId={data?.nft.tokenId}
+                                            searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
+                                            owner={data?.owner as `0x${string}`}
+                                            image={''}
+                                            attributes={[]}
+                                        />
                                     </div>
                                 </>
                         }

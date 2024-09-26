@@ -13,10 +13,12 @@ interface ListingButtonProps {
 }
 
 export default function ListingButton({ className, loading = false, disabled = false, onClick, relisting }: ListingButtonProps) {
-
-
     return (
-        <Button className={`transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4 w-full ${className}`} disabled={disabled} onClick={onClick}>
+        <Button
+            className={`transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4 w-full ${className}`}
+            disabled={disabled}
+            onClick={onClick}
+        >
             {
                 loading ? <LoadingTemplate /> : <><RocketIcon size={24} />
                     <span className="text-xl font-bold uppercase">

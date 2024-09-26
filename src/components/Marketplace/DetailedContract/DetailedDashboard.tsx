@@ -14,6 +14,7 @@ import { fetchCharacterData, fetchCharacterDataReturnType, fetchItemData, fetchI
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { client } from '@/graphql/client';
 import { accessToPinataImage } from '@/utils/image.util';
+import Loading from '@/app/loading';
 
 interface DetailedDashboardProps {
   contractAddress: string,
@@ -37,12 +38,16 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   const [characterData, setCharacterData] = useState<fetchCharacterDataReturnType>();
   const [itemData, setItemData] = useState<fetchItemDataReturnType>();
 
-  const { data: graphqlData, isLoading: graphqlIsLoading, error } = useQuery({
-    queryKey: ['data'],
+  const { data: graphqlData, isLoading: graphqlIsLoading, isFetching: graphqlIsFetching, isError: graphqlIsError, error: graphqlError, refetch: graphqlRefetch } = useQuery({
+    queryKey: ['details'],
     async queryFn() {
       return await querySubgraphs({ client });
-    }
+    },
   });
+
+  useEffect(() => {
+    graphqlRefetch();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -77,7 +82,11 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
     }
   }
 
+  if (graphqlIsLoading || graphqlIsFetching) {
+    return <Loading />
+  }
+
   return <div className="flex flex-col items-center justify-center gap-5 px-14 py-10">
-    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} />
+    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} category={category} />
   </div>
 }

@@ -17,7 +17,7 @@ interface BuyDialogProps {
     searchOrderStatus?: OrderStatus | null;
     contractAddress: string | `0x${string}`;
     tokenId: string;
-    searchOrderExpiresAt: string | null;
+    searchOrderExpiresAt?: number;
 }
 
 export default function BuyDialog({ searchOrderStatus, contractAddress, tokenId, searchOrderExpiresAt }: BuyDialogProps) {
@@ -25,8 +25,12 @@ export default function BuyDialog({ searchOrderStatus, contractAddress, tokenId,
 
     return (
         <Dialog>
-            <DialogTrigger className='w-full'>
-                <BuyButton disabled={searchOrderStatus != 'open' || !isConnected || (searchOrderExpiresAt != null && isExpired(parseInt(searchOrderExpiresAt)))} />
+            <DialogTrigger
+                asChild
+            >
+                <BuyButton
+                    disabled={searchOrderStatus != 'open' || !isConnected || (searchOrderExpiresAt != null && isExpired(searchOrderExpiresAt))}
+                />
             </DialogTrigger>
         </Dialog>
     )
