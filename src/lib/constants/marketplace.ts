@@ -6,3 +6,5 @@ export const BID_CONSTANTS = {
 export const ORDER_CONSTANTS = {
   THRESHOLD_ORDER: 10 * 60,
 };
+
+export const PRECISION = 1000000;

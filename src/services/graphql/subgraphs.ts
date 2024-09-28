@@ -1,10 +1,10 @@
-import { GraphQLClient, type RequestDocument } from 'graphql-request';
+import { GraphQLClient, type RequestDocument } from "graphql-request";
 
-import { graphql } from '@/generated/gql';
+import { graphql } from "@/generated/gql";
 
 const Subgraphs: RequestDocument = graphql(`
   query Characters {
-  characters {
+    characters {
       characterAccount {
         id
         contractAddress
@@ -13,7 +13,7 @@ const Subgraphs: RequestDocument = graphql(`
         id
         creator
         owner {
-            address
+          address
         }
         tokenId
         tokenURI
@@ -22,46 +22,47 @@ const Subgraphs: RequestDocument = graphql(`
         amount
         rarity
         orders {
-            id
-            category
-            tokenId
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            createdAt
-            expiresAt
-            updatedAt
+          id
+          category
+          tokenId
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          createdAt
+          expiresAt
+          updatedAt
         }
         bids {
-            id
-            category
-            tokenId
-            bidder
-            seller
-            price
-            status
-            expiresAt
-            createdAt
-            updatedAt
+          id
+          category
+          tokenId
+          bidder
+          seller
+          price
+          status
+          expiresAt
+          createdAt
+          updatedAt
         }
         activeOrder {
-            id
-            category
-            tokenId
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            createdAt
-            expiresAt
-            updatedAt
+          id
+          category
+          tokenId
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          createdAt
+          expiresAt
+          updatedAt
         }
         searchOwner
         searchOrderStatus
         searchOrderExpiresAt
+        searchOrderPrice
       }
       attributes {
         attribute
@@ -69,20 +70,20 @@ const Subgraphs: RequestDocument = graphql(`
       }
       level
       exp
-  }
-  treasureAccounts {
+    }
+    treasureAccounts {
       treasure {
         tokenId
         tokenURI
         nft {
-            id
-            tokenId
-            tokenURI
-            contractAddress
-            category
-            amount
-            rarity
-            orders {
+          id
+          tokenId
+          tokenURI
+          contractAddress
+          category
+          amount
+          rarity
+          orders {
             id
             category
             tokenId
@@ -94,8 +95,8 @@ const Subgraphs: RequestDocument = graphql(`
             createdAt
             expiresAt
             updatedAt
-            }
-            bids {
+          }
+          bids {
             id
             category
             tokenId
@@ -106,8 +107,8 @@ const Subgraphs: RequestDocument = graphql(`
             expiresAt
             createdAt
             updatedAt
-            }
-            activeOrder {
+          }
+          activeOrder {
             id
             category
             tokenId
@@ -119,79 +120,81 @@ const Subgraphs: RequestDocument = graphql(`
             createdAt
             expiresAt
             updatedAt
-            }
+          }
         }
       }
       balance
-  }
-  items {
-    nft {
-      id
-      creator
-      owner {
-        address
-      }
-      tokenId
-      tokenURI
-      contractAddress
-      category
-      amount
-      rarity
-      orders {
+    }
+    items {
+      nft {
         id
-        category
+        creator
+        owner {
+          address
+        }
         tokenId
-        transactionHash
-        owner
-        buyer
-        price
-        status
-        createdAt
-        expiresAt
-        updatedAt
+        tokenURI
+        contractAddress
+        category
+        amount
+        rarity
+        orders {
+          id
+          category
+          tokenId
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          createdAt
+          expiresAt
+          updatedAt
+        }
+        bids {
+          id
+          category
+          tokenId
+          bidder
+          seller
+          price
+          status
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        activeOrder {
+          id
+          category
+          tokenId
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          createdAt
+          expiresAt
+          updatedAt
+        }
+        searchOwner
+        searchOrderStatus
+        searchOrderExpiresAt
+        searchOrderPrice
       }
-      bids {
-        id
-        category
-        tokenId
-        bidder
-        seller
-        price
-        status
-        expiresAt
-        createdAt
-        updatedAt
-      }
-      activeOrder {
-        id
-        category
-        tokenId
-        transactionHash
-        owner
-        buyer
-        price
-        status
-        createdAt
-        expiresAt
-        updatedAt
+      attributes {
+        attribute
+        value
+        isIncrease
+        isPercentage
       }
     }
-    attributes {
-      attribute
-      value
-      isIncrease
-      isPercentage
-    } 
   }
-}
 `) as RequestDocument;
 
 export type QuerySubgraphsArgs = {
   client: GraphQLClient;
 };
-export async function querySubgraphs({
-  client
-}: QuerySubgraphsArgs) {
+export async function querySubgraphs({ client }: QuerySubgraphsArgs) {
   try {
     const data = await client.request(Subgraphs);
     return data;

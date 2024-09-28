@@ -39,7 +39,7 @@ export const useERC721Approval = ({
     abi: erc721Abi,
     args: [spender, tokenId],
     functionName: "approve",
-    query: { enabled: enabled && !!chainId },
+    query: { enabled: enabled && !!chainId && !!address, retry: false },
   });
 
   const {

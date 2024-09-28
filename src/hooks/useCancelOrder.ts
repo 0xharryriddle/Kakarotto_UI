@@ -39,7 +39,7 @@ export const useCancelOrder = ({
     abi: getABI("KakarottoMarketplace"),
     args: [tokenAddress, tokenId],
     functionName: "cancelOrder",
-    query: { enabled: enabled && !!chainId },
+    query: { enabled: enabled && !!chainId, retry: false },
   });
 
   const {
