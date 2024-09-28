@@ -8,20 +8,15 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
 
 import { OrderStatus } from '@/generated/graphql';
 import CancelListingButton from '@/components/Marketplace/DetailedContract/Button/CancelListingButton';
 import { BanIcon } from 'lucide-react';
-import Link from 'next/link';
-import { EXPLORER_URL } from '@/contracts/utils/commons.util';
-import { useAccount, useWriteContract } from 'wagmi';
-import { kakarottoMarketplaceConfig } from '@/contracts/config/writeContract.config';
+import { useAccount } from 'wagmi';
 import { useToast } from '@chakra-ui/react';
 import { isExpired } from '@/utils/date.util';
 import { useCancelOrder } from '@/hooks/useCancelOrder';
-import { getKakarottoMarketplaceAddress } from '@/contracts/utils/getAddress.util';
 import { Address, TransactionReceipt } from 'viem';
 import getExplorer from '@/contracts/utils/getExplorer.util';
 
@@ -35,9 +30,11 @@ interface CancelListingDialogProps {
 export default function CancelListingDialog({ searchOrderStatus, contractAddress, searchOrderExpiresAt, tokenId }: CancelListingDialogProps) {
     const { chainId } = useAccount();
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
+
     const toast = useToast();
 
     const {
+        error: cancelOrderError,
         isLoading: cancelOrderIsLoading,
         onCancelOrder,
     } = useCancelOrder({
@@ -77,7 +74,7 @@ export default function CancelListingDialog({ searchOrderStatus, contractAddress
                 toast.close('cancel-order-loading-toast');
             }
         }
-    })
+    });
 
     async function onSubmit() {
         setIsSubmit(true);

@@ -25,17 +25,16 @@ import {
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns"
-import { Attribute, OrderStatus } from '@/generated/graphql';
+import { CharacterAttribute, OrderStatus } from '@/generated/graphql';
 import MakeOfferButton from '../Button/MakeOfferButton';
 import { useAccount } from 'wagmi';
 import { isExpired } from '@/utils/date.util';
 import { useToast } from '@chakra-ui/react';
 import Image from 'next/image';
-import { accessToPinataImage } from '@/utils/image.util';
 import { useBidOrder } from '@/hooks/useBidOrder';
 import { getERC721BidAddress, getKakarottoTokenAddress } from '@/contracts/utils/getAddress.util';
 import getABI from '@/contracts/utils/getAbi.util';
-import { Address, isAddressEqual, TransactionReceipt } from 'viem';
+import { Address, isAddressEqual, parseEther, TransactionReceipt } from 'viem';
 import { useIsSufficientTokenBalance } from '@/hooks/useIsSufficientTokenBalance';
 import { BID_CONSTANTS } from '@/lib/constants/marketplace';
 import { truncateEthAddress } from '@/utils/address.util';
@@ -46,9 +45,13 @@ import { Input } from '@/components/ui/input';
 import { useFormattedTokenBalance } from '@/hooks/useFormattedTokenBalance';
 import { formatUnitsToNumber } from '@/utils/token-unit-utils/format-units-to-number';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, ScaleIcon, SignatureIcon } from 'lucide-react';
 import { TimePicker } from '@/components/time-picker/time-picker';
 import { useERC20Allowance } from '@/hooks/useERC20Allowance';
+import { capitalizeFirstLetter } from '@/utils/string.util';
+import BuyButton from '../Button/BuyButton';
+import { useERC20Approval } from '@/hooks/useERC20Approval';
+import getExplorer from '@/contracts/utils/getExplorer.util';
 
 interface OfferDialogProps {
     searchOrderStatus?: OrderStatus | null;
@@ -56,8 +59,9 @@ interface OfferDialogProps {
     tokenId: bigint;
     searchOrderExpiresAt?: number;
     image: string;
-    attributes: Attribute[],
+    attributes: CharacterAttribute[],
     owner?: Address;
+    priceInWei: bigint;
 }
 
 const formSchema = z.object({
@@ -66,13 +70,6 @@ const formSchema = z.object({
     }).refine(value => parseInt(value, 10) > 0, {
         message: "Price must be larger than 0"
     }),
-    // duration: z.string().refine(value => !Number.isNaN(parseInt(value, 10)), {
-    //     message: "Expected number, received a string"
-    // }).refine((duration) => {
-    //     return parseInt(duration) >= BID_CONSTANTS.MIN_BID_DURATION && parseInt(duration) <= BID_CONSTANTS.MAX_BID_DURATION
-    // }, {
-    //     message: "The expired date must be after today 10 minutes"
-    // })
     expiredAt: z.date().refine((date) => {
         const timeStamp = date.getTime();
         return (timeStamp > Date.now()) && (timeStamp - Date.now() > BID_CONSTANTS.MIN_BID_DURATION * 1000) && (timeStamp - Date.now() <= BID_CONSTANTS.MAX_BID_DURATION * 1000)
@@ -81,10 +78,19 @@ const formSchema = z.object({
     })
 });
 
-export default function OfferDialog({ searchOrderStatus, contractAddress, tokenId, searchOrderExpiresAt, image, attributes, owner }: OfferDialogProps) {
+export default function OfferDialog({
+    searchOrderStatus,
+    contractAddress,
+    tokenId,
+    searchOrderExpiresAt,
+    image,
+    attributes,
+    owner,
+    priceInWei
+}: OfferDialogProps) {
     const { isConnected, chainId, address } = useAccount();
-    // const [bidPrice, setBidPrice] = useState<bigint>(BigInt(0));
-    // const [bidDuration, setBidDuration] = useState<bigint>(BigInt(0));
+
+    const toast = useToast();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -92,27 +98,6 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
             bidPrice: "0",
             expiredAt: new Date(Date.now() + BID_CONSTANTS.MIN_BID_DURATION * 1000)
         }
-    });
-
-    const {
-        error: bidOrderError,
-        isLoading: bidOrderIsLoading,
-        isSuccess: bidOrderIsSuccess,
-        isError: bidOrderIsError,
-        onBidOrder,
-        refetch: bidOrderRefetch,
-    } = useBidOrder({
-        chainId,
-        address: getERC721BidAddress(chainId),
-        abi: getABI('ERC721Bid'),
-        tokenAddress: contractAddress,
-        tokenId,
-        price: BigInt(form.getValues('bidPrice')),
-        duration: form.getValues('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.getValues('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
-        enabled: form.getValues('expiredAt').getTime() > Date.now() && BigInt(form.getValues('bidPrice')) > BigInt(0),
-        onSuccess: (data: TransactionReceipt) => { },
-        onSettled: (data?: TransactionReceipt) => { },
-        onError: (error?: Error) => { }
     });
 
     const {
@@ -142,20 +127,6 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
     });
 
     const {
-        isLoading: erc20AllowanceIsLoading,
-        isFetching: erc20AllowanceIsFetching,
-        isSuccess: erc20AllowanceIsSuccess,
-        isError: erc20AllowanceIsError,
-        allowance: erc20Allowance,
-        refetch: erc20AllowanceRefetch
-    } = useERC20Allowance({
-        tokenAddress: getKakarottoTokenAddress(chainId),
-        allowedAddress: getERC721BidAddress(chainId),
-        chainId,
-        enabled: true,
-    })
-
-    const {
         tokenBalanceRaw,
         refetch: tokenBalanceRefetch,
         isLoading: tokenBalanceIsLoading,
@@ -168,8 +139,129 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
         enabled: true,
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        console.log(values.expiredAt.getTime() - Date.now())
+    const {
+        error: bidOrderError,
+        isLoading: bidOrderIsLoading,
+        isSuccess: bidOrderIsSuccess,
+        isError: bidOrderIsError,
+        onBidOrder,
+        refetch: bidOrderRefetch,
+    } = useBidOrder({
+        chainId,
+        address: getERC721BidAddress(chainId),
+        abi: getABI('ERC721Bid'),
+        tokenAddress: contractAddress,
+        tokenId,
+        price: parseEther(form.getValues('bidPrice')),
+        duration: form.getValues('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.getValues('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
+        enabled: form.getValues('expiredAt').getTime() > Date.now() && BigInt(form.getValues('bidPrice')) > BigInt(0),
+        onSuccess: (data: TransactionReceipt) => {
+            if (!toast.isActive('offer-order-success-toast')) {
+                toast({
+                    id: 'offer-order-success-toast',
+                    title: "Placed a Bid this NFT Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have placed a bid this NFT for Bid Market</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
+        },
+        onSettled: (data?: TransactionReceipt) => {
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
+        },
+        onError: (error?: Error) => {
+            console.log(error);
+            toast({
+                title: "Place A Bid Error",
+                description: "Something went wrong",
+                isClosable: true,
+                status: 'error',
+                position: "bottom-right"
+            })
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
+        }
+    });
+
+    const {
+        isLoading: erc20ApprovalIsLoading,
+        onERC20Approval,
+    } = useERC20Approval({
+        chainId,
+        address: getKakarottoTokenAddress(chainId),
+        spender: getERC721BidAddress(chainId),
+        amount: parseEther(form.getValues('bidPrice')),
+        enabled: !!form.getValues('bidPrice'),
+        onSuccess: (data: TransactionReceipt) => {
+            if (!toast.isActive('erc20-approval-success-toast')) {
+                toast({
+                    id: 'erc20-approval-success-toast',
+                    title: "Approving Token Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have approved tokens for Marketplace</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
+        },
+        onSettled: (data?: TransactionReceipt) => {
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
+        },
+        onError: (error?: Error) => {
+            console.log(error);
+            toast({
+                title: "Approving Token Error",
+                description: "Something went wrong",
+                isClosable: true,
+                status: 'error',
+                position: "bottom-right"
+            })
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
+        }
+    })
+
+    const onApprovalERC20Submit = async () => {
+        if (!toast.isActive('erc20-approval-loading-toast')) {
+            toast({
+                id: 'erc20-approval-loading-toast',
+                title: "Approving Token Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+        }
+        await onERC20Approval();
+    }
+
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        if (!toast.isActive('offer-order-loading-toast')) {
+            toast({
+                id: 'offer-order-loading-toast',
+                title: "Placed This NFT Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+        }
+        await onBidOrder();
     }
 
     return (
@@ -179,9 +271,12 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
             >
                 <MakeOfferButton
                     disabled={
-                        !(searchOrderStatus == 'open' && isConnected && address && owner && !isAddressEqual(address, owner) && (!searchOrderExpiresAt || (searchOrderExpiresAt && !isExpired(searchOrderExpiresAt))))
+                        bidOrderIsLoading || searchOrderStatus != 'open' || !isConnected || (searchOrderExpiresAt != null && isExpired(searchOrderExpiresAt))
                     }
-                />
+                >
+                    <ScaleIcon size={24} />
+                    <span className="text-xl font-bold uppercase">Make offer</span>
+                </MakeOfferButton>
             </DialogTrigger>
             <DialogContent className='h-fit'>
                 <DialogHeader>
@@ -189,33 +284,39 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
                     <DialogDescription>{"Offer your price suitably to nft's owner."}</DialogDescription>
                 </DialogHeader>
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col justify-center gap-2 border-2 rounded-lg px-5">
+                    <div className="flex flex-col justify-center gap-2 border-2 border-primary rounded-lg px-5">
                         <span className='font-bold text-2xl'>Kakarotto Token</span>
-                        <div className="space-x-2 flex justify-between">
+                        <div className="flex justify-between">
                             <span className='text-lg font-bold'>TokenId:</span>
                             <span className='font-medium'>#0</span>
                         </div>
-                        <div className="space-x-2 flex justify-between">
+                        <div className=" flex justify-between">
                             <span className='text-lg font-bold'>Category:</span>
                             <span className='font-medium'>Character</span>
                         </div>
-                        <div className="space-x-2 flex justify-between">
+                        <div className="flex justify-between">
                             <span className='text-lg font-bold'>Rarity:</span>
                             <span className='font-medium'>Bronze</span>
                         </div>
-                        <div className="space-x-2 flex justify-between">
+                        <div className="flex justify-between">
                             <span className='text-lg font-bold'>Owner:</span>
                             <span className='font-medium'>{contractAddress ? truncateEthAddress(contractAddress.toString()) : "Unknown"}</span>
                         </div>
-                        <div className="space-x-2 flex justify-between">
+                        <div className="flex justify-between">
                             <span className='text-lg font-bold'>Price:</span>
-                            <span className='font-medium'>$60</span>
+                            <span className='font-medium'>{formatUnitsToNumber(priceInWei)}</span>
                         </div>
-                        <div className="space-x-2 flex justify-between">
+                        <div className="flex justify-between gap-2 w-full text-primary">
                             <span className='text-lg font-bold'>Attributes:</span>
-                            <div className="ml-5">
-                                <span className='font-medium'>Attack: </span>
-                                <span className='font-medium'>40</span>
+                            <div className="flex flex-col justify-center gap-2 w-full">
+                                {
+                                    attributes.map((attribute, index) => {
+                                        return (<div key={index} className="flex flex-row items-center justify-between ml-10">
+                                            <span className='font-medium'>{capitalizeFirstLetter(attribute?.attribute)}</span>
+                                            <span className='font-medium'>{attribute?.value}</span>
+                                        </div>)
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
@@ -291,7 +392,39 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
                                                 </FormItem>
                                             )}
                                         />
-                                        <Button type='submit' className='w-full'>Place bid</Button>
+                                        {
+                                            !isSufficientAllowance || !isSufficientBalance
+                                                ? <Button
+                                                    className='w-full transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4'
+                                                    disabled={!isSufficientBalance || !isConnected || erc20ApprovalIsLoading}
+                                                    type='button'
+                                                    onClick={onApprovalERC20Submit}
+                                                >
+                                                    {
+                                                        erc20ApprovalIsLoading
+                                                            ? <span className='text-xl font-bold'>Loading...</span>
+                                                            : isSufficientBalance
+                                                                ? <>
+                                                                    <SignatureIcon size={24} />
+                                                                    <span className="text-xl font-bold uppercase">Approve Token</span>
+                                                                </> : "Insufficient balance"
+                                                    }
+                                                </Button>
+                                                : <Button
+                                                    className='w-full transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4'
+                                                    disabled={!isSufficientAllowance || !isSufficientBalance || bidOrderIsLoading || searchOrderStatus != 'open' || !isConnected || (searchOrderExpiresAt != null && isExpired(searchOrderExpiresAt)) || !isSufficientAllowance || !isSufficientBalance}
+                                                    type='submit'
+                                                >
+                                                    {
+                                                        bidOrderIsLoading
+                                                            ? <span className='text-xl font-bold'>Loading...</span>
+                                                            : <>
+                                                                <ScaleIcon size={24} />
+                                                                <span className="text-xl font-bold uppercase">Make offer</span>
+                                                            </>
+                                                    }
+                                                </Button>
+                                        }
                                     </form>
                                 </Form>
                             </div>
@@ -299,6 +432,6 @@ export default function OfferDialog({ searchOrderStatus, contractAddress, tokenI
                     </div>
                 </div>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }

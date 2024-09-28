@@ -31,14 +31,13 @@ import ListingButton from '@/components/Marketplace/DetailedContract/Button/List
 import { OrderStatus } from '@/generated/graphql';
 import { CalendarIcon, RocketIcon, ScaleIcon, SignatureIcon } from 'lucide-react';
 import { useAccount } from 'wagmi';
-import { ToastId, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { Address, isAddressEqual, parseEther, TransactionReceipt } from 'viem';
 import { getKakarottoCharacterAddress, getKakarottoMarketplaceAddress, getKakarottoTokenAddress } from '@/contracts/utils/getAddress.util';
 import { z } from "zod"
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TimePicker } from '@/components/time-picker/time-picker';
-import getABI from '@/contracts/utils/getAbi.util';
 import { isExpired } from '@/utils/date.util';
 import { usePublicationFee } from '@/hooks/usePublicationFee';
 import { useFormattedTokenBalance } from '@/hooks/useFormattedTokenBalance';
@@ -52,7 +51,6 @@ import { formatUnitsToNumber } from '@/utils/token-unit-utils/format-units-to-nu
 import { ORDER_CONSTANTS } from '@/lib/constants/marketplace';
 import { useERC721AllowanceAll } from '@/hooks/useERC721AllowanceAll';
 import getExplorer from '@/contracts/utils/getExplorer.util';
-import { CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 
 interface ListingDialogProps {
     searchOrderStatus?: OrderStatus | null;
@@ -76,9 +74,7 @@ const formSchema = z.object({
 });
 
 export default function ListingDialog({ searchOrderStatus, contractAddress, tokenId, searchOrderExpiresAt, category }: ListingDialogProps) {
-    const { chainId, address } = useAccount();
-    const [isERC721ApprovalSubmit, setERC721ApprovalSubmit] = useState<boolean>(false);
-    const [isERC20ApprovalSubmit, setERC20ApprovalSubmit] = useState<boolean>(false);
+    const { chainId, address, isConnected } = useAccount();
 
     const toast = useToast();
 
@@ -149,16 +145,19 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         expiresAt: BigInt(Math.floor(form.getValues('expiredAt').getTime() / 1000)),
         enabled: !form.getFieldState('price').invalid && !form.getFieldState('expiredAt').invalid,
         onSuccess: (data: TransactionReceipt) => {
-            toast({
-                title: "Listing Your Asset Successfully.",
-                description: <div className="flex flex-col justify-center gap-1">
-                    <span>You have been listing your token for Marketplace</span>
-                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                </div>,
-                status: 'success',
-                isClosable: true,
-                position: "bottom-right"
-            })
+            if (!toast.isActive('create-order-success-toast')) {
+                toast({
+                    id: 'create-order-success-toast',
+                    title: "Listing Your Asset Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have been listing your token for Marketplace</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
         },
         onSettled: (data?: TransactionReceipt) => {
             if (toast.isActive('create-order-loading-toast')) {
@@ -185,28 +184,30 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         onERC721Approval,
     } = useERC721Approval({
         chainId,
-        address,
+        address: contractAddress,
         spender: getKakarottoMarketplaceAddress(chainId),
         tokenId: BigInt(parseInt(tokenId)),
-        enabled: !!tokenId && !!isERC721ApprovalSubmit,
+        enabled: !!tokenId,
         onSuccess: (data: TransactionReceipt) => {
-            setERC721ApprovalSubmit(false);
             if (toast.isActive('erc721-approval-loading-toast')) {
                 toast.close('erc721-approval-loading-toast');
             }
-            toast({
-                title: "Approving Your Asset Successfully.",
-                description: <div className="flex flex-col justify-center gap-1">
-                    <span>You have approved your asset for Marketplace</span>
-                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                </div>,
-                status: 'success',
-                isClosable: true,
-                position: "bottom-right"
-            })
+            if (!toast.isActive('erc721-approval-success-toast')) {
+                toast({
+                    id: 'erc721-approval-success-toast',
+                    title: "Approving Your Asset Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have approved your asset for Marketplace</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
+
         },
         onSettled: (data?: TransactionReceipt) => {
-            setERC721ApprovalSubmit(false);
             if (toast.isActive('erc721-approval-loading-toast')) {
                 toast.close('erc721-approval-loading-toast');
             }
@@ -220,7 +221,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            setERC721ApprovalSubmit(false);
             if (toast.isActive('erc721-approval-loading-toast')) {
                 toast.close('erc721-approval-loading-toast');
             }
@@ -235,21 +235,23 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         address: getKakarottoTokenAddress(chainId),
         spender: getKakarottoMarketplaceAddress(chainId),
         amount: publicationFeeInWei as bigint,
-        enabled: !!publicationFeeIsSuccess && !!publicationFeeInWei && !!isERC20ApprovalSubmit,
+        enabled: !!publicationFeeIsSuccess && !!publicationFeeInWei,
         onSuccess: (data: TransactionReceipt) => {
-            toast({
-                title: "Approving Token Successfully.",
-                description: <div className="flex flex-col justify-center gap-1">
-                    <span>You have approved tokens for Marketplace</span>
-                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                </div>,
-                status: 'success',
-                isClosable: true,
-                position: "bottom-right"
-            })
+            if (!toast.isActive('erc20-approval-success-toast')) {
+                toast({
+                    id: 'erc20-approval-success-toast',
+                    title: "Approving Token Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have approved tokens for Marketplace</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
         },
         onSettled: (data?: TransactionReceipt) => {
-            setERC20ApprovalSubmit(false);
             if (toast.isActive('erc20-approval-loading-toast')) {
                 toast.close('erc20-approval-loading-toast');
             }
@@ -263,7 +265,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            setERC20ApprovalSubmit(false);
             if (toast.isActive('erc20-approval-loading-toast')) {
                 toast.close('erc20-approval-loading-toast');
             }
@@ -288,30 +289,32 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
     }
 
     async function onApprovalERC721Submit() {
-        setERC721ApprovalSubmit(true);
-        toast({
-            id: 'erc721-approval-loading-toast',
-            title: "Approving Your Asset Pending.",
-            description: "Please wait a moment",
-            status: 'loading',
-            position: "bottom-right",
-            duration: null,
-            isClosable: false,
-        });
+        if (!toast.isActive('erc721-approval-loading-toast')) {
+            toast({
+                id: 'erc721-approval-loading-toast',
+                title: "Approving Your Asset Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+        }
         await onERC721Approval();
     }
 
     async function onApprovalERC20Submit() {
-        setERC20ApprovalSubmit(true);
-        toast({
-            id: 'erc20-approval-loading-toast',
-            title: "Approving Token Pending",
-            description: "Please wait a moment",
-            status: 'loading',
-            position: "bottom-right",
-            duration: null,
-            isClosable: false,
-        });
+        if (!toast.isActive('erc20-approval-loading-toast')) {
+            toast({
+                id: 'erc20-approval-loading-toast',
+                title: "Approving Token Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+        }
         await onERC20Approval();
     }
 
@@ -321,7 +324,7 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 asChild
             >
                 <ListingButton
-                    disabled={searchOrderStatus == 'open' && searchOrderExpiresAt != null && !isExpired(searchOrderExpiresAt)}
+                    disabled={!isConnected && searchOrderStatus == 'open' && searchOrderExpiresAt != null && !isExpired(searchOrderExpiresAt)}
                     relisting={searchOrderStatus == 'open' && searchOrderExpiresAt != null && isExpired(searchOrderExpiresAt)}
                 />
             </DialogTrigger>

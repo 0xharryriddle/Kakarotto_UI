@@ -1,7 +1,8 @@
 'use client';
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation';
 import { type Sketch } from "@p5-wrapper/react";
+
 import { NextReactP5Wrapper } from "@p5-wrapper/next";
 import { ArrowLeftCircleIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -36,7 +37,9 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
         let imageCanvas: any;
         p5.setup = () => {
             p5.createCanvas(700, 425, p5.WEBGL);
-            imageCanvas = p5.loadImage(imageURL);
+            imageCanvas = p5.loadImage(imageURL, (image) => {
+                p5.redraw();
+            });
         };
 
         p5.draw = () => {
@@ -134,6 +137,9 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
                                             contractAddress={data?.nft.contractAddress}
                                             tokenId={data?.nft.tokenId}
                                             searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
+                                            priceInWei={BigInt(data?.nft.searchOrderPrice ? data?.nft.searchOrderPrice : 0)}
+                                            category={category}
+                                            rarity={data?.rarity}
                                         />
                                         {/* Make Offer */}
                                         <OfferDialog
@@ -143,7 +149,8 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
                                             searchOrderExpiresAt={data?.nft.searchOrderExpiresAt ? parseInt(data?.nft.searchOrderExpiresAt) : undefined}
                                             owner={data?.owner as `0x${string}`}
                                             image={''}
-                                            attributes={[]}
+                                            priceInWei={BigInt(data?.nft.searchOrderPrice ? data?.nft.searchOrderPrice : 0)}
+                                            attributes={data?.attributes ? data?.attributes : []}
                                         />
                                     </div>
                                 </>

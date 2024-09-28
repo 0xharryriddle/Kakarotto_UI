@@ -1,6 +1,5 @@
 import getABI from "@/contracts/utils/getAbi.util";
-import { formatUnitsToNumber } from "@/utils/token-unit-utils/format-units-to-number";
-import { Abi, Address } from "viem";
+import { Address } from "viem";
 import { useReadContract } from "wagmi";
 
 type Props = {
@@ -9,39 +8,37 @@ type Props = {
   enabled?: boolean;
 };
 
-export const usePublicationFee = ({ address, chainId, enabled }: Props) => {
+export const useFeePercentageMarketplace = ({
+  address,
+  chainId,
+  enabled,
+}: Props) => {
   const isEnabled = !!address && !!chainId && !!enabled;
 
   const {
-    data: publicationFeeInWei,
+    data: feePercentage,
     isLoading,
     isFetching,
     isError,
     isSuccess,
-    refetch: publicationFeeRefetch,
+    refetch: feePercentageRefetch,
   } = useReadContract({
     chainId,
     address: enabled ? address : undefined,
     args: isEnabled ? [] : undefined,
     abi: getABI("KakarottoMarketplace"),
-    functionName: "publicationFeeInWei",
+    functionName: "feePercentage",
     query: { enabled: isEnabled },
   });
 
-  const refetch = enabled ? publicationFeeRefetch : undefined;
-
-  const parsedPublicationFee = formatUnitsToNumber(
-    publicationFeeInWei ? (publicationFeeInWei as bigint) : BigInt(0),
-    18
-  );
+  const refetch = enabled ? feePercentageRefetch : undefined;
 
   return {
-    publicationFeeInWei,
+    feePercentage,
     isLoading,
     isFetching,
     isSuccess,
     isError,
-    parsedPublicationFee,
     refetch,
   };
 };

@@ -43,7 +43,7 @@ export const useCreateOrder = ({
     abi: getABI("KakarottoMarketplace"),
     args: [tokenAddress, tokenId, priceInWei, expiresAt],
     functionName: "createOrder",
-    query: { enabled: enabled && !!chainId },
+    query: { enabled: enabled && !!chainId, retry: false },
   });
 
   const {

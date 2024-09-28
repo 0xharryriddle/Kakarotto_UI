@@ -40,24 +40,24 @@ export const SMART_CONTRACT_ADDRESS = {
   },
   KakarottoMarketplace: {
     1802203764: "0xc43b9fc4f10c43b8211e7d78275a9a4856447228",
-    11155111: "0xb22383Db550cddD81AF5BC14323ed87EBd86a6F6",
+    11155111: "0x5F65eef5Ec8971669DBE631854758236a27Ab5DD",
   },
   ERC721Bid: {
     1802203764: "0x91b41d09c6045c6b93c1477f7a05306f2572a8d8",
-    11155111: "0x3713b9a513d62a10686c5af6cb8e4b7c8c36bd5b",
+    11155111: "0xa1b96AD7141c9313Cd174ea4D5C2b7525591Aeb2",
   },
 };
 
 export const ABI_CONTRACT = {
-  "KakarottoToken": tokenABI,
-  "KakarottoERC6551Account": erc6551AccountABI,
-  "KakarottoERC6551Registry": erc6551RegistryABI,
-  "KakarottoVault": vaultABI,
-  "KakarottoItem": itemABI,
-  "KakarottoTreasure": treasureABI,
-  "KakarottoCharacter": characterABI,
-  "KakarottoMarketplace": marketplaceABI,
-  "ERC721Bid": erc721BidABI,
+  KakarottoToken: tokenABI,
+  KakarottoERC6551Account: erc6551AccountABI,
+  KakarottoERC6551Registry: erc6551RegistryABI,
+  KakarottoVault: vaultABI,
+  KakarottoItem: itemABI,
+  KakarottoTreasure: treasureABI,
+  KakarottoCharacter: characterABI,
+  KakarottoMarketplace: marketplaceABI,
+  ERC721Bid: erc721BidABI,
 };
 
 export const EXPLORER_URL = {
@@ -68,13 +68,13 @@ export const EXPLORER_URL = {
 export const CONTRACT_ACTIONS = {
   KakarottoCharacter: {
     MINT_ACTION: keccak256(toHex("KAKAROTTO_MINT")),
-    LEVELUP_ACTION: keccak256(toHex("KAKAROTTO_LEVELUP"))
+    LEVELUP_ACTION: keccak256(toHex("KAKAROTTO_LEVELUP")),
   },
   KakarottoItem: {
     MINT_ACTION: keccak256(toHex("KAKAROTTO_ITEM_MINT")),
   },
   KakarottoTreasure: {
     MINT_ACTION: stringToHex("KAKAROTTO_MINT_TREASURE", { size: 32 }),
-    OPEN_ACTION: stringToHex("KAKAROTTO_OPEN_TREASURE", { size: 32 })
-  }
-}
+    OPEN_ACTION: stringToHex("KAKAROTTO_OPEN_TREASURE", { size: 32 }),
+  },
+};

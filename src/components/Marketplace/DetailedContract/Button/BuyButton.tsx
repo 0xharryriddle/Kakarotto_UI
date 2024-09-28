@@ -1,19 +1,36 @@
 'use client';
 import React from 'react'
 import { Button } from '@/components/ui/button';
-import { HandshakeIcon } from 'lucide-react';
 
 interface BuyButtonProps {
     className?: string;
     disabled?: boolean;
     onClick?: () => {};
+    children?: React.ReactNode;
 }
 
-export default function BuyButton({ className, disabled, onClick }: BuyButtonProps) {
-    return (
-        <Button className={`transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4 w-full ${className}`} disabled={disabled} onClick={onClick}>
-            <HandshakeIcon size={24} />
-            <span className="text-xl font-bold uppercase">Buy</span>
-        </Button>
-    )
-}
+const BuyButton = React.forwardRef<HTMLButtonElement, BuyButtonProps>(
+    (props, forwardedRef) => {
+        const {
+            className = '',
+            disabled = false,
+            onClick,
+            children
+        } = props;
+
+        return (
+            <Button
+                ref={forwardedRef}
+                className={`transition delay-100 duration-200 ease-in-out hover:scale-90 hover:cursor-pointer space-x-2 p-4 w-full ${className}`}
+                disabled={disabled}
+                onClick={onClick}
+            >
+                {children}
+            </Button>
+        )
+    }
+)
+
+BuyButton.displayName = 'BuyButton';
+
+export default BuyButton;

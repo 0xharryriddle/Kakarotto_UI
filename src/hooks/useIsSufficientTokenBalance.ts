@@ -1,5 +1,5 @@
 import { Address } from "viem";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 import { useERC20Allowance } from "./useERC20Allowance";
 import { useFormattedTokenBalance } from "./useFormattedTokenBalance";
 import { formatUnitsToNumber } from "@/utils/token-unit-utils/format-units-to-number";

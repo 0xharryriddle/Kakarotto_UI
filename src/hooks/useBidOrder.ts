@@ -45,7 +45,7 @@ export const useBidOrder = ({
     abi,
     args: [tokenAddress, tokenId, price, duration],
     functionName: "placeBid",
-    query: { enabled: enabled && !!chainId },
+    query: { enabled: enabled && !!chainId, retry: false },
   });
 
   const {
