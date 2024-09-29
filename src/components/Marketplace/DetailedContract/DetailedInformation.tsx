@@ -183,7 +183,7 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
             </div>
             <div className="flex flex-col w-full gap-2 col-span-3">
                 <span className='uppercase font-bold text-xl ml-5'>Activity Details</span>
-                <ActivityTabs />
+                <ActivityTabs bids={data?.nft.bids ? data?.nft.bids : []} />
             </div>
         </div>
     </div>

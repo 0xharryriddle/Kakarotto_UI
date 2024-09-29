@@ -100,6 +100,10 @@ export default function OfferDialog({
         }
     });
 
+    useEffect(() => {
+
+    })
+
     const {
         parsedBalanceRequired,
         isSufficientAllowance,
@@ -112,7 +116,7 @@ export default function OfferDialog({
         isError: isSufficientIsError,
         tokenSymbol
     } = useIsSufficientTokenBalance({
-        balanceRequired: BigInt(form.getValues('bidPrice')),
+        balanceRequired: parseEther(form.watch('bidPrice')),
         currencyAddress: getKakarottoTokenAddress(chainId),
         contractToApprove: getERC721BidAddress(chainId),
         chainId,
@@ -123,7 +127,7 @@ export default function OfferDialog({
             name: 'Kakarotto',
             symbol: 'KKR'
         },
-        enabled: BigInt(form.getValues('bidPrice')) > BigInt(0)
+        enabled: true
     });
 
     const {
@@ -152,9 +156,9 @@ export default function OfferDialog({
         abi: getABI('ERC721Bid'),
         tokenAddress: contractAddress,
         tokenId,
-        price: parseEther(form.getValues('bidPrice')),
-        duration: form.getValues('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.getValues('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
-        enabled: form.getValues('expiredAt').getTime() > Date.now() && BigInt(form.getValues('bidPrice')) > BigInt(0),
+        price: parseEther(form.watch('bidPrice')),
+        duration: form.watch('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.watch('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
+        enabled: true,
         onSuccess: (data: TransactionReceipt) => {
             if (!toast.isActive('offer-order-success-toast')) {
                 toast({
@@ -190,6 +194,8 @@ export default function OfferDialog({
         }
     });
 
+    console.log(bidOrderError);
+
     const {
         isLoading: erc20ApprovalIsLoading,
         onERC20Approval,
@@ -197,8 +203,9 @@ export default function OfferDialog({
         chainId,
         address: getKakarottoTokenAddress(chainId),
         spender: getERC721BidAddress(chainId),
-        amount: parseEther(form.getValues('bidPrice')),
-        enabled: !!form.getValues('bidPrice'),
+        amount: parseEther(form.watch('bidPrice')),
+        enabled: true,
+        // !!form.watch('bidPrice'),
         onSuccess: (data: TransactionReceipt) => {
             if (!toast.isActive('erc20-approval-success-toast')) {
                 toast({
@@ -253,7 +260,7 @@ export default function OfferDialog({
         if (!toast.isActive('offer-order-loading-toast')) {
             toast({
                 id: 'offer-order-loading-toast',
-                title: "Placed This NFT Pending.",
+                title: "Placing a Bid this NFT Pending.",
                 description: "Please wait a moment",
                 status: 'loading',
                 position: "bottom-right",
