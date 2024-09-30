@@ -145,6 +145,9 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         expiresAt: BigInt(Math.floor(form.getValues('expiredAt').getTime() / 1000)),
         enabled: !form.getFieldState('price').invalid && !form.getFieldState('expiredAt').invalid,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('create-order-loading-toast')) {
+                toast.close('create-order-loading-toast');
+            }
             if (!toast.isActive('create-order-success-toast')) {
                 toast({
                     id: 'create-order-success-toast',
@@ -160,12 +163,13 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('create-order-loading-toast')) {
-                toast.close('create-order-loading-toast');
-            }
+
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('create-order-loading-toast')) {
+                toast.close('create-order-loading-toast');
+            }
             toast({
                 title: "Listing Your Asset Error.",
                 description: "Something went wrong",
@@ -173,9 +177,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('create-order-loading-toast')) {
-                toast.close('create-order-loading-toast');
-            }
         }
     })
 
@@ -208,12 +209,13 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
 
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc721-approval-loading-toast')) {
-                toast.close('erc721-approval-loading-toast');
-            }
+
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc721-approval-loading-toast')) {
+                toast.close('erc721-approval-loading-toast');
+            }
             toast({
                 title: "Approving Your Asset Error.",
                 description: "Something went wrong",
@@ -221,9 +223,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc721-approval-loading-toast')) {
-                toast.close('erc721-approval-loading-toast');
-            }
         }
     })
 
@@ -237,6 +236,9 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         amount: publicationFeeInWei as bigint,
         enabled: !!publicationFeeIsSuccess && !!publicationFeeInWei,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             if (!toast.isActive('erc20-approval-success-toast')) {
                 toast({
                     id: 'erc20-approval-success-toast',
@@ -252,12 +254,12 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             toast({
                 title: "Approving Token Error",
                 description: "Something went wrong",
@@ -265,9 +267,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         }
     })
 

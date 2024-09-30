@@ -100,10 +100,6 @@ export default function OfferDialog({
         }
     });
 
-    useEffect(() => {
-
-    })
-
     const {
         parsedBalanceRequired,
         isSufficientAllowance,
@@ -160,6 +156,9 @@ export default function OfferDialog({
         duration: form.watch('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.watch('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
         enabled: true,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
             if (!toast.isActive('offer-order-success-toast')) {
                 toast({
                     id: 'offer-order-success-toast',
@@ -175,12 +174,12 @@ export default function OfferDialog({
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('offer-order-loading-toast')) {
-                toast.close('offer-order-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
             toast({
                 title: "Place A Bid Error",
                 description: "Something went wrong",
@@ -188,13 +187,8 @@ export default function OfferDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('offer-order-loading-toast')) {
-                toast.close('offer-order-loading-toast');
-            }
         }
     });
-
-    console.log(bidOrderError);
 
     const {
         isLoading: erc20ApprovalIsLoading,
@@ -207,6 +201,9 @@ export default function OfferDialog({
         enabled: true,
         // !!form.watch('bidPrice'),
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             if (!toast.isActive('erc20-approval-success-toast')) {
                 toast({
                     id: 'erc20-approval-success-toast',
@@ -222,12 +219,12 @@ export default function OfferDialog({
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             toast({
                 title: "Approving Token Error",
                 description: "Something went wrong",
@@ -235,9 +232,6 @@ export default function OfferDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         }
     })
 

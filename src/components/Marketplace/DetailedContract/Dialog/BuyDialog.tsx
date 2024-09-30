@@ -93,24 +93,31 @@ export default function BuyDialog({
         priceInWei,
         enabled: !isSufficientIsLoading && !isSufficientIsFetching && isSufficientAllowance && isSufficientBalance && tokenId != undefined && contractAddress != undefined,
         onSuccess: (data: TransactionReceipt) => {
-            toast({
-                title: "Bought This Asset Successfully.",
-                description: <div className="flex flex-col justify-center gap-1">
-                    <span>You have bought this asset.</span>
-                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                </div>,
-                status: 'success',
-                isClosable: true,
-                position: "bottom-right"
-            })
-        },
-        onSettled: (data?: TransactionReceipt) => {
             if (toast.isActive('buy-order-loading-toast')) {
                 toast.close('buy-order-loading-toast');
             }
+            if (!toast.isActive('buy-order-success-toast')) {
+                toast({
+                    id: 'buy-order-success-toast',
+                    title: "Bought This Asset Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have bought this asset.</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
+        },
+        onSettled: (data?: TransactionReceipt) => {
+
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('buy-order-loading-toast')) {
+                toast.close('buy-order-loading-toast');
+            }
             toast({
                 title: "Buying This Asset Error.",
                 description: "Something went wrong",
@@ -118,9 +125,6 @@ export default function BuyDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('buy-order-loading-toast')) {
-                toast.close('buy-order-loading-toast');
-            }
         }
     })
 
@@ -134,6 +138,9 @@ export default function BuyDialog({
         amount: saleFeeAmount,
         enabled: !!feePercentageIsSuccess && !!feePercentage && !!saleFeeAmount,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             if (!toast.isActive('erc20-approval-success-toast')) {
                 toast({
                     id: 'erc20-approval-success-toast',
@@ -149,12 +156,12 @@ export default function BuyDialog({
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             toast({
                 title: "Approving Token Error",
                 description: "Something went wrong",
@@ -162,9 +169,6 @@ export default function BuyDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         }
     })
 

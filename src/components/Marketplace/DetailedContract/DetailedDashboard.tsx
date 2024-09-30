@@ -46,10 +46,6 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   });
 
   useEffect(() => {
-    graphqlRefetch();
-  }, []);
-
-  useEffect(() => {
     async function fetchData() {
       if (graphqlData) {
         // setLoading(true);
@@ -82,7 +78,7 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
     }
   }
 
-  if (graphqlIsLoading || graphqlIsFetching) {
+  if (graphqlIsLoading) {
     return <Loading />
   }
 

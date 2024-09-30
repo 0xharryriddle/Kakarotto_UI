@@ -1,6 +1,7 @@
 import { Address, TransactionReceipt } from "viem";
 import {
   useSimulateContract,
+  useTransactionConfirmations,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
@@ -65,9 +66,25 @@ export const useCancelOrder = ({
     },
   });
 
+  const {
+    isFetching: isFetchingConfirmation,
+    isLoading: isLoadingConfirmation,
+    isFetched: isFetchedConfirmation,
+    isSuccess: isSuccessConfirmation,
+    isError: isErrorConfirmation,
+    error: errorConfirmation,
+  } = useTransactionConfirmations({
+    hash: transactionHash,
+    query: {
+      enabled,
+    },
+  });
+
   useWriteContractCallbacks({
     receipt,
     isFetched,
+    isFetchedConfirmation,
+    isSuccessConfirmation,
     onSuccess,
     onSettled,
     onError,
@@ -90,14 +107,22 @@ export const useCancelOrder = ({
   };
 
   const isLoading =
-    isLoadingReceipt || isLoadingPrepare || isLoadingWrite || isFetchingReceipt;
-  const isError = isErrorPrepare || isErrorReceipt || isErrorWrite;
-  const error = errorWrite || errorTransaction || errorPrepare;
+    isLoadingReceipt ||
+    isLoadingConfirmation ||
+    isLoadingPrepare ||
+    isLoadingWrite ||
+    isFetchingReceipt ||
+    isFetchingConfirmation;
+  const isError =
+    isErrorPrepare || isErrorReceipt || isErrorWrite || isErrorConfirmation;
+  const error =
+    errorWrite || errorTransaction || errorPrepare || errorConfirmation;
 
   return {
     error,
     isLoading,
     isSuccess,
+    isSuccessConfirmation,
     isError,
     onCancelOrder,
     refetch,
