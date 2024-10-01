@@ -75,6 +75,7 @@ export const useBidOrder = ({
   const {
     isFetching: isFetchingConfirmation,
     isLoading: isLoadingConfirmation,
+    // isPending: isPendingConfirmation,
     isFetched: isFetchedConfirmation,
     isSuccess: isSuccessConfirmation,
     isError: isErrorConfirmation,
@@ -91,8 +92,22 @@ export const useBidOrder = ({
     isFetched,
     isFetchedConfirmation,
     isSuccessConfirmation,
-    onSuccess,
-    onSettled,
+    onSuccess: (data: TransactionReceipt, isConfirmed: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation confirmed");
+        onSuccess?.(data);
+      } else {
+        console.log(
+          "Order creation transaction received, waiting for confirmation"
+        );
+      }
+    },
+    onSettled: (data?: TransactionReceipt, isConfirmed?: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation process completed");
+        onSettled?.(data);
+      }
+    },
     onError,
     error: errorWrite,
   });

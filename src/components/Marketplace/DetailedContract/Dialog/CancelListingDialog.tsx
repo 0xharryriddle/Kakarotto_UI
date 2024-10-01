@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -29,8 +29,23 @@ interface CancelListingDialogProps {
 
 export default function CancelListingDialog({ searchOrderStatus, contractAddress, searchOrderExpiresAt, tokenId }: CancelListingDialogProps) {
     const { chainId } = useAccount();
-
     const toast = useToast();
+    const [showCancelListingToast, setShowCancelListingToast] = useState(false);
+
+    useEffect(() => {
+        if (showCancelListingToast) {
+            toast({
+                id: 'cancel-order-loading-toast',
+                title: "Cancel Your Listing Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowCancelListingToast(false);
+        }
+    }, [showCancelListingToast, toast]);
 
     const {
         error: cancelOrderError,
@@ -77,17 +92,7 @@ export default function CancelListingDialog({ searchOrderStatus, contractAddress
     });
 
     async function onSubmit() {
-        if (!toast.isActive('cancel-order-loading-toast')) {
-            toast({
-                id: 'cancel-order-loading-toast',
-                title: "Cancel Your Listing Pending",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            })
-        }
+        setShowCancelListingToast(true);
         await onCancelOrder();
     }
 

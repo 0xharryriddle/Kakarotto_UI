@@ -1,14 +1,12 @@
 'use client';
 import React, { useState, useEffect } from 'react'
 import { notFound } from 'next/navigation';
-import { gql, request } from 'graphql-request'
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query'
 
 import * as Enums from '@/utils/enum.util';
 import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
 import DetailedInformation from '@/components/Marketplace/DetailedContract/DetailedInformation';
-import DetailedOrder from '@/components/Marketplace/DetailedContract/DetailedOrder';
 import { Character, Item } from '@/generated/graphql';
 import { fetchCharacterData, fetchCharacterDataReturnType, fetchItemData, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
@@ -34,7 +32,6 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
     notFound();
   }
 
-  // const [loading, setLoading] = useState<boolean>(false);
   const [characterData, setCharacterData] = useState<fetchCharacterDataReturnType>();
   const [itemData, setItemData] = useState<fetchItemDataReturnType>();
 

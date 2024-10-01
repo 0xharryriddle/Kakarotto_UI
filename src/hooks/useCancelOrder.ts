@@ -68,6 +68,7 @@ export const useCancelOrder = ({
 
   const {
     isFetching: isFetchingConfirmation,
+    // isPending: isPendingConfirmation,
     isLoading: isLoadingConfirmation,
     isFetched: isFetchedConfirmation,
     isSuccess: isSuccessConfirmation,
@@ -85,8 +86,22 @@ export const useCancelOrder = ({
     isFetched,
     isFetchedConfirmation,
     isSuccessConfirmation,
-    onSuccess,
-    onSettled,
+    onSuccess: (data: TransactionReceipt, isConfirmed: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation confirmed");
+        onSuccess?.(data);
+      } else {
+        console.log(
+          "Order creation transaction received, waiting for confirmation"
+        );
+      }
+    },
+    onSettled: (data?: TransactionReceipt, isConfirmed?: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation process completed");
+        onSettled?.(data);
+      }
+    },
     onError,
     error: errorWrite,
   });

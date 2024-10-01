@@ -89,8 +89,39 @@ export default function OfferDialog({
     priceInWei
 }: OfferDialogProps) {
     const { isConnected, chainId, address } = useAccount();
-
     const toast = useToast();
+    const [showOfferOrderToast, setShowOfferOrderToast] = useState(false);
+    const [showERC20ApprovalToast, setShowERC20ApprovalToast] = useState(false);
+
+    useEffect(() => {
+        if (showOfferOrderToast) {
+            toast({
+                id: 'offer-order-loading-toast',
+                title: "Placing a Bid this NFT Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowOfferOrderToast(false);
+        }
+    }, [showOfferOrderToast, toast]);
+
+    useEffect(() => {
+        if (showERC20ApprovalToast) {
+            toast({
+                id: 'erc20-approval-loading-toast',
+                title: "Approving Token Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowERC20ApprovalToast(false);
+        }
+    }, [showERC20ApprovalToast, toast]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -199,7 +230,6 @@ export default function OfferDialog({
         spender: getERC721BidAddress(chainId),
         amount: parseEther(form.watch('bidPrice')),
         enabled: true,
-        // !!form.watch('bidPrice'),
         onSuccess: (data: TransactionReceipt) => {
             if (toast.isActive('erc20-approval-loading-toast')) {
                 toast.close('erc20-approval-loading-toast');
@@ -236,32 +266,12 @@ export default function OfferDialog({
     })
 
     const onApprovalERC20Submit = async () => {
-        if (!toast.isActive('erc20-approval-loading-toast')) {
-            toast({
-                id: 'erc20-approval-loading-toast',
-                title: "Approving Token Pending",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowERC20ApprovalToast(true);
         await onERC20Approval();
     }
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        if (!toast.isActive('offer-order-loading-toast')) {
-            toast({
-                id: 'offer-order-loading-toast',
-                title: "Placing a Bid this NFT Pending.",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowOfferOrderToast(true);
         await onBidOrder();
     }
 

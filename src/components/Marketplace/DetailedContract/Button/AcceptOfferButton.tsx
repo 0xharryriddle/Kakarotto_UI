@@ -12,7 +12,12 @@ interface AcceptOfferButtonProps {
 
 const AcceptOfferButton = React.forwardRef<HTMLButtonElement, AcceptOfferButtonProps>(
     (props, forwardedRef) => {
-        const { className = '', disabled = false, loading = false, onClick } = props;
+        const {
+            className = '',
+            disabled = false,
+            loading = false,
+            onClick
+        } = props;
 
         return (
             <Button
