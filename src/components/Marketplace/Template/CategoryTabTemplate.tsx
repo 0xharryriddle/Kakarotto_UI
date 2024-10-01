@@ -20,7 +20,6 @@ import LoadingTemplate from '@/components/LoadingTemplate';
 import { fetchCharacterDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { accessToPinataImage } from '@/utils/image.util';
 import { Button } from '@/components/ui/button';
-import { UseQueryResult } from '@tanstack/react-query';
 
 interface CategoryTabTemplateProps {
     contractAddress: `0x${string}`;

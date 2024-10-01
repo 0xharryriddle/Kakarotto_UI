@@ -1,17 +1,19 @@
-import { GraphQLClient } from 'graphql-request';
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import { GraphQLClient } from "graphql-request";
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { env } from '@/env/server';
+import { env } from "@/env/server";
 
-const subgraphQueryUrl = "https://api.studio.thegraph.com/query/77725/kakarottosubgraph/version/latest";
+const subgraphQueryUrl =
+  "https://api.studio.thegraph.com/query/77725/kakarottosubgraph/version/latest";
 
 const client = new GraphQLClient(subgraphQueryUrl, {
   headers: {
     Authorization: `Bearer ${env.API_KEY}`,
-    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0',
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+    Pragma: "no-cache",
+    Expires: "0",
+    // cache: "no-cache",
   },
 });
 
@@ -26,17 +28,19 @@ async function process(request: Request) {
 
   const parsedGqlRequest = GraphqlReqSchema.safeParse(body);
   if (!parsedGqlRequest.success) {
-    return NextResponse.json({ error: parsedGqlRequest.error }, { status: 400 });
+    return NextResponse.json(
+      { error: parsedGqlRequest.error },
+      { status: 400 }
+    );
   }
   const gqlRequest = parsedGqlRequest.data;
 
-  const gqlResponse: any = await client.request(gqlRequest.query, gqlRequest.variables ?? undefined);
+  const gqlResponse: any = await client.request(
+    gqlRequest.query,
+    gqlRequest.variables ?? undefined
+  );
 
-  return NextResponse.json({ data: gqlResponse }, { status: 200, headers: {
-    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0',
-  }, });
+  return NextResponse.json({ data: gqlResponse }, { status: 200 });
 }
 
 export async function GET(request: Request) {
@@ -46,4 +50,3 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   return await process(request);
 }
-

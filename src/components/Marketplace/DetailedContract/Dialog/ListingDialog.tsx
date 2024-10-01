@@ -75,8 +75,55 @@ const formSchema = z.object({
 
 export default function ListingDialog({ searchOrderStatus, contractAddress, tokenId, searchOrderExpiresAt, category }: ListingDialogProps) {
     const { chainId, address, isConnected } = useAccount();
-
     const toast = useToast();
+    const [showCreateOrderToast, setShowCreateOrderToast] = useState(false);
+    const [showERC721ApprovalToast, setShowERC721ApprovalToast] = useState(false);
+    const [showERC20ApprovalToast, setShowERC20ApprovalToast] = useState(false);
+
+    useEffect(() => {
+        if (showCreateOrderToast) {
+            toast({
+                id: 'create-order-loading-toast',
+                title: "Listing Your Asset Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowCreateOrderToast(false);
+        }
+    }, [showCreateOrderToast, toast]);
+
+    useEffect(() => {
+        if (showERC721ApprovalToast) {
+            toast({
+                id: 'erc721-approval-loading-toast',
+                title: "Approving Your Asset Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowERC721ApprovalToast(false);
+        }
+    }, [showERC721ApprovalToast, toast]);
+
+    useEffect(() => {
+        if (showERC20ApprovalToast) {
+            toast({
+                id: 'erc20-approval-loading-toast',
+                title: "Approving Token Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowERC20ApprovalToast(false);
+        }
+    }, [showERC20ApprovalToast, toast]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -145,6 +192,9 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         expiresAt: BigInt(Math.floor(form.getValues('expiredAt').getTime() / 1000)),
         enabled: !form.getFieldState('price').invalid && !form.getFieldState('expiredAt').invalid,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('create-order-loading-toast')) {
+                toast.close('create-order-loading-toast');
+            }
             if (!toast.isActive('create-order-success-toast')) {
                 toast({
                     id: 'create-order-success-toast',
@@ -160,12 +210,13 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('create-order-loading-toast')) {
-                toast.close('create-order-loading-toast');
-            }
+
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('create-order-loading-toast')) {
+                toast.close('create-order-loading-toast');
+            }
             toast({
                 title: "Listing Your Asset Error.",
                 description: "Something went wrong",
@@ -173,9 +224,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('create-order-loading-toast')) {
-                toast.close('create-order-loading-toast');
-            }
         }
     })
 
@@ -208,12 +256,13 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
 
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc721-approval-loading-toast')) {
-                toast.close('erc721-approval-loading-toast');
-            }
+
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc721-approval-loading-toast')) {
+                toast.close('erc721-approval-loading-toast');
+            }
             toast({
                 title: "Approving Your Asset Error.",
                 description: "Something went wrong",
@@ -221,9 +270,6 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc721-approval-loading-toast')) {
-                toast.close('erc721-approval-loading-toast');
-            }
         }
     })
 
@@ -237,27 +283,28 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
         amount: publicationFeeInWei as bigint,
         enabled: !!publicationFeeIsSuccess && !!publicationFeeInWei,
         onSuccess: (data: TransactionReceipt) => {
-            if (!toast.isActive('erc20-approval-success-toast')) {
-                toast({
-                    id: 'erc20-approval-success-toast',
-                    title: "Approving Token Successfully.",
-                    description: <div className="flex flex-col justify-center gap-1">
-                        <span>You have approved tokens for Marketplace</span>
-                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                    </div>,
-                    status: 'success',
-                    isClosable: true,
-                    position: "bottom-right"
-                })
-            }
-        },
-        onSettled: (data?: TransactionReceipt) => {
             if (toast.isActive('erc20-approval-loading-toast')) {
                 toast.close('erc20-approval-loading-toast');
             }
+            toast({
+                id: 'create-order-success-toast',
+                title: "Listing Your Asset Successfully.",
+                description: <div className="flex flex-col justify-center gap-1">
+                    <span>You have been listing your token for Marketplace</span>
+                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                </div>,
+                status: 'success',
+                isClosable: true,
+                position: "bottom-right"
+            });
+        },
+        onSettled: (data?: TransactionReceipt) => {
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             toast({
                 title: "Approving Token Error",
                 description: "Something went wrong",
@@ -265,56 +312,23 @@ export default function ListingDialog({ searchOrderStatus, contractAddress, toke
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         }
     })
 
     async function onSubmit(
         values: z.infer<typeof formSchema>
     ) {
-        if (!toast.isActive('create-order-loading-toast')) {
-            toast({
-                id: 'create-order-loading-toast',
-                title: "Listing Your Asset Pending.",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowCreateOrderToast(true);
         await onCreateOrder();
     }
 
     async function onApprovalERC721Submit() {
-        if (!toast.isActive('erc721-approval-loading-toast')) {
-            toast({
-                id: 'erc721-approval-loading-toast',
-                title: "Approving Your Asset Pending.",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowERC721ApprovalToast(true);
         await onERC721Approval();
     }
 
     async function onApprovalERC20Submit() {
-        if (!toast.isActive('erc20-approval-loading-toast')) {
-            toast({
-                id: 'erc20-approval-loading-toast',
-                title: "Approving Token Pending",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowERC20ApprovalToast(true);
         await onERC20Approval();
     }
 

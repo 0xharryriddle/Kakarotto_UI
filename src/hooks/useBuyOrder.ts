@@ -1,6 +1,7 @@
 import { Address, TransactionReceipt } from "viem";
 import {
   useSimulateContract,
+  useTransactionConfirmations,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
@@ -70,11 +71,42 @@ export const useBuyOrder = ({
     },
   });
 
+  const {
+    isFetching: isFetchingConfirmation,
+    isLoading: isLoadingConfirmation,
+    // isPending: isPendingConfirmation,
+    isFetched: isFetchedConfirmation,
+    isSuccess: isSuccessConfirmation,
+    isError: isErrorConfirmation,
+    error: errorConfirmation,
+  } = useTransactionConfirmations({
+    hash: transactionHash,
+    query: {
+      enabled,
+    },
+  });
+
   useWriteContractCallbacks({
     receipt,
     isFetched,
-    onSuccess,
-    onSettled,
+    isFetchedConfirmation,
+    isSuccessConfirmation,
+    onSuccess: (data: TransactionReceipt, isConfirmed: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation confirmed");
+        onSuccess?.(data);
+      } else {
+        console.log(
+          "Order creation transaction received, waiting for confirmation"
+        );
+      }
+    },
+    onSettled: (data?: TransactionReceipt, isConfirmed?: boolean) => {
+      if (isConfirmed) {
+        console.log("Order creation process completed");
+        onSettled?.(data);
+      }
+    },
     onError,
     error: errorWrite,
   });
@@ -95,14 +127,22 @@ export const useBuyOrder = ({
   };
 
   const isLoading =
-    isLoadingReceipt || isLoadingPrepare || isLoadingWrite || isFetchingReceipt;
-  const isError = isErrorPrepare || isErrorReceipt || isErrorWrite;
-  const error = errorWrite || errorTransaction || errorPrepare;
+    isLoadingReceipt ||
+    isLoadingConfirmation ||
+    isLoadingPrepare ||
+    isLoadingWrite ||
+    isFetchingReceipt ||
+    isFetchingConfirmation;
+  const isError =
+    isErrorPrepare || isErrorReceipt || isErrorWrite || isErrorConfirmation;
+  const error =
+    errorWrite || errorTransaction || errorPrepare || errorConfirmation;
 
   return {
     error,
     isLoading,
     isSuccess,
+    isSuccessConfirmation,
     isError,
     onBuyOrder,
     refetch,

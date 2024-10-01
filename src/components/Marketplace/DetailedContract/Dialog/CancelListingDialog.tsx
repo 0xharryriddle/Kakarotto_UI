@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -29,9 +29,23 @@ interface CancelListingDialogProps {
 
 export default function CancelListingDialog({ searchOrderStatus, contractAddress, searchOrderExpiresAt, tokenId }: CancelListingDialogProps) {
     const { chainId } = useAccount();
-    const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
     const toast = useToast();
+    const [showCancelListingToast, setShowCancelListingToast] = useState(false);
+
+    useEffect(() => {
+        if (showCancelListingToast) {
+            toast({
+                id: 'cancel-order-loading-toast',
+                title: "Cancel Your Listing Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowCancelListingToast(false);
+        }
+    }, [showCancelListingToast, toast]);
 
     const {
         error: cancelOrderError,
@@ -41,28 +55,32 @@ export default function CancelListingDialog({ searchOrderStatus, contractAddress
         chainId,
         tokenAddress: contractAddress,
         tokenId: BigInt(parseInt(tokenId)),
-        enabled: isSubmit,
+        enabled: true,
         onSuccess: (data: TransactionReceipt) => {
-            toast({
-                title: "Listing Your Asset Successfully.",
-                description: <div className="flex flex-col justify-center gap-1">
-                    <span>You have canceled your listing for Marketplace</span>
-                    <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
-                </div>,
-                status: 'success',
-                isClosable: true,
-                position: "bottom-right"
-            })
-        },
-        onSettled: (data?: TransactionReceipt) => {
-            setIsSubmit(false);
             if (toast.isActive('cancel-order-loading-toast')) {
                 toast.close('cancel-order-loading-toast');
             }
+            if (!toast.isActive('cancel-order-success-toast')) {
+                toast({
+                    id: 'cancel-order-success-toast',
+                    title: "Listing Your Asset Successfully.",
+                    description: <div className="flex flex-col justify-center gap-1">
+                        <span>You have canceled your listing for Marketplace</span>
+                        <a target='_blank' href={`${getExplorer(chainId)}/tx/${data.transactionHash}`} className='text-primary underline hover:scale-95 transition delay-100 duration-200 ease-in-out font-bold text-xl'>Transaction link</a>
+                    </div>,
+                    status: 'success',
+                    isClosable: true,
+                    position: "bottom-right"
+                })
+            }
+        },
+        onSettled: (data?: TransactionReceipt) => {
         },
         onError: (error?: Error) => {
-            setIsSubmit(false);
             console.log(error);
+            if (toast.isActive('cancel-order-loading-toast')) {
+                toast.close('cancel-order-loading-toast');
+            }
             toast({
                 title: "Cancel Your Listing Error.",
                 description: "Something went wrong",
@@ -70,25 +88,11 @@ export default function CancelListingDialog({ searchOrderStatus, contractAddress
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('cancel-order-loading-toast')) {
-                toast.close('cancel-order-loading-toast');
-            }
         }
     });
 
     async function onSubmit() {
-        setIsSubmit(true);
-        if (!toast.isActive('cancel-order-loading-toast')) {
-            toast({
-                id: 'cancel-order-loading-toast',
-                title: "Cancel Your Listing Pending",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            })
-        }
+        setShowCancelListingToast(true);
         await onCancelOrder();
     }
 

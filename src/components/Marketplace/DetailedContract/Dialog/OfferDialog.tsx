@@ -89,8 +89,39 @@ export default function OfferDialog({
     priceInWei
 }: OfferDialogProps) {
     const { isConnected, chainId, address } = useAccount();
-
     const toast = useToast();
+    const [showOfferOrderToast, setShowOfferOrderToast] = useState(false);
+    const [showERC20ApprovalToast, setShowERC20ApprovalToast] = useState(false);
+
+    useEffect(() => {
+        if (showOfferOrderToast) {
+            toast({
+                id: 'offer-order-loading-toast',
+                title: "Placing a Bid this NFT Pending.",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowOfferOrderToast(false);
+        }
+    }, [showOfferOrderToast, toast]);
+
+    useEffect(() => {
+        if (showERC20ApprovalToast) {
+            toast({
+                id: 'erc20-approval-loading-toast',
+                title: "Approving Token Pending",
+                description: "Please wait a moment",
+                status: 'loading',
+                position: "bottom-right",
+                duration: null,
+                isClosable: false,
+            });
+            setShowERC20ApprovalToast(false);
+        }
+    }, [showERC20ApprovalToast, toast]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -99,10 +130,6 @@ export default function OfferDialog({
             expiredAt: new Date(Date.now() + BID_CONSTANTS.MIN_BID_DURATION * 1000)
         }
     });
-
-    useEffect(() => {
-
-    })
 
     const {
         parsedBalanceRequired,
@@ -160,6 +187,9 @@ export default function OfferDialog({
         duration: form.watch('expiredAt').getTime() > Date.now() ? BigInt(Math.floor((form.watch('expiredAt').getTime() - Date.now()) / 1000)) : BigInt(0),
         enabled: true,
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
             if (!toast.isActive('offer-order-success-toast')) {
                 toast({
                     id: 'offer-order-success-toast',
@@ -175,12 +205,12 @@ export default function OfferDialog({
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('offer-order-loading-toast')) {
-                toast.close('offer-order-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('offer-order-loading-toast')) {
+                toast.close('offer-order-loading-toast');
+            }
             toast({
                 title: "Place A Bid Error",
                 description: "Something went wrong",
@@ -188,13 +218,8 @@ export default function OfferDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('offer-order-loading-toast')) {
-                toast.close('offer-order-loading-toast');
-            }
         }
     });
-
-    console.log(bidOrderError);
 
     const {
         isLoading: erc20ApprovalIsLoading,
@@ -205,8 +230,10 @@ export default function OfferDialog({
         spender: getERC721BidAddress(chainId),
         amount: parseEther(form.watch('bidPrice')),
         enabled: true,
-        // !!form.watch('bidPrice'),
         onSuccess: (data: TransactionReceipt) => {
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             if (!toast.isActive('erc20-approval-success-toast')) {
                 toast({
                     id: 'erc20-approval-success-toast',
@@ -222,12 +249,12 @@ export default function OfferDialog({
             }
         },
         onSettled: (data?: TransactionReceipt) => {
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         },
         onError: (error?: Error) => {
             console.log(error);
+            if (toast.isActive('erc20-approval-loading-toast')) {
+                toast.close('erc20-approval-loading-toast');
+            }
             toast({
                 title: "Approving Token Error",
                 description: "Something went wrong",
@@ -235,39 +262,16 @@ export default function OfferDialog({
                 status: 'error',
                 position: "bottom-right"
             })
-            if (toast.isActive('erc20-approval-loading-toast')) {
-                toast.close('erc20-approval-loading-toast');
-            }
         }
     })
 
     const onApprovalERC20Submit = async () => {
-        if (!toast.isActive('erc20-approval-loading-toast')) {
-            toast({
-                id: 'erc20-approval-loading-toast',
-                title: "Approving Token Pending",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowERC20ApprovalToast(true);
         await onERC20Approval();
     }
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        if (!toast.isActive('offer-order-loading-toast')) {
-            toast({
-                id: 'offer-order-loading-toast',
-                title: "Placing a Bid this NFT Pending.",
-                description: "Please wait a moment",
-                status: 'loading',
-                position: "bottom-right",
-                duration: null,
-                isClosable: false,
-            });
-        }
+        setShowOfferOrderToast(true);
         await onBidOrder();
     }
 
