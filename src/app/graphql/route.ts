@@ -2,14 +2,14 @@ import { GraphQLClient } from "graphql-request";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
-import { env } from "@/env/server";
+// import { env } from "@/env/server";
 
 const subgraphQueryUrl =
   "https://api.studio.thegraph.com/query/77725/kakarottosubgraph/version/latest";
 
 const client = new GraphQLClient(subgraphQueryUrl, {
   headers: {
-    Authorization: `Bearer ${env.API_KEY}`,
+    // Authorization: `Bearer ${env.API_KEY}`,
     "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
     Pragma: "no-cache",
     Expires: "0",
@@ -39,6 +39,8 @@ async function process(request: Request) {
     gqlRequest.query,
     gqlRequest.variables ?? undefined
   );
+
+  console.log(gqlResponse);
 
   return NextResponse.json({ data: gqlResponse }, { status: 200 });
 }

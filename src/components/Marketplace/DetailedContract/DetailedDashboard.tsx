@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import * as Enums from '@/utils/enum.util';
 import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
 import DetailedInformation from '@/components/Marketplace/DetailedContract/DetailedInformation';
-import { Character, Item } from '@/generated/graphql';
+import { Character, Item, Sale } from '@/generated/graphql';
 import { fetchCharacterData, fetchCharacterDataReturnType, fetchItemData, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { client } from '@/graphql/client';
@@ -20,6 +20,7 @@ interface DetailedDashboardProps {
 }
 
 interface GraphQLDataProps {
+  sales: Sale[];
   characters: Character[];
   items: Item[];
 }
@@ -32,6 +33,7 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
     notFound();
   }
 
+  const [saleData, setSaleData] = useState<Sale[]>();
   const [characterData, setCharacterData] = useState<fetchCharacterDataReturnType>();
   const [itemData, setItemData] = useState<fetchItemDataReturnType>();
 
@@ -48,7 +50,8 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
         // setLoading(true);
         setCharacterData(undefined);
         setItemData(undefined);
-        const { characters, items } = graphqlData as GraphQLDataProps;
+        const { sales, characters, items } = graphqlData as GraphQLDataProps;
+        setSaleData(sales);
         await fetchNFTData({ characters, category, items });
         // setLoading(false);
       }
@@ -80,6 +83,6 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   }
 
   return <div className="flex flex-col items-center justify-center gap-5 px-14 py-10">
-    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} category={category} />
+    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} category={category} sales={saleData} />
   </div>
 }

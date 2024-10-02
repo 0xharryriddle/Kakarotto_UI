@@ -13,5 +13,8 @@ export const client = new GraphQLClient(
       graphqlEnvironment == "production" &&
       graphqlProduction
     ? graphqlProduction
-    : "http://localhost:3000/graphql"
+    : "http://localhost:3000/graphql",
+  {
+    method: "POST",
+  }
 );

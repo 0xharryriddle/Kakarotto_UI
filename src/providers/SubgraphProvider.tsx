@@ -8,6 +8,8 @@ function buildQueryClient() {
         defaultOptions: {
             queries: {
                 staleTime: 60 * 1000,
+                // gcTime: Infinity,
+                refetchOnMount: 'always'
             },
         },
     });

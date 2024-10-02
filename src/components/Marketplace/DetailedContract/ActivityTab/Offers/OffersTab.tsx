@@ -1,8 +1,8 @@
 'use client';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import LoadingTemplate from '@/components/LoadingTemplate';
-import { Bid, Character, Item, Nft } from '@/generated/graphql';
+import { Bid } from '@/generated/graphql';
 import OffersTable from './OffersTable';
 import { offersColumns } from './OffersColumns';
 

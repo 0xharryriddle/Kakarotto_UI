@@ -7,7 +7,7 @@ const graphqlProduction = process.env.NEXT_PUBLIC_PRODUCTION_GRAPHQL_URL;
 
 export const env = createEnv({
   server: {
-    API_KEY: z.string().min(32).max(32),
+    // API_KEY: z.string().min(32).max(32),
     ROOT_URI: z
       .string()
       .url()
@@ -24,7 +24,7 @@ export const env = createEnv({
       ),
   },
   client: {
-    NEXT_PUBLIC_API_KEY: z.string().min(32).max(32),
+    // NEXT_PUBLIC_API_KEY: z.string().min(32).max(32),
     NEXT_PUBLIC_ROOT_URI: z
       .string()
       .url()
@@ -41,9 +41,9 @@ export const env = createEnv({
       ),
   },
   runtimeEnv: {
-    API_KEY: process.env.NEXT_PUBLIC_API_KEY,
+    // API_KEY: process.env.NEXT_PUBLIC_API_KEY,
     ROOT_URI: process.env.NEXT_PUBLIC_ROOT_URI,
-    NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY,
+    // NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY,
     NEXT_PUBLIC_ROOT_URI: process.env.NEXT_PUBLIC_ROOT_URI,
   },
 });
