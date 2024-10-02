@@ -18,15 +18,15 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-interface OffersTableProps<TData, TValue> {
+interface SalesTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
 
-export default function OffersTable<TData, TValue>({
+export default function SalesTable<TData, TValue>({
     columns,
     data
-}: OffersTableProps<TData, TValue>) {
+}: SalesTableProps<TData, TValue>) {
     const table = useReactTable({
         data,
         columns,
@@ -48,7 +48,7 @@ export default function OffersTable<TData, TValue>({
                             table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow
                                     key={headerGroup.id}
-                                >
+                                    className={``}>
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead key={header.id}>
@@ -69,6 +69,11 @@ export default function OffersTable<TData, TValue>({
                     <TableBody>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => {
+                                if (row.original == null) {
+                                    return <TableRow
+                                        key={row.id || null}
+                                    ></TableRow>
+                                }
                                 const status = row.getValue('status')
                                 const expiredAt = parseInt(row.getValue('expiresAt'))
                                 const isBidExpired = expiredAt * 1000 < Date.now()

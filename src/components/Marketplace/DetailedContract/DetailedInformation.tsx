@@ -12,22 +12,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { truncateEthAddress } from '@/utils/address.util';
 import ActivityTabs from '@/components/Marketplace/DetailedContract/ActivityTab/ActivityTabs';
 import { useAccount } from 'wagmi';
-import { formatEther, isAddressEqual } from 'viem';
+import { formatEther, getAddress, isAddressEqual } from 'viem';
 import ListingDialog from './Dialog/ListingDialog';
 import CancelListingDialog from './Dialog/CancelListingDialog';
 import { isExpired, timeLeft } from '@/utils/date.util';
 import BuyDialog from './Dialog/BuyDialog';
 import OfferDialog from './Dialog/OfferDialog';
 import * as Enums from "@/utils/enum.util";
+import { Sale } from '@/generated/graphql';
 
 interface DetailedInformationProps {
     // loading: boolean;
-    data: fetchCharacterDataReturnType | fetchItemDataReturnType | undefined;
+    data?: fetchCharacterDataReturnType | fetchItemDataReturnType;
+    sales?: Sale[],
     imageURL: string;
     category: Enums.Categories;
 }
 
-export default function DetailedInformation({ data, imageURL, category }: DetailedInformationProps) {
+export default function DetailedInformation({ data, imageURL, category, sales }: DetailedInformationProps) {
     const { address, chain } = useAccount();
     const router = useRouter();
     const size = 400;
@@ -54,6 +56,8 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
             p5.pop();
         };
     };
+
+    console.log(sales);
 
     return (<div className="flex flex-col justify-center gap-5 text-primary w-full h-full">
         <div className="flex flex-col justify-center gap-5 text-primary w-full h-full">
@@ -183,7 +187,7 @@ export default function DetailedInformation({ data, imageURL, category }: Detail
             </div>
             <div className="flex flex-col w-full gap-2 col-span-3">
                 <span className='uppercase font-bold text-xl ml-5'>Activity Details</span>
-                <ActivityTabs bids={data?.nft.bids ? data?.nft.bids : []} />
+                <ActivityTabs bids={data?.nft.bids ? data?.nft.bids.filter(item => item.tokenId == data?.tokenId) : []} orders={data?.nft.orders ? data?.nft.orders.filter(item => item.tokenId == data?.tokenId) : []} sales={sales} />
             </div>
         </div>
     </div>

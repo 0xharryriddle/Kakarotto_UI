@@ -1,4 +1,4 @@
-import { Bid } from "@/generated/graphql"
+import { Sale } from "@/generated/graphql"
 import { truncateEthAddress } from "@/utils/address.util"
 import { timeAgo, timeLeft, isExpired } from '@/utils/date.util';
 import { ColumnDef } from "@tanstack/react-table"
@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/hover-card"
 import { Button } from "@/components/ui/button";
 
-
-export const offersColumns: ColumnDef<Bid>[] = [
+export const salesColumns: ColumnDef<Sale>[] = [
     {
         accessorKey: "seller",
         header: "Seller",
