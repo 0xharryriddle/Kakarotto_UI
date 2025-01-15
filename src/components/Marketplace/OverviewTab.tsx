@@ -16,22 +16,32 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from '@/components/ui/button'
 import CarouselCard from '@/components/Marketplace/CarouselCard';
-import * as Enums from '@/utils/enum.util';
+import * as Enums from '@/utils/type.util';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { client } from '@/graphql/client';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { useQuery } from '@tanstack/react-query';
 import { env } from "@/env/server";
+import { GET_ALL_NFTS } from '@/queries/nft';
 
 interface OverviewTabProps {
     changeTabLoading: boolean;
 }
 
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
-    const { data, status } = useQuery({
+    const {
+        data: queryData,
+        isLoading: queryIsLoading,
+        status: queryStatus,
+        error: queryError,
+        isFetched: queryIsFetched
+    } = useQuery({
         queryKey: ['overview'],
         async queryFn() {
-            return await querySubgraphs({ client });
+            return await querySubgraphs({
+                client,
+                query: GET_ALL_NFTS
+            });
         },
     });
 

@@ -3,7 +3,7 @@ import React from 'react'
 import { Card, CardContent } from "@/components/ui/card"
 import Image from 'next/image';
 import { Badge, Heading, Text } from '@chakra-ui/react';
-import { Categories, Rarities } from '@/utils/enum.util';
+import { Categories, Rarities } from '@/utils/type.util';
 import { UseQueryResult } from '@tanstack/react-query';
 interface CarouselCardProps {
     image: string;
@@ -33,7 +33,7 @@ export default function CarouselCard({ image, name, category, description, price
                     <Text className='text-sm'>{description}</Text>
                     <div className="flex flex-row gap-2 text-sm">
                         {/* Token Icon */}
-                        <Text className='text-lg text-primary'>{price}</Text>
+                        <Text className='text-lg text-primary'>{price || "Not Listing"}</Text>
                     </div>
                     <Badge colorScheme={rarity == Rarities.Bronze ? 'brown' : rarity == Rarities.Silver ? 'gray' : rarity == Rarities.Gold ? 'gold' : rarity == Rarities.Platinum ? 'green' : 'purple'} className='rounded-lg p-2 w-fit'>{rarity == Rarities.Bronze ? 'Bronze' : rarity == Rarities.Silver ? 'Silver' : rarity == Rarities.Gold ? 'Gold' : rarity == Rarities.Platinum ? 'Platinum' : 'Diamond'}</Badge>
                 </div>

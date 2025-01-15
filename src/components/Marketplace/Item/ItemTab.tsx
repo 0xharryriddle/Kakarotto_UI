@@ -1,7 +1,7 @@
 'use client';
 import React, { useEffect, useState } from 'react'
 import HeaderTabTemplate from '@/components/Marketplace/Template/HeaderTabTemplate'
-import { Categories } from '@/utils/enum.util';
+import { Categories } from '@/utils/type.util';
 import CategoryTabTemplate from '@/components/Marketplace/Template/CategoryTabTemplate';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { useAccount } from 'wagmi';
@@ -11,6 +11,7 @@ import { fetchItemData } from '@/contracts/utils/fetchCardData.utill';
 import { getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
 import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { client } from '@/graphql/client';
+import { GET_ALL_ITEMS } from '@/queries/item';
 
 interface ItemTabProps {
   changeTabLoading: boolean;
@@ -22,42 +23,19 @@ interface GraphQLDataProps {
 
 export default function ItemTab({ changeTabLoading }: ItemTabProps) {
   const { chainId } = useAccount();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [itemData, setItemData] = useState<Item[]>([]);
 
-  const { data: graphqlData } = useQuery({
+  const {
+    data: queryData,
+    isLoading: queryIsLoading,
+    status: queryStatus,
+    error: queryError,
+    isFetched: queryIsFetched
+  } = useQuery({
     queryKey: ['items'],
     async queryFn() {
-      return await querySubgraphs({ client })
+      return await querySubgraphs({ client, query: GET_ALL_ITEMS })
     }
   });
-
-  useEffect(() => {
-    async function fetchData() {
-      if (graphqlData) {
-        setLoading(true);
-        setItemData([]);
-        const { items } = graphqlData as GraphQLDataProps;
-        await fetchNFTData({ items });
-        setLoading(false);
-      }
-    }
-    fetchData();
-  }, [graphqlData]);
-
-  const fetchNFTData = async (
-    {
-      items,
-    }: {
-      items: Item[],
-    }) => {
-    try {
-      const itemResult = await fetchItemData({ items });
-      setItemData(itemResult);
-    } catch (error) {
-      console.error("Failed to fetch metadata:", error);
-    }
-  }
 
   return (
     changeTabLoading
@@ -68,11 +46,11 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
           contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)}
           standard="ERC721"
           category={Categories.Item} />
-        <CategoryTabTemplate
-          data={itemData}
-          loading={loading}
+        {/* <CategoryTabTemplate
+          queryData={queryData ? (queryData as GraphQLDataProps).items : []}
+          loading={queryIsLoading}
           category={Categories.Item}
-          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} />
+          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} /> */}
       </div>
   )
 }

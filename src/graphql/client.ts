@@ -18,3 +18,5 @@ export const client = new GraphQLClient(
     method: "POST",
   }
 );
+
+// export const client = new GraphQLClient("/graphql");

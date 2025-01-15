@@ -1,9 +1,9 @@
 import { Bid, Order } from "@/generated/graphql"
-import { truncateEthAddress } from "@/utils/address.util"
+import { truncateHash } from "@/utils/address.util"
 import { timeAgo, timeLeft } from "@/utils/date.util";
 import { ColumnDef } from "@tanstack/react-table"
 import { CoinsIcon } from "lucide-react";
-import { formatEther } from "viem";
+import { formatEther, zeroAddress } from "viem";
 import {
     HoverCard,
     HoverCardContent,
@@ -17,7 +17,7 @@ export const listingsColumns: ColumnDef<Order>[] = [
         header: "Owner",
         cell: ({ row }) => {
             const owner = row.getValue('owner') as string;
-            const truncatedAddress = truncateEthAddress(owner);
+            const truncatedAddress = truncateHash(owner || zeroAddress);
             return (<HoverCard>
                 <HoverCardTrigger className="font-bold cursor-pointer transition delay-100 duration-200 ease-in-out hover:scale-90" onClick={() => { navigator.clipboard.writeText(owner) }}>
                     <div>{truncatedAddress}</div>
@@ -33,7 +33,7 @@ export const listingsColumns: ColumnDef<Order>[] = [
         header: "Buyer",
         cell: ({ row }) => {
             const buyer = row.getValue('buyer') as string;
-            const truncatedAddress = truncateEthAddress(buyer);
+            const truncatedAddress = truncateHash(buyer || zeroAddress);
             return (<HoverCard>
                 <HoverCardTrigger className={`font-bold cursor-pointer transition delay-100 duration-200 ease-in-out hover:scale-90 ${!buyer && "text-secondary/70"}`} onClick={() => { if (buyer) navigator.clipboard.writeText(buyer) }}>
                     <div>{buyer ? truncatedAddress : "No one"}</div>

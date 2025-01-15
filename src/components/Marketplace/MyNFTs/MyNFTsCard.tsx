@@ -58,20 +58,23 @@ import { useForm } from "react-hook-form"
 import { isAddress } from 'viem';
 import { accessToPinataImage } from '@/utils/image.util';
 import { useRouter } from 'next/navigation';
-import * as Enums from "@/utils/enum.util";
-
+import * as Enums from "@/utils/type.util";
+import { Nft } from '@/generated/graphql';
+import { UNKNOWN_RARITY } from '@/utils/constant.util';
 
 interface MyNFTsCardProps {
-    image: string;
-    name: string;
-    tokenId: string;
-    rarity: string;
-    attributes?: any[];
-    account: string;
-    creator: string;
     className?: string;
-    contractAddress: string;
-    category: string;
+    data: Nft;
+    // image: string;
+    // name: string;
+    // tokenId: string;
+    // rarity: string;
+    // attributes?: any[];
+    // account: string;
+    // creator: string;
+    // className?: string;
+    // contractAddress: string;
+    // category: string;
 }
 
 const formSchema = z.object({
@@ -83,7 +86,13 @@ const formSchema = z.object({
     rarity: z.nativeEnum(Enums.Rarities),
 })
 
-export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, className, account, creator, category, contractAddress }: MyNFTsCardProps) {
+export default function MyNFTsCard(
+    // { image, name, tokenId, rarity, attributes, className, account, creator, category, contractAddress }: MyNFTsCardProps
+    {
+        data,
+        className,
+    }: MyNFTsCardProps
+) {
     const { chainId, isConnected } = useAccount();
     const router = useRouter();
     const [chooseAction, setChooseAction] = useState<{
@@ -123,36 +132,52 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
                 <HoverCard openDelay={100} closeDelay={0}>
                     <HoverCardTrigger>
                         <Card className={`border-primary border-4 w-64 h-auto text-secondary rounded-lg bg-gray-800 group overflow-hidden hover:cursor-pointer ${className} }`} onClick={() => {
-                            if (category === 'treasure') {
+                            if (data.category === 'treasure') {
                                 return;
                             }
-                            router.push(`/marketplace/contracts/${contractAddress}/item/${tokenId}`)
+                            router.push(`/marketplace/contracts/${data.contractAddress}/item/${data.tokenId}`)
                         }}>
                             <CardContent className='flex flex-col items-center justify-center gap-2 font-bold w-full'>
                                 <div className="w-full rounded-t-lg relative overflow-hidden h-60">
                                     <Image src={"/item_frame.png"} alt="Item frame" className='rounded-md w-full h-full absolute' width={500} height={500} loading="lazy" />
-                                    <Image src={image ? accessToPinataImage(image) : '/secret_treasure.gif'} alt="carousel image" width={500} height={500} className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out" loading="lazy" />
+                                    {/* // TODO: Implement the image */}
+                                    <Image
+                                        src={data.tokenURI ?
+                                            accessToPinataImage(
+                                                data.tokenURI,
+                                                data.searchIsTreasure,
+                                                data.tokenId
+                                            ) : '/secret_treasure.gif'}
+                                        alt="carousel image"
+                                        width={500}
+                                        height={500}
+                                        className="w-full h-full rounded-lg group-hover:scale-110 transition delay-100 duration-200 ease-in-out"
+                                        loading="lazy"
+                                    />
                                 </div>
-                                <span className="text-xl">{name}</span>
+                                <span className="text-xl">{data.name}</span>
                                 <div className="flex flex-row items-center justify-center gap-5">
                                     <div className="flex flex-col items-center justify-center">
                                         <span className='text-lg'>Token ID</span>
-                                        <span className='text-base'>{`#${tokenId}`}</span>
+                                        <span className='text-base'>{`#${data.tokenId}`}</span>
                                     </div>
                                     <div className="flex flex-col items-center justify-center">
                                         <span className='text-lg'>Rarity</span>
-                                        <span className='text-base'>{rarity.toLocaleUpperCase()}</span>
+                                        <span className='text-base'>{data.rarity
+                                            ? data.rarity.toLocaleUpperCase()
+                                            : UNKNOWN_RARITY.toLocaleUpperCase()}</span>
                                     </div>
                                 </div>
                                 {
-                                    account && creator && chainId && <div className="flex flex-row items-center justify-center gap-2">
-                                        <a href={`${getExplorer(chainId)}/address/${account}`} target='blank'>
+                                    data.searchIsCharacter && data.creator && chainId &&
+                                    <div className="flex flex-row items-center justify-center gap-2">
+                                        <a href={`${getExplorer(chainId)}/address/${data.character?.characterAccount?.contractAddress}`} target='blank'>
                                             <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
                                                 <span>Account</span>
                                                 <CircleArrowOutUpRightIcon size={16} />
                                             </Button>
                                         </a>
-                                        <a href={`${getExplorer(chainId)}/address/${creator}`} target='blank'>
+                                        <a href={`${getExplorer(chainId)}/address/${data.creator}`} target='blank'>
                                             <Button className='cursor-default flex flex-row items-center justify-center gap-2 hover:opacity-90'>
                                                 <span>Creator</span>
                                                 <CircleArrowOutUpRightIcon size={16} />
@@ -187,7 +212,7 @@ export default function MyNFTsCard({ image, name, tokenId, rarity, attributes, c
                     </DialogDescription>
                     <div className="flex flex-row items-center justify-around gap-2 p-5">
                         {
-                            category === 'treasure' && <AlertDialog>
+                            data.category === 'treasure' && <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button className="cursor-pointer" onClick={() => {
                                     }}>Open</Button>

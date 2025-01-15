@@ -16,6 +16,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "giphy.com",
       },
+      {
+        protocol: "https",
+        hostname: "kakarotto-backend.onrender.com",
+      },
     ],
   },
   headers: async () => {

@@ -19,7 +19,7 @@ import { HandshakeIcon, SignatureIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { PRECISION } from '@/lib/constants/marketplace';
 import { formatUnitsToNumber } from '@/utils/token-unit-utils/format-units-to-number';
-import * as Enums from '@/utils/enum.util';
+import * as Enums from '@/utils/type.util';
 import { useBuyOrder } from '@/hooks/useBuyOrder';
 import getExplorer from '@/contracts/utils/getExplorer.util';
 import { useToast } from '@chakra-ui/react';

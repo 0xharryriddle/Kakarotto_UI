@@ -1,18 +1,14 @@
-import { isAddress } from "viem";
-
-// Captures 0x + 4 characters, then the last 4 characters.
-const truncateRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/;
-
 /**
- * Truncates an ethereum address to the format 0x0000…0000
- * @param address Full address to truncate
- * @returns Truncated address
+ * Truncates an hash with the startlength and endlength
+ * @param hash Hash to truncate
+ * @param startLength Length of the start
+ * @param endLength Length of the end
+ * @returns Truncated hash
  */
-const truncateEthAddress = (address: string) => {
-  if (!isAddress(address)) return "";
-  const match = address.match(truncateRegex);
-  if (!match) return address;
-  return `${match[1]}…${match[2]}`;
-};
-
-export { truncateEthAddress };
+export function truncateHash(
+  hash: string,
+  startLength: number = 6,
+  endLength: number = 4
+): string {
+  return `${hash.slice(0, startLength)}...${hash.slice(-endLength)}`;
+}

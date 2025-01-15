@@ -9,10 +9,11 @@ import {
     HoverCardTrigger,
 } from "@/components/ui/hover-card"
 
-import { Categories } from '@/utils/enum.util';
+import { Categories } from '@/utils/type.util';
 import * as mappings from '@/utils/mapping.util'
-import { truncateEthAddress } from '@/utils/address.util';
+import { truncateHash } from '@/utils/address.util';
 import { useAccount } from 'wagmi';
+import { zeroAddress } from 'viem';
 
 interface HeaderTabTemplateProps {
     image: string;
@@ -40,7 +41,7 @@ export default function HeaderTabTemplate({
                     <HoverCard>
                         <HoverCardTrigger className='hover:scale-95 transition delay-100 duration-200 ease-in-out'>
                             <p className="text-secondary/70">
-                                Contract: {truncateEthAddress(contractAddress)}
+                                Contract: {truncateHash(contractAddress || zeroAddress)}
                             </p>
                         </HoverCardTrigger>
                         <HoverCardContent>

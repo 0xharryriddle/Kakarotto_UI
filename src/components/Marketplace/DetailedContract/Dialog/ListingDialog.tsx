@@ -44,7 +44,7 @@ import { useFormattedTokenBalance } from '@/hooks/useFormattedTokenBalance';
 import { useERC20Allowance } from '@/hooks/useERC20Allowance';
 import { useERC721Allowance } from '@/hooks/useERC721Allowance';
 import { useCreateOrder } from '@/hooks/useCreateOrder';
-import * as Enums from "@/utils/enum.util";
+import * as Enums from "@/utils/type.util";
 import { useERC20Approval } from '@/hooks/useERC20Approval';
 import { useERC721Approval } from '@/hooks/useERC721Approval';
 import { formatUnitsToNumber } from '@/utils/token-unit-utils/format-units-to-number';

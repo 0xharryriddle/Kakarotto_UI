@@ -8,8 +8,8 @@ const tabData = [
     { name: 'Overview', link: '/marketplace', value: 'overview' },
     { name: 'Character', link: '/marketplace/characters', value: 'characters' },
     { name: 'Item', link: '/marketplace/items', value: 'items' },
-    { name: 'My Lists', link: '/marketplace/my_listings', value: 'my_listings' },
-    { name: 'My NFTs', link: '/marketplace/my_nfts', value: 'my_nfts' }
+    { name: 'My Lists', link: '/marketplace/my-listings', value: 'my-listings' },
+    { name: 'My NFTs', link: '/marketplace/my-nfts', value: 'my-nfts' }
 ]
 
 export default function HeaderTab() {

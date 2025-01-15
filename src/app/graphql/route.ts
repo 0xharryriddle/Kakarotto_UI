@@ -9,11 +9,8 @@ const subgraphQueryUrl =
 
 const client = new GraphQLClient(subgraphQueryUrl, {
   headers: {
-    // Authorization: `Bearer ${env.API_KEY}`,
-    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-    Pragma: "no-cache",
-    Expires: "0",
-    // cache: "no-cache",
+    // @note - if the subgraph requires an auth token, you can add it here
+    // Authorization: `Bearer ${process.env.GRAPHQL_AUTH_TOKEN}`,
   },
 });
 
@@ -39,8 +36,6 @@ async function process(request: Request) {
     gqlRequest.query,
     gqlRequest.variables ?? undefined
   );
-
-  console.log(gqlResponse);
 
   return NextResponse.json({ data: gqlResponse }, { status: 200 });
 }

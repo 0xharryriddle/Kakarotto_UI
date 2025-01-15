@@ -9,16 +9,16 @@ import { Button } from '@/components/ui/button';
 import { fetchCharacterDataReturnType, fetchItemDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { truncateEthAddress } from '@/utils/address.util';
+import { truncateHash } from '@/utils/address.util';
 import ActivityTabs from '@/components/Marketplace/DetailedContract/ActivityTab/ActivityTabs';
 import { useAccount } from 'wagmi';
-import { formatEther, getAddress, isAddressEqual } from 'viem';
+import { formatEther, getAddress, isAddressEqual, zeroAddress } from 'viem';
 import ListingDialog from './Dialog/ListingDialog';
 import CancelListingDialog from './Dialog/CancelListingDialog';
 import { isExpired, timeLeft } from '@/utils/date.util';
 import BuyDialog from './Dialog/BuyDialog';
 import OfferDialog from './Dialog/OfferDialog';
-import * as Enums from "@/utils/enum.util";
+import * as Enums from "@/utils/type.util";
 import { Sale } from '@/generated/graphql';
 
 interface DetailedInformationProps {
@@ -39,21 +39,22 @@ export default function DetailedInformation({ data, imageURL, category, sales }:
         let imageCanvas: any;
         p5.setup = () => {
             p5.createCanvas(700, 425, p5.WEBGL);
-            imageCanvas = p5.loadImage(imageURL, (image) => {
-                p5.redraw();
-            });
+            p5.color(0);
+            // imageCanvas = p5.loadImage(imageURL, (image) => {
+            //     p5.redraw();
+            // });
         };
 
         p5.draw = () => {
-            p5.background(250);
-            p5.push();
-            const biggestImageDimension =
-                imageCanvas.width > imageCanvas.height ? imageCanvas.width : imageCanvas.height;
-            p5.texture(imageCanvas);
-            p5.scale((size / biggestImageDimension) * .73);
-            p5.rotateY(p5.frameCount * ((2 * Math.PI) / totalFrames));
-            p5.plane(imageCanvas.width, imageCanvas.height);
-            p5.pop();
+            // p5.background(250);
+            // p5.push();
+            // const biggestImageDimension =
+            //     imageCanvas.width > imageCanvas.height ? imageCanvas.width : imageCanvas.height;
+            // // p5.texture(imageCanvas);
+            // p5.scale((size / biggestImageDimension) * .73);
+            // p5.rotateY(p5.frameCount * ((2 * Math.PI) / totalFrames));
+            // p5.plane(imageCanvas.width, imageCanvas.height);
+            // p5.pop();
         };
     };
 
@@ -89,7 +90,9 @@ export default function DetailedInformation({ data, imageURL, category, sales }:
                                     <AvatarImage src="https://github.com/shadcn.png" />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
-                                <span className='text-lg'>{data?.owner ? truncateEthAddress(data?.owner) : "Unknown"}</span>
+                                <span className='text-lg'>{
+                                    truncateHash(data?.owner || zeroAddress)
+                                }</span>
                             </div>
                         </div>
                         <div className="flex flex-col justify-center gap-5 w-1/2">
@@ -99,7 +102,8 @@ export default function DetailedInformation({ data, imageURL, category, sales }:
                                     <AvatarImage src="https://github.com/shadcn.png" />
                                     <AvatarFallback>CN</AvatarFallback>
                                 </Avatar>
-                                <span className='text-lg'>{data?.creator ? truncateEthAddress(data?.creator) : "Unknown"}</span>
+                                <span className='text-lg'>
+                                    {truncateHash(data?.creator ? data?.creator : zeroAddress)}</span>
                             </div>
                         </div>
                     </div>
@@ -181,7 +185,11 @@ export default function DetailedInformation({ data, imageURL, category, sales }:
                     </div>
                     <div className="flex flex-row items-center justify-between">
                         <span className="text-lg text-foreground">Owner</span>
-                        <span className='text-foreground/60 text-base uppercase'>{data?.nft.searchOwner ? truncateEthAddress(data?.nft.searchOwner || "") : "Unknown"}</span>
+                        <span className='text-foreground/60 text-base uppercase'>{
+                            truncateHash(
+                                data?.nft.searchOwner || zeroAddress
+                            )
+                        }</span>
                     </div>
                 </div>
             </div>
