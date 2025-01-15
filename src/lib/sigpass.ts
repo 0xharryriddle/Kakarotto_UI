@@ -1,13 +1,13 @@
 /**
  * SIGPASS
- * 
+ *
  */
 
 // evm
-import { mnemonicToAccount } from 'viem/accounts'
+import { mnemonicToAccount } from "viem/accounts";
 // bip39
-import * as bip39 from '@scure/bip39';
-import { wordlist } from '@scure/bip39/wordlists/english';
+import * as bip39 from "@scure/bip39";
+import { wordlist } from "@scure/bip39/wordlists/english";
 
 /**
  * Use WebAuthn to store authentication-protected arbitrary bytes
@@ -42,13 +42,11 @@ async function createOrThrow(name: string, data: Uint8Array) {
         },
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new Uint8Array((credential as any).rawId);
   } catch (error) {
     return null;
   }
 }
-
 
 /**
  * Use WebAuthn to retrieve authentication-protected arbitrary bytes
@@ -64,21 +62,18 @@ async function getOrThrow(id: Uint8Array) {
         allowCredentials: [{ type: "public-key", id }],
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return new Uint8Array((credential as any).response.userHandle);
   } catch (error) {
     return null;
   }
 }
 
-
 /**
  * Check if WebAuthn is supported
- * 
+ *
  * @returns boolean
  */
 function checkBrowserWebAuthnSupport(): boolean {
-
   if (!navigator.credentials) {
     return false;
   }
@@ -147,17 +142,21 @@ async function getSigpassWallet() {
   if (mnemonicPhrase) {
     // const account = privateKeyToAccount(privateKey as Address);
     // derive the evm account from mnemonic
-    const evmAccount = mnemonicToAccount(mnemonicPhrase,
-      {
-        accountIndex: 0,
-        addressIndex: 0,
-      }
-    );
+    const evmAccount = mnemonicToAccount(mnemonicPhrase, {
+      accountIndex: 0,
+      addressIndex: 0,
+    });
     return evmAccount;
   } else {
     return null;
   }
 }
 
-export { createOrThrow, getOrThrow, checkBrowserWebAuthnSupport, createSigpassWallet, getSigpassWallet, checkSigpassWallet };
-
+export {
+  createOrThrow,
+  getOrThrow,
+  checkBrowserWebAuthnSupport,
+  createSigpassWallet,
+  getSigpassWallet,
+  checkSigpassWallet,
+};

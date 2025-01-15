@@ -18,11 +18,10 @@ export default async function MarketplacePage() {
     async queryFn() {
       return await querySubgraphs({
         client,
-        query: GET_ALL_NFTS,
-        variables: {
-          orderBy: 'activeOrder__price',
-          orderDirection: 'desc'
-        }
+        query: GET_ALL_NFTS({
+          first: 100,
+          skip: 0
+        })
       })
     },
   });

@@ -41,14 +41,15 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
         async queryFn() {
             return await querySubgraphs({
                 client,
-                query: GET_ALL_NFTS,
-                variables: {
-                    orderBy: 'activeOrder__price',
-                    orderDirection: 'desc'
-                }
+                query: GET_ALL_NFTS({
+                    first: 100,
+                    skip: 0
+                })
             });
         },
     });
+
+    console.log(queryData);
 
     return (
         <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit w-full" >

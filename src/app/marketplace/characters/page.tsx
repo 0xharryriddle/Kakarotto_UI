@@ -15,7 +15,10 @@ export default async function CharacterMarketplacePage() {
   await queryClient.prefetchQuery({
     queryKey: ['characters'],
     async queryFn() {
-      return await querySubgraphs({ client, query: GET_ALL_CHARACTERS })
+      return await querySubgraphs({
+        client,
+        query: GET_ALL_CHARACTERS({})
+      })
     },
   })
 

@@ -13,6 +13,7 @@ import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { client } from '@/graphql/client';
 import { accessToPinataImage } from '@/utils/image.util';
 import Loading from '@/app/loading';
+import { GET_NFT_BY_TOKEN_ID } from '@/queries/nft';
 
 interface DetailedDashboardProps {
   contractAddress: string,
@@ -40,49 +41,36 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
   const { data: graphqlData, isLoading: graphqlIsLoading, isFetching: graphqlIsFetching, isError: graphqlIsError, error: graphqlError, refetch: graphqlRefetch } = useQuery({
     queryKey: ['details'],
     async queryFn() {
-      return await querySubgraphs({ client });
+      return await querySubgraphs({
+        client,
+        query: GET_NFT_BY_TOKEN_ID,
+        variables: {
+          tokenId
+        }
+      });
     },
   });
-
-  useEffect(() => {
-    async function fetchData() {
-      if (graphqlData) {
-        // setLoading(true);
-        setCharacterData(undefined);
-        setItemData(undefined);
-        const { sales, characters, items } = graphqlData as GraphQLDataProps;
-        setSaleData(sales);
-        await fetchNFTData({ characters, category, items });
-        // setLoading(false);
-      }
-    }
-    fetchData();
-  }, [category, graphqlData]);
-
-  const fetchNFTData = async (
-    {
-      characters,
-      items,
-      category
-    }: {
-      characters: Character[],
-      items: Item[],
-      category: Enums.Categories | null,
-    }) => {
-    try {
-      const dataResult = (category == Enums.Categories.Character ? await fetchCharacterData({ characters }) : Enums.Categories.Item ? await fetchItemData({ items }) : []).filter((data) => data.tokenId == tokenId)[0];
-
-      category == Enums.Categories.Character ? setCharacterData(dataResult) : category == Enums.Categories.Item ? setItemData(dataResult) : [];
-    } catch (error) {
-      console.error("Failed to fetch metadata:", error);
-    }
-  }
 
   if (graphqlIsLoading) {
     return <Loading />
   }
 
   return <div className="flex flex-col items-center justify-center gap-5 px-14 py-10">
-    <DetailedInformation data={category == Enums.Categories.Character ? characterData : category == Enums.Categories.Item ? itemData : undefined} imageURL={accessToPinataImage(category == Enums.Categories.Character ? characterData?.metadata.image : category == Enums.Categories.Item ? itemData?.metadata.image : "")} category={category} sales={saleData} />
+    <DetailedInformation
+      data={
+        category == Enums.Categories.Character
+          ? characterData
+          : category == Enums.Categories.Item
+            ? itemData
+            : undefined}
+      imageURL={
+        accessToPinataImage(category == Enums.Categories.Character
+          ? characterData?.metadata.image
+          : category == Enums.Categories.Item
+            ? itemData?.metadata.image
+            : "")}
+      category={category}
+      sales={saleData}
+    />
   </div>
 }

@@ -46,11 +46,11 @@ export default function ItemTab({ changeTabLoading }: ItemTabProps) {
           contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)}
           standard="ERC721"
           category={Categories.Item} />
-        <CategoryTabTemplate
-          data={queryData ? (queryData as GraphQLDataProps).items : []}
+        {/* <CategoryTabTemplate
+          queryData={queryData ? (queryData as GraphQLDataProps).items : []}
           loading={queryIsLoading}
           category={Categories.Item}
-          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} />
+          contractAddress={getKakarottoItemAddress(chainId) ? getKakarottoItemAddress(chainId) : getKakarottoItemAddress(11155111)} /> */}
       </div>
   )
 }
