@@ -6,6 +6,9 @@ if (!env.ROOT_URI) {
   throw new Error("ROOT_URI is not defined in the environment variables.");
 }
 
-export const client = new GraphQLClient(env.ROOT_URI, {
-  method: "POST",
-});
+// this hits the graphql api exposed in the /app/graphql/route.ts file
+export const client = new GraphQLClient(env.ROOT_URI);
+
+// export const client = new GraphQLClient(env.ROOT_URI, {
+//   method: "POST",
+// });

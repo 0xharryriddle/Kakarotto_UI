@@ -11,22 +11,28 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Categories } from '@/utils/enum.util';
+import { Categories } from '@/utils/type.util';
 import { rarities } from '@/utils/mapping.util';
-import * as Enums from '@/utils/enum.util';
+import * as Enums from '@/utils/type.util';
 import * as Mapping from '@/utils/mapping.util';
 import CarouselCard from '@/components/Marketplace/CarouselCard';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { fetchCharacterDataReturnType } from '@/contracts/utils/fetchCardData.utill';
 import { accessToPinataImage } from '@/utils/image.util';
 import { Button } from '@/components/ui/button';
+import { client } from '@/graphql/client';
+import { querySubgraphs } from '@/services/graphql/subgraphs';
+import { Character } from '@/generated/graphql';
+import { GET_ALL_CHARACTERS } from '@/queries/character';
+import { useQuery } from '@tanstack/react-query'
 
 interface CategoryTabTemplateProps {
     contractAddress: `0x${string}`;
     category: Categories;
-    data: any[];
-    loading?: boolean;
-    // refetch: (options: { throwOnError: boolean, cancelRefetch: boolean }) => Promise<UseQueryResult>
+}
+
+interface GraphQLDataProps {
+    characters: Character[]
 }
 
 type RarityFilter = {
@@ -41,10 +47,7 @@ type AttributeFilter = {
 
 export default function CategoryTabTemplate({
     contractAddress,
-    category,
-    data,
-    loading,
-    // refetch
+    category
 }: CategoryTabTemplateProps) {
     const router = useRouter()
     const [filter, setFilter] = useState<{
@@ -53,6 +56,18 @@ export default function CategoryTabTemplate({
     }>({
         rarities: [],
         attributes: []
+    });
+    const {
+        data: queryData,
+        isLoading: queryIsLoading,
+        status: queryStatus,
+        error: queryError,
+        isFetched: queryIsFetched
+    } = useQuery({
+        queryKey: ['characters'],
+        async queryFn() {
+            return await querySubgraphs({ client, query: GET_ALL_CHARACTERS({}) });
+        }
     });
 
     return (
@@ -72,7 +87,9 @@ export default function CategoryTabTemplate({
                                                 rarities.map((rarity, index) => (
                                                     <Checkbox
                                                         key={index}
-                                                        isChecked={filter.rarities.filter(r => r.index === index)[0]?.isChecked}
+                                                        isChecked={
+                                                            filter.rarities.filter(r => r.index === index)[0]?.isChecked
+                                                        }
                                                         onChange={(e) => setFilter((prev) => {
                                                             const newRarities = prev.rarities;
                                                             newRarities[index] = {
@@ -127,14 +144,43 @@ export default function CategoryTabTemplate({
                     <Button>Reset</Button>
                 </div>
                 {
-                    loading ? <LoadingTemplate className='h-full w-full' /> :
-                        data.length ? <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-4/5 h-full">
-                            {
-                                data.map((element, index) => {
-                                    const castingElement = element as fetchCharacterDataReturnType;
-                                    return <CarouselCard key={index} image={castingElement.metadata?.image ? accessToPinataImage(castingElement.metadata?.image) : "/secret_treasure.gif"} name={castingElement.metadata?.name ? castingElement.metadata?.name : "Unknown"} category={category} description={castingElement.metadata?.description && ""} price={1.90} rarity={Mapping.rarities.findIndex((item) => item == castingElement.rarity) as Enums.Rarities} type="" className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200' onClick={() => router.push(`/marketplace/contracts/${contractAddress}/item/${element.tokenId}`)} />
-                                })}
-                        </div>
+                    queryIsLoading ? <LoadingTemplate className='h-full w-full' /> :
+                        (queryData as GraphQLDataProps).characters.length
+                            ?
+                            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-4/5 h-full">
+                                {
+                                    (queryData as GraphQLDataProps).characters.map(
+                                        (element, index) => {
+                                            return <CarouselCard
+                                                key={index}
+                                                image={
+                                                    // element.metadata?.image
+                                                    //     ? accessToPinataImage(castingElement.metadata?.image) : "/secret_treasure.gif"
+                                                    "/secret_treasure.gif"
+                                                }
+                                                name={
+                                                    element.nft.name || "Unknown"
+                                                }
+                                                category={category}
+                                                description={
+                                                    // TODO: Need to fetch the description from the metadata
+                                                    "This is a description"
+                                                }
+                                                price={element.nft.searchOrderPrice}
+                                                rarity={
+                                                    Mapping.rarities.findIndex(
+                                                        (item) => item == element.nft.rarity
+                                                    ) as Enums.Rarities
+                                                }
+                                                // TODO: Need to implement `type`
+                                                type=""
+                                                className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'
+                                                onClick={
+                                                    () => router.push(`/marketplace/contracts/${contractAddress}/item/${element.nft.tokenId}`)
+                                                }
+                                            />
+                                        })}
+                            </div>
                             :
                             <div className="w-4/5 h-full flex flex-col items-center justify-center gap-5">
                                 <p className="text-2xl font-bold text-primary/75">No any {Mapping.categories[category]}...</p>

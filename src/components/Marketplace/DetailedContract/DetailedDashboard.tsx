@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { useAccount } from 'wagmi';
 import { useQuery } from '@tanstack/react-query'
 
-import * as Enums from '@/utils/enum.util';
+import * as Enums from '@/utils/type.util';
 import { getKakarottoCharacterAddress, getKakarottoItemAddress } from '@/contracts/utils/getAddress.util';
 import DetailedInformation from '@/components/Marketplace/DetailedContract/DetailedInformation';
 import { Character, Item, Sale } from '@/generated/graphql';

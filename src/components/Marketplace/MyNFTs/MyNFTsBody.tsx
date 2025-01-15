@@ -21,57 +21,25 @@ import { Label } from "@/components/ui/label"
 import { capitalizeFirstLetter } from '@/contracts/utils/string.util';
 import { Checkbox } from "@/components/ui/checkbox"
 import * as mappings from '@/utils/mapping.util';
-import { Character, TreasureAccount, Item } from '@/generated/graphql';
+import { Character, TreasureAccount, Item, Nft } from '@/generated/graphql';
 import { useAccount } from 'wagmi';
 import MyNFTsList from './MyNFTsList';
 import LoadingTemplate from '@/components/LoadingTemplate';
-
-const defaultRarityState = {
-    bronze: false,
-    silver: false,
-    gold: false,
-    platinum: false,
-    diamond: false
-};
-
-const defaultCharacterAttributeState = {
-    power: 0,
-    defend: 0,
-    agility: 0,
-    intelligence: 0,
-    luck: 0
-};
+import { DEFAULT_CHARACTER_ATTRIBUTE_STATE, DEFAULT_RARITY_STATE } from '@/utils/constant.util';
 
 interface MyNFTsBodyProps {
-    nftData: {
-        all: any[],
-        characters: Character[],
-        items: Item[],
-        treasures: TreasureAccount[],
-    },
+    data?: Nft[],
+    dataIsFetched?: boolean,
     loadingData?: boolean
 }
 
-
-export default function MyNFTsBody({ nftData, loadingData }: MyNFTsBodyProps) {
+export default function MyNFTsBody({ data, dataIsFetched, loadingData }: MyNFTsBodyProps) {
     const { address, chainId, isConnected } = useAccount();
     const [loading, setLoading] = useState(false);
     const [currentTab, setCurrentTab] = useState('all');
     const [filter, setFilter] = useState({
-        rarity: {
-            bronze: false,
-            silver: false,
-            gold: false,
-            platinum: false,
-            diamond: false
-        },
-        attributes: {
-            power: 0,
-            defend: 0,
-            agility: 0,
-            intelligence: 0,
-            luck: 0
-        }
+        rarity: DEFAULT_RARITY_STATE,
+        attributes: DEFAULT_CHARACTER_ATTRIBUTE_STATE,
     });
     const [showToolTip, setShowToolTip] = useState(
         {
@@ -147,9 +115,9 @@ export default function MyNFTsBody({ nftData, loadingData }: MyNFTsBodyProps) {
                                         <Checkbox onClick={() => setFilter(
                                             {
                                                 ...filter,
-                                                rarity: defaultRarityState
+                                                rarity: DEFAULT_RARITY_STATE,
                                             }
-                                        )} className='cursor-pointer' checked={JSON.stringify(filter.rarity) == JSON.stringify(defaultRarityState)} />
+                                        )} className='cursor-pointer' checked={JSON.stringify(filter.rarity) == JSON.stringify(DEFAULT_RARITY_STATE)} />
                                         <Label htmlFor="none">None</Label>
                                     </div>
                                     {
@@ -159,7 +127,7 @@ export default function MyNFTsBody({ nftData, loadingData }: MyNFTsBodyProps) {
                                                     {
                                                         ...filter,
                                                         rarity: {
-                                                            ...defaultRarityState,
+                                                            ...DEFAULT_RARITY_STATE,
                                                             [rarity]: true
                                                         }
                                                     }
@@ -241,12 +209,27 @@ export default function MyNFTsBody({ nftData, loadingData }: MyNFTsBodyProps) {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
-                    <Button className='w-40' onClick={handleApplyFilter} disabled={JSON.stringify(filter) == JSON.stringify({ rarity: defaultRarityState, attributes: defaultCharacterAttributeState })}>Apply</Button>
+                    <Button
+                        className='w-40'
+                        onClick={handleApplyFilter}
+                        disabled={
+                            JSON.stringify(filter)
+                            ==
+                            JSON.stringify(
+                                { rarity: DEFAULT_RARITY_STATE, attributes: DEFAULT_CHARACTER_ATTRIBUTE_STATE }
+                            )
+                        }
+                    >Apply</Button>
                 </div>
                 <TabsContent value="all" className='w-3/4 flex text-center justify-center'>
-                    {loading || loadingData ? <LoadingTemplate /> : <MyNFTsList data={nftData.all} />}
+                    {loading || loadingData
+                        ? <LoadingTemplate />
+                        : <MyNFTsList
+                            data={data}
+                            isFetched={dataIsFetched}
+                        />}
                 </TabsContent>
-                <TabsContent value="character" className='w-3/4 flex text-center justify-center'>
+                {/* <TabsContent value="character" className='w-3/4 flex text-center justify-center'>
                     {loading || loadingData ? <LoadingTemplate /> : <MyNFTsList data={
                         nftData.characters
                     } />}
@@ -260,7 +243,7 @@ export default function MyNFTsBody({ nftData, loadingData }: MyNFTsBodyProps) {
                     {loading || loadingData ? <LoadingTemplate /> : <MyNFTsList data={
                         nftData.treasures
                     } />}
-                </TabsContent>
+                </TabsContent> */}
             </div>
         </Tabs >
     )

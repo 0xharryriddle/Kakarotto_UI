@@ -34,10 +34,10 @@ import Image from 'next/image';
 import { useBidOrder } from '@/hooks/useBidOrder';
 import { getERC721BidAddress, getKakarottoTokenAddress } from '@/contracts/utils/getAddress.util';
 import getABI from '@/contracts/utils/getAbi.util';
-import { Address, isAddressEqual, parseEther, TransactionReceipt } from 'viem';
+import { Address, isAddressEqual, parseEther, TransactionReceipt, zeroAddress } from 'viem';
 import { useIsSufficientTokenBalance } from '@/hooks/useIsSufficientTokenBalance';
 import { BID_CONSTANTS } from '@/lib/constants/marketplace';
-import { truncateEthAddress } from '@/utils/address.util';
+import { truncateHash } from '@/utils/address.util';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -311,7 +311,10 @@ export default function OfferDialog({
                         </div>
                         <div className="flex justify-between">
                             <span className='text-lg font-bold'>Owner:</span>
-                            <span className='font-medium'>{contractAddress ? truncateEthAddress(contractAddress.toString()) : "Unknown"}</span>
+                            <span className='font-medium'>{
+                                truncateHash(contractAddress || zeroAddress)
+                            }
+                            </span>
                         </div>
                         <div className="flex justify-between">
                             <span className='text-lg font-bold'>Price:</span>

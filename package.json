@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev-rm-cache": "rm -rf .next && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "codegen.gql": "graphql-codegen --config ./graphql-codegen.ts && bun prettier --write \"src/generated/**/*\""
+    "codegen.gql": "graphql-codegen --config ./graphql-codegen.ts && prettier --write \"src/generated/**/*\""
   },
   "dependencies": {
     "@chakra-ui/next-js": "^2.2.0",

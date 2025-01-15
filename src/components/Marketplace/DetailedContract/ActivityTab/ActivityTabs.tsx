@@ -4,7 +4,7 @@ import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 import OffersTab from './Offers/OffersTab';
 import SalesTab from './Sales/SalesTab';
 import { Bid, Order, Sale } from '@/generated/graphql';
-import * as Enums from "@/utils/enum.util";
+import * as Enums from "@/utils/type.util";
 import ListingsTab from './Listings/ListingsTab';
 
 interface ActivityTabs {

@@ -1,9 +1,9 @@
 import { Sale } from "@/generated/graphql"
-import { truncateEthAddress } from "@/utils/address.util"
+import { truncateHash } from "@/utils/address.util"
 import { timeAgo, timeLeft, isExpired } from '@/utils/date.util';
 import { ColumnDef } from "@tanstack/react-table"
 import { CoinsIcon } from "lucide-react";
-import { formatEther } from "viem";
+import { formatEther, zeroAddress } from "viem";
 import {
     HoverCard,
     HoverCardContent,
@@ -17,7 +17,7 @@ export const salesColumns: ColumnDef<Sale>[] = [
         header: "Seller",
         cell: ({ row }) => {
             const seller = row.getValue('seller') as string;
-            const truncatedAddress = truncateEthAddress(seller);
+            const truncatedAddress = truncateHash(seller || zeroAddress);
             return (<HoverCard>
                 <HoverCardTrigger className="font-bold cursor-pointer transition delay-100 duration-200 ease-in-out hover:scale-90" onClick={() => { navigator.clipboard.writeText(seller) }}>
                     <div>{truncatedAddress}</div>
@@ -33,7 +33,7 @@ export const salesColumns: ColumnDef<Sale>[] = [
         header: "Bidder",
         cell: ({ row }) => {
             const bidder = row.getValue('bidder') as string;
-            const truncatedAddress = truncateEthAddress(bidder);
+            const truncatedAddress = truncateHash(bidder || zeroAddress);
             return (<HoverCard>
                 <HoverCardTrigger className="font-bold cursor-pointer transition delay-100 duration-200 ease-in-out hover:scale-90" onClick={() => { navigator.clipboard.writeText(bidder) }}>
                     <div>{truncatedAddress}</div>

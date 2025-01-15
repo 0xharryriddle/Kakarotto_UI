@@ -5,13 +5,11 @@ import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experime
 
 function buildQueryClient() {
     return new QueryClient({
-        defaultOptions: {
-            queries: {
-                staleTime: 60 * 1000,
-                // gcTime: Infinity,
-                refetchOnMount: 'always'
-            },
-        },
+        // defaultOptions: {
+        //     queries: {
+        //         staleTime: 60 * 1000,
+        //     },
+        // },
     });
 }
 let browserQueryClient: QueryClient | undefined = undefined;

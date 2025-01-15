@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/select"
 import { AArrowDownIcon, AArrowUpIcon } from 'lucide-react';
 import CarouselCard from '@/components/Marketplace/CarouselCard';
-import { Categories } from '@/utils/enum.util';
+import { Categories } from '@/utils/type.util';
 import ConnectButtonTab from '@/components/ConnectButtonTab';
-import * as Enums from '@/utils/enum.util';
+import * as Enums from '@/utils/type.util';
 
 interface MyListsTabProps {
     loading?: boolean;
