@@ -29,7 +29,6 @@ interface OverviewTabProps {
 }
 
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
-
     const {
         data: queryData,
         isLoading: queryIsLoading,
@@ -41,15 +40,10 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
         async queryFn() {
             return await querySubgraphs({
                 client,
-                query: GET_ALL_NFTS({
-                    first: 100,
-                    skip: 0
-                })
+                query: GET_ALL_NFTS
             });
         },
     });
-
-    console.log(queryData);
 
     return (
         <div className="flex flex-col justify-center gap-10 p-10 h-full min-h-fit w-full" >

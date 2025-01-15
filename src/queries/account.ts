@@ -1,139 +1,126 @@
 import { gql, RequestDocument } from "graphql-request";
 import { graphql } from "@/generated/gql";
-import { Address } from "viem";
-import {
-  Account_OrderBy,
-  InputMaybe,
-  OrderDirection,
-  Scalars,
-} from "@/generated/graphql";
 
-export const GET_ACCOUNT_BY_ADDRESS = ({
-  address,
-}: {
-  address: Address;
-}): RequestDocument => {
-  return graphql(`
-    query GetAccountByAddress {
-      account(where: { address: { _eq: ${address} } }) {
+export const GET_ACCOUNT_BY_ADDRESS: RequestDocument = graphql(`
+  query GetAccountByAddress($owner: Bytes!) {
+    accounts(where: { address: { _eq: $owner } }) {
+      id
+      address
+      nfts(orderBy: tokenId) {
         id
-        address
-        nfts(orderBy: tokenId) {
+        tokenId
+        contractAddress
+        category
+        creator
+        owner {
+          id
+          address
+        }
+        amount
+        tokenURI
+        rarity
+        orders(orderBy: createdAt) {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        bids(orderBy: createdAt) {
+          id
+          bidAddress
+          category
+          nftAddress
+          tokenId
+          bidder
+          seller
+          price
+          status
+          blockchainId
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+      }
+      treasureAccounts {
+        id
+        treasure {
           id
           tokenId
-          contractAddress
-          category
-          creator
-          owner {
-            id
-            address
-          }
-          amount
           tokenURI
-          rarity
-          orders(orderBy: createdAt) {
+          nft {
             id
-            marketplaceAddress
+            tokenId
+            contractAddress
             category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          bids(orderBy: createdAt) {
-            id
-            bidAddress
-            category
-            nftAddress
-            tokenId
-            bidder
-            seller
-            price
-            status
-            blockchainId
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-        }
-        treasureAccounts {
-          id
-          treasure {
-            id
-            tokenId
-            tokenURI
-            nft {
-              id
-              tokenId
-              contractAddress
-              category
-              creator
-              owner {
-                id
-                address
-              }
-              amount
-              tokenURI
-              rarity
-              orders(orderBy: createdAt) {
-                id
-                marketplaceAddress
-                category
-                nftAddress
-                tokenId
-                amount
-                transactionHash
-                owner
-                buyer
-                price
-                status
-                blockNumber
-                expiresAt
-                createdAt
-                updatedAt
-              }
-              bids(orderBy: createdAt) {
-                id
-                bidAddress
-                category
-                nftAddress
-                tokenId
-                bidder
-                seller
-                price
-                status
-                blockchainId
-                blockNumber
-                expiresAt
-                createdAt
-                updatedAt
-              }
-            }
-            name
+            creator
             owner {
               id
               address
             }
+            amount
+            tokenURI
+            rarity
+            orders(orderBy: createdAt) {
+              id
+              marketplaceAddress
+              category
+              nftAddress
+              tokenId
+              amount
+              transactionHash
+              owner
+              buyer
+              price
+              status
+              blockNumber
+              expiresAt
+              createdAt
+              updatedAt
+            }
+            bids(orderBy: createdAt) {
+              id
+              bidAddress
+              category
+              nftAddress
+              tokenId
+              bidder
+              seller
+              price
+              status
+              blockchainId
+              blockNumber
+              expiresAt
+              createdAt
+              updatedAt
+            }
           }
-          balance
+          name
+          owner {
+            id
+            address
+          }
         }
-        sales
-        purchases
-        spent
-        earned
+        balance
       }
+      sales
+      purchases
+      spent
+      earned
     }
-  `) as RequestDocument;
-};
+  }
+`) as RequestDocument;
 
 // export const GET_ALL_ACCOUNTS = ({
 //   first,

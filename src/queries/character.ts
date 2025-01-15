@@ -9,174 +9,118 @@ import {
   Scalars,
 } from "@/generated/graphql";
 
-export const GET_ALL_CHARACTERS = ({
-  first,
-  skip,
-  orderBy,
-  orderDirection,
-}: {
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: Character_OrderBy;
-  orderDirection?: OrderDirection;
-}): RequestDocument => {
-  if (first) {
-    first =
-      Number(first) < SUBGRAPH.FIRST.MIN || Number(first) > SUBGRAPH.FIRST.MAX
-        ? SUBGRAPH.FIRST.MAX
-        : first;
-  }
-  if (skip) {
-    skip =
-      Number(skip) < SUBGRAPH.SKIP.MIN || Number(skip) > SUBGRAPH.SKIP.MAX
-        ? 0
-        : skip;
-  }
-
-  return graphql(`
-    query GetAllCharacters {
-      characters(
-        ${first ? `first: ${first}` : ""}
-        ${skip ? `skip: ${skip}` : ""}
-        ${orderBy ? `orderBy: ${orderBy}` : ""}
-        ${orderDirection ? `orderDirection: ${orderDirection}` : ""}
-      ) {
+export const GET_ALL_CHARACTERS: RequestDocument = graphql(`
+  query GetAllCharacters(
+    $first: Int
+    $skip: Int
+    $orderBy: Character_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    characters(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      id
+      characterAccount {
         id
-        characterAccount {
+        contractAddress
+      }
+      level
+      exp
+      nft {
+        id
+        tokenId
+        contractAddress
+        category
+        creator
+        owner {
           id
-          contractAddress
-        }
-        level
-        exp
-        nft {
-          id
-          tokenId
-          contractAddress
-          category
-          creator
-          owner {
+          address
+          nfts {
             id
-            address
-            nfts {
-              id
-            }
-            sales
-            purchases
-            spent
-            earned
-          }
-          amount
-          tokenURI
-          rarity
-          orders(orderBy: createdAt) {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          bids(orderBy: createdAt) {
-            id
-            bidAddress
-            category
-            nftAddress
-            tokenId
-            bidder
-            seller
-            price
-            status
-            blockchainId
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          activeOrder {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          name
-          createdAt
-          updatedAt
-          soldAt
-          transferredAt
-          character {
-            id
-            characterAccount {
-              id
-              contractAddress
-            }
-            level
-            exp
-            attributes {
-              id
-              attribute
-              value
-            }
-          }
-          item {
-            id
-            attributes {
-              id
-              attribute
-              value
-              isIncrease
-              isPercentage
-            }
-          }
-          treasure {
-            id
-            tokenId
-            tokenURI
-            name
-            owner {
-              id
-              address
-            }
           }
           sales
-          volume
-          searchOwner
-          searchOrderStatus
-          searchOrderPrice
-          searchOrderExpiresAt
-          searchOrderCreatedAt
-
-          searchIsCharacter
-          searchCharacterAccount
-          searchCharacterLevel
-          searchCharacterExp
-          searchCharacterAttribute {
+          purchases
+          spent
+          earned
+        }
+        amount
+        tokenURI
+        rarity
+        orders(orderBy: createdAt) {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        bids(orderBy: createdAt) {
+          id
+          bidAddress
+          category
+          nftAddress
+          tokenId
+          bidder
+          seller
+          price
+          status
+          blockchainId
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        activeOrder {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        name
+        createdAt
+        updatedAt
+        soldAt
+        transferredAt
+        character {
+          id
+          characterAccount {
+            id
+            contractAddress
+          }
+          level
+          exp
+          attributes {
             id
             attribute
             value
           }
-          searchIsTreasure
-          searchIsItem
-          searchItemAttribute {
+        }
+        item {
+          id
+          attributes {
             id
             attribute
             value
@@ -184,204 +128,169 @@ export const GET_ALL_CHARACTERS = ({
             isPercentage
           }
         }
-        attributes {
+        treasure {
+          id
+          tokenId
+          tokenURI
+          name
+          owner {
+            id
+            address
+          }
+        }
+        sales
+        volume
+        searchOwner
+        searchOrderStatus
+        searchOrderPrice
+        searchOrderExpiresAt
+        searchOrderCreatedAt
+
+        searchIsCharacter
+        searchCharacterAccount
+        searchCharacterLevel
+        searchCharacterExp
+        searchCharacterAttribute {
           id
           attribute
           value
         }
+        searchIsTreasure
+        searchIsItem
+        searchItemAttribute {
+          id
+          attribute
+          value
+          isIncrease
+          isPercentage
+        }
+      }
+      attributes {
+        id
+        attribute
+        value
       }
     }
-  `) as RequestDocument;
-};
-
-export const GET_ALL_CHARACTERS_FILTER = ({
-  first,
-  skip,
-  orderBy,
-  orderDirection,
-  rarity,
-  status,
-}: {
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: Character_OrderBy;
-  orderDirection?: OrderDirection;
-  rarity?: Rarity[];
-  status?: "all" | "only_listings" | "not_for_sales";
-}): RequestDocument => {
-  if (first) {
-    first =
-      Number(first) < SUBGRAPH.FIRST.MIN || Number(first) > SUBGRAPH.FIRST.MAX
-        ? SUBGRAPH.FIRST.MAX
-        : first;
   }
-  if (skip) {
-    skip =
-      Number(skip) < SUBGRAPH.SKIP.MIN || Number(skip) > SUBGRAPH.SKIP.MAX
-        ? 0
-        : skip;
-  }
+`) as RequestDocument;
 
-  return graphql(`
-    query GetAllCharacters {
-      characters(
-        ${first ? `first: ${first}` : ""}
-        ${skip ? `skip: ${skip}` : ""}
-        ${orderBy ? `orderBy: ${orderBy}` : ""}
-        ${orderDirection ? `orderDirection: ${orderDirection}` : ""}
-        where: {
-          nft_: {
-            ${
-              rarity && rarity.length > 0
-                ? `rarity_in: ${JSON.stringify(rarity)}`
-                : ""
-            }
-            ${
-              status === "only_listings"
-                ? `searchOrderStatus: open` // 'open' status
-                : status === "not_for_sales"
-                ? `searchOrderStatus: null` // 'null' is not for sales
-                : "" // 'all' status
-            }
-          }
-        }
-      ) {
+export const GET_ALL_CHARACTERS_FILTER: RequestDocument = graphql(`
+  query GetAllCharactersFilter(
+    $first: Int
+    $skip: Int
+    $orderBy: Character_orderBy
+    $orderDirection: OrderDirection
+    $rarity: [Rarity!]
+    $searchOrderStatus: OrderStatus
+  ) {
+    characters(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: {
+        nft_: { rarity_in: $rarity, searchOrderStatus: $searchOrderStatus }
+      }
+    ) {
+      id
+      characterAccount {
         id
-        characterAccount {
+        contractAddress
+      }
+      level
+      exp
+      nft {
+        id
+        tokenId
+        contractAddress
+        category
+        creator
+        owner {
           id
-          contractAddress
-        }
-        level
-        exp
-        nft {
-          id
-          tokenId
-          contractAddress
-          category
-          creator
-          owner {
+          address
+          nfts {
             id
-            address
-            nfts {
-              id
-            }
-            sales
-            purchases
-            spent
-            earned
-          }
-          amount
-          tokenURI
-          rarity
-          orders(orderBy: createdAt) {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          bids(orderBy: createdAt) {
-            id
-            bidAddress
-            category
-            nftAddress
-            tokenId
-            bidder
-            seller
-            price
-            status
-            blockchainId
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          activeOrder {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          name
-          createdAt
-          updatedAt
-          soldAt
-          transferredAt
-          character {
-            id
-            characterAccount {
-              id
-              contractAddress
-            }
-            level
-            exp
-            attributes {
-              id
-              attribute
-              value
-            }
-          }
-          item {
-            id
-            attributes {
-              id
-              attribute
-              value
-              isIncrease
-              isPercentage
-            }
-          }
-          treasure {
-            id
-            tokenId
-            tokenURI
-            name
-            owner {
-              id
-              address
-            }
           }
           sales
-          volume
-          searchOwner
-          searchOrderStatus
-          searchOrderPrice
-          searchOrderExpiresAt
-          searchOrderCreatedAt
-
-          searchIsCharacter
-          searchCharacterAccount
-          searchCharacterLevel
-          searchCharacterExp
-          searchCharacterAttribute {
+          purchases
+          spent
+          earned
+        }
+        amount
+        tokenURI
+        rarity
+        orders(orderBy: createdAt) {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        bids(orderBy: createdAt) {
+          id
+          bidAddress
+          category
+          nftAddress
+          tokenId
+          bidder
+          seller
+          price
+          status
+          blockchainId
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        activeOrder {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        name
+        createdAt
+        updatedAt
+        soldAt
+        transferredAt
+        character {
+          id
+          characterAccount {
+            id
+            contractAddress
+          }
+          level
+          exp
+          attributes {
             id
             attribute
             value
           }
-          searchIsTreasure
-          searchIsItem
-          searchItemAttribute {
+        }
+        item {
+          id
+          attributes {
             id
             attribute
             value
@@ -389,187 +298,166 @@ export const GET_ALL_CHARACTERS_FILTER = ({
             isPercentage
           }
         }
-        attributes {
+        treasure {
+          id
+          tokenId
+          tokenURI
+          name
+          owner {
+            id
+            address
+          }
+        }
+        sales
+        volume
+        searchOwner
+        searchOrderStatus
+        searchOrderPrice
+        searchOrderExpiresAt
+        searchOrderCreatedAt
+
+        searchIsCharacter
+        searchCharacterAccount
+        searchCharacterLevel
+        searchCharacterExp
+        searchCharacterAttribute {
           id
           attribute
           value
         }
+        searchIsTreasure
+        searchIsItem
+        searchItemAttribute {
+          id
+          attribute
+          value
+          isIncrease
+          isPercentage
+        }
+      }
+      attributes {
+        id
+        attribute
+        value
       }
     }
-  `) as RequestDocument;
-};
-
-export const GET_CHARACTERS_BY_OWNER = ({
-  first,
-  skip,
-  orderBy,
-  orderDirection,
-  searchOwner,
-}: {
-  first?: InputMaybe<Scalars["Int"]["input"]>;
-  skip?: InputMaybe<Scalars["Int"]["input"]>;
-  orderBy?: Character_OrderBy;
-  orderDirection?: OrderDirection;
-  searchOwner: Scalars["String"]["input"];
-}): RequestDocument => {
-  if (first) {
-    first =
-      Number(first) < SUBGRAPH.FIRST.MIN || Number(first) > SUBGRAPH.FIRST.MAX
-        ? SUBGRAPH.FIRST.MAX
-        : first;
   }
-  if (skip) {
-    skip =
-      Number(skip) < SUBGRAPH.SKIP.MIN || Number(skip) > SUBGRAPH.SKIP.MAX
-        ? 0
-        : skip;
-  }
+`) as RequestDocument;
 
-  return graphql(`
-    query GetCharactersByOwner {
-      characters(
-        ${first ? `first: ${first}` : ""}
-        ${skip ? `skip: ${skip}` : ""}
-        ${orderBy ? `orderBy: ${orderBy}` : ""}
-        ${orderDirection ? `orderDirection: ${orderDirection}` : ""}
-        where: { nft_: { searchOwner: ${searchOwner} } }
-      ) {
+export const GET_ALL_CHARACTERS_BY_OWNER: RequestDocument = graphql(`
+  query GetCharactersByOwner(
+    $first: Int
+    $skip: Int
+    $orderBy: Character_orderBy
+    $orderDirection: OrderDirection
+    $owner: String
+  ) {
+    characters(
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+      where: { nft_: { owner: $owner } }
+    ) {
+      id
+      characterAccount {
         id
-        characterAccount {
+        contractAddress
+      }
+      level
+      exp
+      nft {
+        id
+        tokenId
+        contractAddress
+        category
+        creator
+        owner {
           id
-          contractAddress
-        }
-        level
-        exp
-        nft {
-          id
-          tokenId
-          contractAddress
-          category
-          creator
-          owner {
+          address
+          nfts {
             id
-            address
-            nfts {
-              id
-            }
-            sales
-            purchases
-            spent
-            earned
-          }
-          amount
-          tokenURI
-          rarity
-          orders(orderBy: createdAt) {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          bids(orderBy: createdAt) {
-            id
-            bidAddress
-            category
-            nftAddress
-            tokenId
-            bidder
-            seller
-            price
-            status
-            blockchainId
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          activeOrder {
-            id
-            marketplaceAddress
-            category
-            nftAddress
-            tokenId
-            amount
-            transactionHash
-            owner
-            buyer
-            price
-            status
-            blockNumber
-            expiresAt
-            createdAt
-            updatedAt
-          }
-          name
-          createdAt
-          updatedAt
-          soldAt
-          transferredAt
-          character {
-            id
-            characterAccount {
-              id
-              contractAddress
-            }
-            level
-            exp
-            attributes {
-              id
-              attribute
-              value
-            }
-          }
-          item {
-            id
-            attributes {
-              id
-              attribute
-              value
-              isIncrease
-              isPercentage
-            }
-          }
-          treasure {
-            id
-            tokenId
-            tokenURI
-            name
-            owner {
-              id
-              address
-            }
           }
           sales
-          volume
-          searchOwner
-          searchOrderStatus
-          searchOrderPrice
-          searchOrderExpiresAt
-          searchOrderCreatedAt
-
-          searchIsCharacter
-          searchCharacterAccount
-          searchCharacterLevel
-          searchCharacterExp
-          searchCharacterAttribute {
+          purchases
+          spent
+          earned
+        }
+        amount
+        tokenURI
+        rarity
+        orders(orderBy: createdAt) {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        bids(orderBy: createdAt) {
+          id
+          bidAddress
+          category
+          nftAddress
+          tokenId
+          bidder
+          seller
+          price
+          status
+          blockchainId
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        activeOrder {
+          id
+          marketplaceAddress
+          category
+          nftAddress
+          tokenId
+          amount
+          transactionHash
+          owner
+          buyer
+          price
+          status
+          blockNumber
+          expiresAt
+          createdAt
+          updatedAt
+        }
+        name
+        createdAt
+        updatedAt
+        soldAt
+        transferredAt
+        character {
+          id
+          characterAccount {
+            id
+            contractAddress
+          }
+          level
+          exp
+          attributes {
             id
             attribute
             value
           }
-          searchIsTreasure
-          searchIsItem
-          searchItemAttribute {
+        }
+        item {
+          id
+          attributes {
             id
             attribute
             value
@@ -577,12 +465,48 @@ export const GET_CHARACTERS_BY_OWNER = ({
             isPercentage
           }
         }
-        attributes {
+        treasure {
+          id
+          tokenId
+          tokenURI
+          name
+          owner {
+            id
+            address
+          }
+        }
+        sales
+        volume
+        searchOwner
+        searchOrderStatus
+        searchOrderPrice
+        searchOrderExpiresAt
+        searchOrderCreatedAt
+
+        searchIsCharacter
+        searchCharacterAccount
+        searchCharacterLevel
+        searchCharacterExp
+        searchCharacterAttribute {
           id
           attribute
           value
         }
+        searchIsTreasure
+        searchIsItem
+        searchItemAttribute {
+          id
+          attribute
+          value
+          isIncrease
+          isPercentage
+        }
+      }
+      attributes {
+        id
+        attribute
+        value
       }
     }
-  `) as RequestDocument;
-};
+  }
+`) as RequestDocument;

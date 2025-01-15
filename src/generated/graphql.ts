@@ -2593,6 +2593,134 @@ export type _SubgraphErrorPolicy_ =
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   | "deny";
 
+export type GetAccountByAddressQueryVariables = Exact<{
+  owner: Scalars["Bytes"]["input"];
+}>;
+
+export type GetAccountByAddressQuery = {
+  __typename?: "Query";
+  accounts: Array<{
+    __typename?: "Account";
+    id: string;
+    address: any;
+    sales: any;
+    purchases: any;
+    spent: any;
+    earned: any;
+    nfts?: Array<{
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      owner: { __typename?: "Account"; id: string; address: any };
+      orders: Array<{
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      bids: Array<{
+        __typename?: "Bid";
+        id: string;
+        bidAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        bidder: any;
+        seller: any;
+        price: any;
+        status: OrderStatus;
+        blockchainId: string;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+    }> | null;
+    treasureAccounts?: Array<{
+      __typename?: "TreasureAccount";
+      id: string;
+      balance: any;
+      treasure: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        nft: {
+          __typename?: "NFT";
+          id: string;
+          tokenId: any;
+          contractAddress: any;
+          category: Category;
+          creator: any;
+          amount: any;
+          tokenURI?: string | null;
+          rarity?: Rarity | null;
+          owner: { __typename?: "Account"; id: string; address: any };
+          orders: Array<{
+            __typename?: "Order";
+            id: string;
+            marketplaceAddress: any;
+            category: Category;
+            nftAddress: any;
+            tokenId: any;
+            amount: any;
+            transactionHash: any;
+            owner: any;
+            buyer?: any | null;
+            price: any;
+            status: OrderStatus;
+            blockNumber: any;
+            expiresAt: any;
+            createdAt: any;
+            updatedAt: any;
+          }>;
+          bids: Array<{
+            __typename?: "Bid";
+            id: string;
+            bidAddress: any;
+            category: Category;
+            nftAddress: any;
+            tokenId: any;
+            bidder: any;
+            seller: any;
+            price: any;
+            status: OrderStatus;
+            blockchainId: string;
+            blockNumber: any;
+            expiresAt: any;
+            createdAt: any;
+            updatedAt: any;
+          }>;
+        };
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      };
+    }> | null;
+  }>;
+};
+
 export type GetAllAnalyticsDayDataQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -2624,6 +2752,378 @@ export type GetAnalyticsDayDataQuery = {
     volume: any;
     creatorsEarning: any;
     daoEarning: any;
+  }>;
+};
+
+export type GetAllBidsByTokenIdQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Bid_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  tokenId?: InputMaybe<Scalars["BigInt"]["input"]>;
+}>;
+
+export type GetAllBidsByTokenIdQuery = {
+  __typename?: "Query";
+  bids: Array<{
+    __typename?: "Bid";
+    id: string;
+    bidAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    bidder: any;
+    seller: any;
+    price: any;
+    status: OrderStatus;
+    blockchainId: string;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
+  }>;
+};
+
+export type GetAllBidsByTokenIdAndStatusQueryVariables = Exact<{
+  tokenId: Scalars["BigInt"]["input"];
+  status: OrderStatus;
+}>;
+
+export type GetAllBidsByTokenIdAndStatusQuery = {
+  __typename?: "Query";
+  bids: Array<{
+    __typename?: "Bid";
+    id: string;
+    bidAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    bidder: any;
+    seller: any;
+    price: any;
+    status: OrderStatus;
+    blockchainId: string;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
+  }>;
+};
+
+export type GetAllBidsByBidderAndStatusQueryVariables = Exact<{
+  bidder: Scalars["Bytes"]["input"];
+  status: OrderStatus;
+}>;
+
+export type GetAllBidsByBidderAndStatusQuery = {
+  __typename?: "Query";
+  bids: Array<{
+    __typename?: "Bid";
+    id: string;
+    bidAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    bidder: any;
+    seller: any;
+    price: any;
+    status: OrderStatus;
+    blockchainId: string;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
   }>;
 };
 
@@ -3149,6 +3649,534 @@ export type GetCharacterAttributeByTokenIdQuery = {
         value: any;
       }> | null;
     };
+  }>;
+};
+
+export type GetAllCharactersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Character_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetAllCharactersQuery = {
+  __typename?: "Query";
+  characters: Array<{
+    __typename?: "Character";
+    id: string;
+    level: any;
+    exp: any;
+    characterAccount?: {
+      __typename?: "CharacterAccount";
+      id: string;
+      contractAddress: any;
+    } | null;
+    nft: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      bids: Array<{
+        __typename?: "Bid";
+        id: string;
+        bidAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        bidder: any;
+        seller: any;
+        price: any;
+        status: OrderStatus;
+        blockchainId: string;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      activeOrder?: {
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    };
+    attributes?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
+  }>;
+};
+
+export type GetAllCharactersFilterQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Character_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  rarity?: InputMaybe<Array<Rarity>>;
+  searchOrderStatus?: InputMaybe<OrderStatus>;
+}>;
+
+export type GetAllCharactersFilterQuery = {
+  __typename?: "Query";
+  characters: Array<{
+    __typename?: "Character";
+    id: string;
+    level: any;
+    exp: any;
+    characterAccount?: {
+      __typename?: "CharacterAccount";
+      id: string;
+      contractAddress: any;
+    } | null;
+    nft: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      bids: Array<{
+        __typename?: "Bid";
+        id: string;
+        bidAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        bidder: any;
+        seller: any;
+        price: any;
+        status: OrderStatus;
+        blockchainId: string;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      activeOrder?: {
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    };
+    attributes?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
+  }>;
+};
+
+export type GetCharactersByOwnerQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Character_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  owner?: InputMaybe<Scalars["String"]["input"]>;
+}>;
+
+export type GetCharactersByOwnerQuery = {
+  __typename?: "Query";
+  characters: Array<{
+    __typename?: "Character";
+    id: string;
+    level: any;
+    exp: any;
+    characterAccount?: {
+      __typename?: "CharacterAccount";
+      id: string;
+      contractAddress: any;
+    } | null;
+    nft: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      bids: Array<{
+        __typename?: "Bid";
+        id: string;
+        bidAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        bidder: any;
+        seller: any;
+        price: any;
+        status: OrderStatus;
+        blockchainId: string;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      activeOrder?: {
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    };
+    attributes?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
   }>;
 };
 
@@ -3678,6 +4706,986 @@ export type GetItemByNftTokenIdQuery = {
       isIncrease: boolean;
       isPercentage: boolean;
     }>;
+  }>;
+};
+
+export type GetAllNfTsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Nft_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetAllNfTsQuery = {
+  __typename?: "Query";
+  nfts: Array<{
+    __typename?: "NFT";
+    id: string;
+    tokenId: any;
+    contractAddress: any;
+    category: Category;
+    creator: any;
+    amount: any;
+    tokenURI?: string | null;
+    rarity?: Rarity | null;
+    name?: string | null;
+    createdAt: any;
+    updatedAt: any;
+    soldAt?: any | null;
+    transferredAt: any;
+    sales: any;
+    volume: any;
+    searchOwner?: string | null;
+    searchOrderStatus?: OrderStatus | null;
+    searchOrderPrice?: any | null;
+    searchOrderExpiresAt?: any | null;
+    searchOrderCreatedAt?: any | null;
+    searchIsCharacter?: boolean | null;
+    searchCharacterAccount?: any | null;
+    searchCharacterLevel?: any | null;
+    searchCharacterExp?: any | null;
+    searchIsTreasure?: boolean | null;
+    searchIsItem?: boolean | null;
+    owner: {
+      __typename?: "Account";
+      id: string;
+      address: any;
+      sales: any;
+      purchases: any;
+      spent: any;
+      earned: any;
+      nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+    };
+    orders: Array<{
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    bids: Array<{
+      __typename?: "Bid";
+      id: string;
+      bidAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      bidder: any;
+      seller: any;
+      price: any;
+      status: OrderStatus;
+      blockchainId: string;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    activeOrder?: {
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+    character?: {
+      __typename?: "Character";
+      id: string;
+      level: any;
+      exp: any;
+      characterAccount?: {
+        __typename?: "CharacterAccount";
+        id: string;
+        contractAddress: any;
+      } | null;
+      attributes?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+    } | null;
+    item?: {
+      __typename?: "Item";
+      id: string;
+      attributes: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }>;
+    } | null;
+    treasure?: {
+      __typename?: "Treasure";
+      id: string;
+      tokenId: any;
+      tokenURI?: string | null;
+      name?: string | null;
+      owner?: Array<{
+        __typename?: "Account";
+        id: string;
+        address: any;
+      }> | null;
+    } | null;
+    searchCharacterAttribute?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
+    searchItemAttribute?: Array<{
+      __typename?: "ItemAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+      isIncrease: boolean;
+      isPercentage: boolean;
+    }> | null;
+  }>;
+};
+
+export type GetNftByOwnerQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  searchOwner: Scalars["String"]["input"];
+  orderBy?: InputMaybe<Nft_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetNftByOwnerQuery = {
+  __typename?: "Query";
+  nfts: Array<{
+    __typename?: "NFT";
+    id: string;
+    tokenId: any;
+    contractAddress: any;
+    category: Category;
+    creator: any;
+    amount: any;
+    tokenURI?: string | null;
+    rarity?: Rarity | null;
+    name?: string | null;
+    createdAt: any;
+    updatedAt: any;
+    soldAt?: any | null;
+    transferredAt: any;
+    sales: any;
+    volume: any;
+    searchOwner?: string | null;
+    searchOrderStatus?: OrderStatus | null;
+    searchOrderPrice?: any | null;
+    searchOrderExpiresAt?: any | null;
+    searchOrderCreatedAt?: any | null;
+    searchIsCharacter?: boolean | null;
+    searchCharacterAccount?: any | null;
+    searchCharacterLevel?: any | null;
+    searchCharacterExp?: any | null;
+    searchIsTreasure?: boolean | null;
+    searchIsItem?: boolean | null;
+    owner: {
+      __typename?: "Account";
+      id: string;
+      address: any;
+      sales: any;
+      purchases: any;
+      spent: any;
+      earned: any;
+      nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+    };
+    orders: Array<{
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    bids: Array<{
+      __typename?: "Bid";
+      id: string;
+      bidAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      bidder: any;
+      seller: any;
+      price: any;
+      status: OrderStatus;
+      blockchainId: string;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    activeOrder?: {
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+    character?: {
+      __typename?: "Character";
+      id: string;
+      level: any;
+      exp: any;
+      characterAccount?: {
+        __typename?: "CharacterAccount";
+        id: string;
+        contractAddress: any;
+      } | null;
+      attributes?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+    } | null;
+    item?: {
+      __typename?: "Item";
+      id: string;
+      attributes: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }>;
+    } | null;
+    treasure?: {
+      __typename?: "Treasure";
+      id: string;
+      tokenId: any;
+      tokenURI?: string | null;
+      name?: string | null;
+      owner?: Array<{
+        __typename?: "Account";
+        id: string;
+        address: any;
+      }> | null;
+    } | null;
+    searchCharacterAttribute?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
+    searchItemAttribute?: Array<{
+      __typename?: "ItemAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+      isIncrease: boolean;
+      isPercentage: boolean;
+    }> | null;
+  }>;
+};
+
+export type GetNftByTokenIdQueryVariables = Exact<{
+  tokenId: Scalars["BigInt"]["input"];
+}>;
+
+export type GetNftByTokenIdQuery = {
+  __typename?: "Query";
+  nfts: Array<{
+    __typename?: "NFT";
+    id: string;
+    tokenId: any;
+    contractAddress: any;
+    category: Category;
+    creator: any;
+    amount: any;
+    tokenURI?: string | null;
+    rarity?: Rarity | null;
+    name?: string | null;
+    createdAt: any;
+    updatedAt: any;
+    soldAt?: any | null;
+    transferredAt: any;
+    sales: any;
+    volume: any;
+    searchOwner?: string | null;
+    searchOrderStatus?: OrderStatus | null;
+    searchOrderPrice?: any | null;
+    searchOrderExpiresAt?: any | null;
+    searchOrderCreatedAt?: any | null;
+    searchIsCharacter?: boolean | null;
+    searchCharacterAccount?: any | null;
+    searchCharacterLevel?: any | null;
+    searchCharacterExp?: any | null;
+    searchIsTreasure?: boolean | null;
+    searchIsItem?: boolean | null;
+    owner: {
+      __typename?: "Account";
+      id: string;
+      address: any;
+      sales: any;
+      purchases: any;
+      spent: any;
+      earned: any;
+      nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+    };
+    orders: Array<{
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    bids: Array<{
+      __typename?: "Bid";
+      id: string;
+      bidAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      bidder: any;
+      seller: any;
+      price: any;
+      status: OrderStatus;
+      blockchainId: string;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    }>;
+    activeOrder?: {
+      __typename?: "Order";
+      id: string;
+      marketplaceAddress: any;
+      category: Category;
+      nftAddress: any;
+      tokenId: any;
+      amount: any;
+      transactionHash: any;
+      owner: any;
+      buyer?: any | null;
+      price: any;
+      status: OrderStatus;
+      blockNumber: any;
+      expiresAt: any;
+      createdAt: any;
+      updatedAt: any;
+    } | null;
+    character?: {
+      __typename?: "Character";
+      id: string;
+      level: any;
+      exp: any;
+      characterAccount?: {
+        __typename?: "CharacterAccount";
+        id: string;
+        contractAddress: any;
+      } | null;
+      attributes?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+    } | null;
+    item?: {
+      __typename?: "Item";
+      id: string;
+      attributes: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }>;
+    } | null;
+    treasure?: {
+      __typename?: "Treasure";
+      id: string;
+      tokenId: any;
+      tokenURI?: string | null;
+      name?: string | null;
+      owner?: Array<{
+        __typename?: "Account";
+        id: string;
+        address: any;
+      }> | null;
+    } | null;
+    searchCharacterAttribute?: Array<{
+      __typename?: "CharacterAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+    }> | null;
+    searchItemAttribute?: Array<{
+      __typename?: "ItemAttribute";
+      id: string;
+      attribute: Attribute;
+      value: any;
+      isIncrease: boolean;
+      isPercentage: boolean;
+    }> | null;
+  }>;
+};
+
+export type GetAllOrdersQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Order_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetAllOrdersQuery = {
+  __typename?: "Query";
+  orders: Array<{
+    __typename?: "Order";
+    id: string;
+    marketplaceAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    amount: any;
+    transactionHash: any;
+    owner: any;
+    buyer?: any | null;
+    price: any;
+    status: OrderStatus;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
+  }>;
+};
+
+export type GetOrdersByStatusQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Order_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  status: OrderStatus;
+}>;
+
+export type GetOrdersByStatusQuery = {
+  __typename?: "Query";
+  orders: Array<{
+    __typename?: "Order";
+    id: string;
+    marketplaceAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    amount: any;
+    transactionHash: any;
+    owner: any;
+    buyer?: any | null;
+    price: any;
+    status: OrderStatus;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
+  }>;
+};
+
+export type GetOrdersByTokenIdQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Order_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  tokenId: Scalars["BigInt"]["input"];
+}>;
+
+export type GetOrdersByTokenIdQuery = {
+  __typename?: "Query";
+  orders: Array<{
+    __typename?: "Order";
+    id: string;
+    marketplaceAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    amount: any;
+    transactionHash: any;
+    owner: any;
+    buyer?: any | null;
+    price: any;
+    status: OrderStatus;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
+  }>;
+};
+
+export type GetOrdersByTokenIdAndStatusQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Order_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  tokenId: Scalars["BigInt"]["input"];
+  status: OrderStatus;
+}>;
+
+export type GetOrdersByTokenIdAndStatusQuery = {
+  __typename?: "Query";
+  orders: Array<{
+    __typename?: "Order";
+    id: string;
+    marketplaceAddress: any;
+    category: Category;
+    nftAddress: any;
+    tokenId: any;
+    amount: any;
+    transactionHash: any;
+    owner: any;
+    buyer?: any | null;
+    price: any;
+    status: OrderStatus;
+    blockNumber: any;
+    expiresAt: any;
+    createdAt: any;
+    updatedAt: any;
+    nft?: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{ __typename?: "Order"; id: string }>;
+      bids: Array<{ __typename?: "Bid"; id: string }>;
+      activeOrder?: { __typename?: "Order"; id: string } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    } | null;
   }>;
 };
 
@@ -4355,6 +6363,820 @@ export type GetSalesByTokenIdQuery = {
   }>;
 };
 
+export type GetAllTreasuresQueryVariables = Exact<{
+  first?: InputMaybe<Scalars["Int"]["input"]>;
+  skip?: InputMaybe<Scalars["Int"]["input"]>;
+  orderBy?: InputMaybe<Treasure_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+}>;
+
+export type GetAllTreasuresQuery = {
+  __typename?: "Query";
+  treasures: Array<{
+    __typename?: "Treasure";
+    id: string;
+    tokenId: any;
+    tokenURI?: string | null;
+    name?: string | null;
+    nft: {
+      __typename?: "NFT";
+      id: string;
+      tokenId: any;
+      contractAddress: any;
+      category: Category;
+      creator: any;
+      amount: any;
+      tokenURI?: string | null;
+      rarity?: Rarity | null;
+      name?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      soldAt?: any | null;
+      transferredAt: any;
+      sales: any;
+      volume: any;
+      searchOwner?: string | null;
+      searchOrderStatus?: OrderStatus | null;
+      searchOrderPrice?: any | null;
+      searchOrderExpiresAt?: any | null;
+      searchOrderCreatedAt?: any | null;
+      searchIsCharacter?: boolean | null;
+      searchCharacterAccount?: any | null;
+      searchCharacterLevel?: any | null;
+      searchCharacterExp?: any | null;
+      searchIsTreasure?: boolean | null;
+      searchIsItem?: boolean | null;
+      owner: {
+        __typename?: "Account";
+        id: string;
+        address: any;
+        sales: any;
+        purchases: any;
+        spent: any;
+        earned: any;
+        nfts?: Array<{ __typename?: "NFT"; id: string }> | null;
+      };
+      orders: Array<{
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      bids: Array<{
+        __typename?: "Bid";
+        id: string;
+        bidAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        bidder: any;
+        seller: any;
+        price: any;
+        status: OrderStatus;
+        blockchainId: string;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      }>;
+      activeOrder?: {
+        __typename?: "Order";
+        id: string;
+        marketplaceAddress: any;
+        category: Category;
+        nftAddress: any;
+        tokenId: any;
+        amount: any;
+        transactionHash: any;
+        owner: any;
+        buyer?: any | null;
+        price: any;
+        status: OrderStatus;
+        blockNumber: any;
+        expiresAt: any;
+        createdAt: any;
+        updatedAt: any;
+      } | null;
+      character?: {
+        __typename?: "Character";
+        id: string;
+        level: any;
+        exp: any;
+        characterAccount?: {
+          __typename?: "CharacterAccount";
+          id: string;
+          contractAddress: any;
+        } | null;
+        attributes?: Array<{
+          __typename?: "CharacterAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+        }> | null;
+      } | null;
+      item?: {
+        __typename?: "Item";
+        id: string;
+        attributes: Array<{
+          __typename?: "ItemAttribute";
+          id: string;
+          attribute: Attribute;
+          value: any;
+          isIncrease: boolean;
+          isPercentage: boolean;
+        }>;
+      } | null;
+      treasure?: {
+        __typename?: "Treasure";
+        id: string;
+        tokenId: any;
+        tokenURI?: string | null;
+        name?: string | null;
+        owner?: Array<{
+          __typename?: "Account";
+          id: string;
+          address: any;
+        }> | null;
+      } | null;
+      searchCharacterAttribute?: Array<{
+        __typename?: "CharacterAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+      }> | null;
+      searchItemAttribute?: Array<{
+        __typename?: "ItemAttribute";
+        id: string;
+        attribute: Attribute;
+        value: any;
+        isIncrease: boolean;
+        isPercentage: boolean;
+      }> | null;
+    };
+    owner?: Array<{ __typename?: "Account"; id: string; address: any }> | null;
+  }>;
+};
+
+export const GetAccountByAddressDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAccountByAddress" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "owner" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Bytes" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "accounts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "address" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "_eq" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "address" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nfts" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "tokenId" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidder" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seller" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockchainId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "treasureAccounts" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nft" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "tokenId" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "category" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "creator" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "owner" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "address",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "amount" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "tokenURI" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "rarity" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "orders" },
+                                    arguments: [
+                                      {
+                                        kind: "Argument",
+                                        name: {
+                                          kind: "Name",
+                                          value: "orderBy",
+                                        },
+                                        value: {
+                                          kind: "EnumValue",
+                                          value: "createdAt",
+                                        },
+                                      },
+                                    ],
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "marketplaceAddress",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "category",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "nftAddress",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "tokenId",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "amount",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "transactionHash",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "owner",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "buyer",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "price",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "status",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "blockNumber",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "expiresAt",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "createdAt",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "updatedAt",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "bids" },
+                                    arguments: [
+                                      {
+                                        kind: "Argument",
+                                        name: {
+                                          kind: "Name",
+                                          value: "orderBy",
+                                        },
+                                        value: {
+                                          kind: "EnumValue",
+                                          value: "createdAt",
+                                        },
+                                      },
+                                    ],
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "id" },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "bidAddress",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "category",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "nftAddress",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "tokenId",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "bidder",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "seller",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "price",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "status",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "blockchainId",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "blockNumber",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "expiresAt",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "createdAt",
+                                          },
+                                        },
+                                        {
+                                          kind: "Field",
+                                          name: {
+                                            kind: "Name",
+                                            value: "updatedAt",
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "balance" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "sales" } },
+                { kind: "Field", name: { kind: "Name", value: "purchases" } },
+                { kind: "Field", name: { kind: "Name", value: "spent" } },
+                { kind: "Field", name: { kind: "Name", value: "earned" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAccountByAddressQuery,
+  GetAccountByAddressQueryVariables
+>;
 export const GetAllAnalyticsDayDataDocument = {
   kind: "Document",
   definitions: [
@@ -4458,6 +7280,1560 @@ export const GetAnalyticsDayDataDocument = {
 } as unknown as DocumentNode<
   GetAnalyticsDayDataQuery,
   GetAnalyticsDayDataQueryVariables
+>;
+export const GetAllBidsByTokenIdDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAllBidsByTokenId" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Bid_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tokenId" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "BigInt" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "bids" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tokenId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "bidAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "bidder" } },
+                { kind: "Field", name: { kind: "Name", value: "seller" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "blockchainId" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllBidsByTokenIdQuery,
+  GetAllBidsByTokenIdQueryVariables
+>;
+export const GetAllBidsByTokenIdAndStatusDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAllBidsByTokenIdAndStatus" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tokenId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "BigInt" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "status" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "OrderStatus" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "bids" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tokenId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "status" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "status" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "bidAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "bidder" } },
+                { kind: "Field", name: { kind: "Name", value: "seller" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "blockchainId" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllBidsByTokenIdAndStatusQuery,
+  GetAllBidsByTokenIdAndStatusQueryVariables
+>;
+export const GetAllBidsByBidderAndStatusDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAllBidsByBidderAndStatus" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "bidder" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Bytes" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "status" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "OrderStatus" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "bids" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "bidder" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "bidder" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "status" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "status" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "bidAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "bidder" } },
+                { kind: "Field", name: { kind: "Name", value: "seller" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "blockchainId" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllBidsByBidderAndStatusQuery,
+  GetAllBidsByBidderAndStatusQueryVariables
 >;
 export const GetAllCharacterAccountsDocument = {
   kind: "Document",
@@ -6746,6 +11122,2220 @@ export const GetCharacterAttributeByTokenIdDocument = {
   GetCharacterAttributeByTokenIdQuery,
   GetCharacterAttributeByTokenIdQueryVariables
 >;
+export const GetAllCharactersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllCharacters" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Character_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "characters" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "characterAccount" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "level" } },
+                { kind: "Field", name: { kind: "Name", value: "exp" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidder" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seller" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockchainId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "attributes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllCharactersQuery,
+  GetAllCharactersQueryVariables
+>;
+export const GetAllCharactersFilterDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllCharactersFilter" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Character_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "rarity" },
+          },
+          type: {
+            kind: "ListType",
+            type: {
+              kind: "NonNullType",
+              type: {
+                kind: "NamedType",
+                name: { kind: "Name", value: "Rarity" },
+              },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "searchOrderStatus" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderStatus" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "characters" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "nft_" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "rarity_in" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "rarity" },
+                            },
+                          },
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "searchOrderStatus" },
+                            value: {
+                              kind: "Variable",
+                              name: {
+                                kind: "Name",
+                                value: "searchOrderStatus",
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "characterAccount" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "level" } },
+                { kind: "Field", name: { kind: "Name", value: "exp" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidder" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seller" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockchainId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "attributes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllCharactersFilterQuery,
+  GetAllCharactersFilterQueryVariables
+>;
+export const GetCharactersByOwnerDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetCharactersByOwner" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Character_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "owner" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "String" } },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "characters" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "nft_" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "owner" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "characterAccount" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "level" } },
+                { kind: "Field", name: { kind: "Name", value: "exp" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidder" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seller" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockchainId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "attributes" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetCharactersByOwnerQuery,
+  GetCharactersByOwnerQueryVariables
+>;
 export const GetCountDocument = {
   kind: "Document",
   definitions: [
@@ -8882,6 +15472,3853 @@ export const GetItemByNftTokenIdDocument = {
 } as unknown as DocumentNode<
   GetItemByNftTokenIdQuery,
   GetItemByNftTokenIdQueryVariables
+>;
+export const GetAllNfTsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllNFTs" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "NFT_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "nfts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "contractAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "owner" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "address" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nfts" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "purchases" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "spent" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "earned" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenURI" } },
+                { kind: "Field", name: { kind: "Name", value: "rarity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orders" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "bids" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidder" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "seller" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockchainId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "activeOrder" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "soldAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferredAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "character" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "characterAccount" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "contractAddress" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "level" } },
+                      { kind: "Field", name: { kind: "Name", value: "exp" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "item" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "treasure" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "sales" } },
+                { kind: "Field", name: { kind: "Name", value: "volume" } },
+                { kind: "Field", name: { kind: "Name", value: "searchOwner" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderStatus" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderPrice" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderExpiresAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderCreatedAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsCharacter" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAccount" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterLevel" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterExp" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsTreasure" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsItem" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchItemAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isIncrease" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isPercentage" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllNfTsQuery, GetAllNfTsQueryVariables>;
+export const GetNftByOwnerDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getNFTByOwner" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "searchOwner" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "NFT_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "nfts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "searchOwner" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "contractAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "owner" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "address" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nfts" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "purchases" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "spent" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "earned" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenURI" } },
+                { kind: "Field", name: { kind: "Name", value: "rarity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orders" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "bids" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidder" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "seller" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockchainId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "activeOrder" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "soldAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferredAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "character" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "characterAccount" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "contractAddress" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "level" } },
+                      { kind: "Field", name: { kind: "Name", value: "exp" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "item" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "treasure" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "sales" } },
+                { kind: "Field", name: { kind: "Name", value: "volume" } },
+                { kind: "Field", name: { kind: "Name", value: "searchOwner" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderStatus" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderPrice" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderExpiresAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderCreatedAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsCharacter" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAccount" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterLevel" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterExp" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsTreasure" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsItem" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchItemAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isIncrease" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isPercentage" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetNftByOwnerQuery, GetNftByOwnerQueryVariables>;
+export const GetNftByTokenIdDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getNFTByTokenId" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tokenId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "BigInt" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "nfts" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tokenId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "contractAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                { kind: "Field", name: { kind: "Name", value: "creator" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "owner" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "address" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nfts" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "purchases" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "spent" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "earned" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenURI" } },
+                { kind: "Field", name: { kind: "Name", value: "rarity" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "orders" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "bids" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "orderBy" },
+                      value: { kind: "EnumValue", value: "createdAt" },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bidder" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "seller" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockchainId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "activeOrder" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "marketplaceAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "nftAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transactionHash" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "owner" } },
+                      { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                      { kind: "Field", name: { kind: "Name", value: "price" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "status" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "blockNumber" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "expiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+                { kind: "Field", name: { kind: "Name", value: "soldAt" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transferredAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "character" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "characterAccount" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "contractAddress" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "level" } },
+                      { kind: "Field", name: { kind: "Name", value: "exp" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "item" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attributes" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "treasure" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "sales" } },
+                { kind: "Field", name: { kind: "Name", value: "volume" } },
+                { kind: "Field", name: { kind: "Name", value: "searchOwner" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderStatus" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderPrice" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderExpiresAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchOrderCreatedAt" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsCharacter" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAccount" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterLevel" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterExp" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchCharacterAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                    ],
+                  },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsTreasure" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchIsItem" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "searchItemAttribute" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "attribute" },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "value" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isIncrease" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "isPercentage" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetNftByTokenIdQuery,
+  GetNftByTokenIdQueryVariables
+>;
+export const GetAllOrdersDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getAllOrders" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Order_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "orders" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "marketplaceAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transactionHash" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "owner" } },
+                { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetAllOrdersQuery, GetAllOrdersQueryVariables>;
+export const GetOrdersByStatusDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getOrdersByStatus" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Order_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "status" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "OrderStatus" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "orders" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "status" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "status" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "marketplaceAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transactionHash" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "owner" } },
+                { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetOrdersByStatusQuery,
+  GetOrdersByStatusQueryVariables
+>;
+export const GetOrdersByTokenIdDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getOrdersByTokenId" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Order_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tokenId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "BigInt" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "orders" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "nft_" },
+                      value: {
+                        kind: "ObjectValue",
+                        fields: [
+                          {
+                            kind: "ObjectField",
+                            name: { kind: "Name", value: "tokenId" },
+                            value: {
+                              kind: "Variable",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "marketplaceAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transactionHash" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "owner" } },
+                { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetOrdersByTokenIdQuery,
+  GetOrdersByTokenIdQueryVariables
+>;
+export const GetOrdersByTokenIdAndStatusDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "getOrdersByTokenIdAndStatus" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Order_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "tokenId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "BigInt" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "status" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "OrderStatus" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "orders" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "where" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "tokenId" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                    },
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "status" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "status" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "marketplaceAddress" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "category" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "nftAddress" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "amount" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "transactionHash" },
+                },
+                { kind: "Field", name: { kind: "Name", value: "owner" } },
+                { kind: "Field", name: { kind: "Name", value: "buyer" } },
+                { kind: "Field", name: { kind: "Name", value: "price" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "blockNumber" } },
+                { kind: "Field", name: { kind: "Name", value: "expiresAt" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetOrdersByTokenIdAndStatusQuery,
+  GetOrdersByTokenIdAndStatusQueryVariables
 >;
 export const GetSalesDocument = {
   kind: "Document",
@@ -11478,4 +21915,695 @@ export const GetSalesByTokenIdDocument = {
 } as unknown as DocumentNode<
   GetSalesByTokenIdQuery,
   GetSalesByTokenIdQueryVariables
+>;
+export const GetAllTreasuresDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "GetAllTreasures" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "first" },
+          },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "skip" } },
+          type: { kind: "NamedType", name: { kind: "Name", value: "Int" } },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderBy" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "Treasure_orderBy" },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "orderDirection" },
+          },
+          type: {
+            kind: "NamedType",
+            name: { kind: "Name", value: "OrderDirection" },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "treasures" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "first" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "skip" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "skip" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderBy" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderBy" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "orderDirection" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "orderDirection" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenId" } },
+                { kind: "Field", name: { kind: "Name", value: "tokenURI" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "nft" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenId" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "contractAddress" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "category" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "creator" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "owner" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "address" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nfts" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "sales" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "purchases" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "spent" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "earned" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "amount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tokenURI" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rarity" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "orders" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "bids" },
+                        arguments: [
+                          {
+                            kind: "Argument",
+                            name: { kind: "Name", value: "orderBy" },
+                            value: { kind: "EnumValue", value: "createdAt" },
+                          },
+                        ],
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "bidder" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "seller" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockchainId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "activeOrder" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "marketplaceAddress",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "category" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "nftAddress" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "amount" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "transactionHash" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "buyer" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "price" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "status" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "blockNumber" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "expiresAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "createdAt" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "updatedAt" },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "name" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "createdAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "updatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "soldAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "transferredAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "character" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "characterAccount" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "contractAddress",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "level" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "exp" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "item" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attributes" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "attribute" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "value" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "isIncrease" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: {
+                                      kind: "Name",
+                                      value: "isPercentage",
+                                    },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "treasure" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenId" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "tokenURI" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "name" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "owner" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "id" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "address" },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      { kind: "Field", name: { kind: "Name", value: "sales" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "volume" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOwner" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderStatus" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderPrice" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderExpiresAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchOrderCreatedAt" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsCharacter" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterAccount" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterLevel" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchCharacterExp" },
+                      },
+                      {
+                        kind: "Field",
+                        name: {
+                          kind: "Name",
+                          value: "searchCharacterAttribute",
+                        },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsTreasure" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchIsItem" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "searchItemAttribute" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "attribute" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "value" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isIncrease" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "isPercentage" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+                { kind: "Field", name: { kind: "Name", value: "name" } },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "owner" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "address" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetAllTreasuresQuery,
+  GetAllTreasuresQueryVariables
 >;

@@ -17,7 +17,7 @@ export default async function CharacterMarketplacePage() {
     async queryFn() {
       return await querySubgraphs({
         client,
-        query: GET_ALL_CHARACTERS({})
+        query: GET_ALL_CHARACTERS
       })
     },
   })

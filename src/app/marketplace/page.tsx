@@ -11,24 +11,24 @@ import { querySubgraphs } from '@/services/graphql/subgraphs'
 import { GET_ALL_NFTS } from '@/queries/nft'
 
 export default async function MarketplacePage() {
-  const queryClient = new QueryClient()
+  // const queryClient = new QueryClient()
 
-  await queryClient.prefetchQuery({
-    queryKey: ['overview'],
-    async queryFn() {
-      return await querySubgraphs({
-        client,
-        query: GET_ALL_NFTS({
-          first: 100,
-          skip: 0
-        })
-      })
-    },
-  });
+  // await queryClient.prefetchQuery({
+  //   queryKey: ['overview'],
+  //   async queryFn() {
+  //     return await querySubgraphs({
+  //       client,
+  //       query: GET_ALL_NFTS({
+  //         first: 100,
+  //         skip: 0
+  //       })
+  //     })
+  //   },
+  // });
 
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <OverviewTab changeTabLoading={false} />
-    </HydrationBoundary>
+    // <HydrationBoundary state={dehydrate(queryClient)}>
+    <OverviewTab changeTabLoading={false} />
+    // </HydrationBoundary>
   )
 }

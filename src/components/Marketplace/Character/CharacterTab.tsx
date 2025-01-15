@@ -34,7 +34,7 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
     async queryFn() {
       return await querySubgraphs({
         client,
-        query: GET_ALL_CHARACTERS({})
+        query: GET_ALL_CHARACTERS
       });
     }
   });
