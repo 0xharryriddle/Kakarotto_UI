@@ -26,7 +26,7 @@ interface GraphQLDataProps {
   items: Item[];
 }
 
-export default function DetailedDashboard({ contractAddress, tokenId }: DetailedDashboardProps) {
+export default async function DetailedDashboard({ contractAddress, tokenId }: DetailedDashboardProps) {
   const { chainId } = useAccount();
   const category = contractAddress === getKakarottoCharacterAddress(chainId ? chainId : 11155111) ? Enums.Categories.Character : contractAddress === getKakarottoItemAddress(chainId ? chainId : 11155111) ? Enums.Categories.Item : null;
 
@@ -63,12 +63,7 @@ export default function DetailedDashboard({ contractAddress, tokenId }: Detailed
           : category == Enums.Categories.Item
             ? itemData
             : undefined}
-      imageURL={
-        accessToPinataImage(category == Enums.Categories.Character
-          ? characterData?.metadata.image
-          : category == Enums.Categories.Item
-            ? itemData?.metadata.image
-            : "")}
+      imageURL={""}
       category={category}
       sales={saleData}
     />

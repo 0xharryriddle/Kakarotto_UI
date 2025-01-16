@@ -61,20 +61,11 @@ import { useRouter } from 'next/navigation';
 import * as Enums from "@/utils/type.util";
 import { Nft } from '@/generated/graphql';
 import { UNKNOWN_RARITY } from '@/utils/constant.util';
+import fetchMetadata from '@/services/actions/fetchMetadata';
 
 interface MyNFTsCardProps {
     className?: string;
     data: Nft;
-    // image: string;
-    // name: string;
-    // tokenId: string;
-    // rarity: string;
-    // attributes?: any[];
-    // account: string;
-    // creator: string;
-    // className?: string;
-    // contractAddress: string;
-    // category: string;
 }
 
 const formSchema = z.object({
@@ -86,8 +77,7 @@ const formSchema = z.object({
     rarity: z.nativeEnum(Enums.Rarities),
 })
 
-export default function MyNFTsCard(
-    // { image, name, tokenId, rarity, attributes, className, account, creator, category, contractAddress }: MyNFTsCardProps
+export default async function MyNFTsCard(
     {
         data,
         className,
@@ -142,12 +132,15 @@ export default function MyNFTsCard(
                                     <Image src={"/item_frame.png"} alt="Item frame" className='rounded-md w-full h-full absolute' width={500} height={500} loading="lazy" />
                                     {/* // TODO: Implement the image */}
                                     <Image
-                                        src={data.tokenURI ?
-                                            accessToPinataImage(
-                                                data.tokenURI,
-                                                data.searchIsTreasure,
-                                                data.tokenId
-                                            ) : '/secret_treasure.gif'}
+                                        src={accessToPinataImage(
+                                            {
+                                                pinataURL: (await fetchMetadata({
+                                                    tokenURI: data.tokenURI!,
+                                                    isTreasure: data.searchIsTreasure,
+                                                    tokenId: data.tokenId
+                                                })).image
+                                            }
+                                        )}
                                         alt="carousel image"
                                         width={500}
                                         height={500}

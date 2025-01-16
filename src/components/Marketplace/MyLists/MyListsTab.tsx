@@ -50,7 +50,17 @@ export default function MyListsTab({ loading }: MyListsTabProps) {
             <div className="grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 w-full h-full">
                 {
                     Array.from({ length: 13 }).map((_, index) => {
-                        return <CarouselCard key={index} image="/carrot.jpg" name="Carrot Warrior" category={Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200' />
+                        return <CarouselCard
+                            key={index}
+                            image="/carrot.jpg"
+                            name="Carrot Warrior"
+                            category="item"
+                            description="Carrot is very kind"
+                            price={1.90}
+                            rarity="diamond"
+                            type=""
+                            className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'
+                        />
                     })
                 }
             </div>
