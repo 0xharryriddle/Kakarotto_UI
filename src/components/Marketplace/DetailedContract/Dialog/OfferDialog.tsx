@@ -336,7 +336,6 @@ export default function OfferDialog({
                     </div>
                     <div className="flex flex-col items-center gap-2">
                         <Image
-                            // src={accessToPinataImage(image)} 
                             src={'/secret_treasure.gif'}
                             width={150}
                             height={150}

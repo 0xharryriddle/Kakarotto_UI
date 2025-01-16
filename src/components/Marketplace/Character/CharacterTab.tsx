@@ -23,6 +23,7 @@ interface GraphQLDataProps {
 export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
   const { chainId } = useAccount();
 
+  // Query all characters
   const {
     data: queryData,
     isLoading: queryIsLoading,
@@ -59,7 +60,7 @@ export default function CharacterTab({ changeTabLoading }: CharacterTabProps) {
               : []
           }
           queryIsLoading={queryIsLoading}
-          category={Categories.Character}
+          category={"character"}
           contractAddress={
             getKakarottoCharacterAddress(chainId)
               ? getKakarottoCharacterAddress(chainId)
