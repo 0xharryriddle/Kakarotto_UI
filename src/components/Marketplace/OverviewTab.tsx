@@ -23,24 +23,88 @@ import { querySubgraphs } from '@/services/graphql/subgraphs';
 import { useQuery } from '@tanstack/react-query';
 import { env } from "@/env/server";
 import { GET_ALL_NFTS } from '@/queries/nft';
+import { Nft } from '@/generated/graphql';
+import { GET_COUNT } from '@/queries/count';
+import { accessToPinataImage } from '@/utils/image.util';
+import fetchMetadata from '@/services/actions/fetchMetadata';
 
 interface OverviewTabProps {
     changeTabLoading: boolean;
 }
 
+interface GraphQLDataProps {
+    nfts: Nft[],
+}
+
 export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
+
+    // Query the trending NFTs
     const {
-        data: queryData,
-        isLoading: queryIsLoading,
-        status: queryStatus,
-        error: queryError,
-        isFetched: queryIsFetched
+        data: trendingNFTsData,
+        isLoading: trendingNFTsIsLoading,
+        status: trendingNFTsStatus,
+        error: trendingNFTsError,
+        isFetched: trendingNFTsIsFetched
     } = useQuery({
-        queryKey: ['overview'],
+        queryKey: ['trendingNFTs'],
         async queryFn() {
             return await querySubgraphs({
                 client,
-                query: GET_ALL_NFTS
+                query: GET_ALL_NFTS,
+                variables: { first: 10, skip: 0, orderBy: 'volume', orderDirection: 'desc' },
+            });
+        },
+    });
+
+    // Query the newest NFTs
+    const {
+        data: newestNFTsData,
+        isLoading: newestNFTsIsLoading,
+        status: newestNFTsStatus,
+        error: newestNFTsError,
+        isFetched: newestNFTsIsFetched
+    } = useQuery({
+        queryKey: ['newestNFTs'],
+        async queryFn() {
+            return await querySubgraphs({
+                client,
+                query: GET_ALL_NFTS,
+                variables: { first: 10, skip: 0, orderBy: 'createdAt', orderDirection: 'desc' },
+            });
+        },
+    });
+
+    // Query the latest listings
+    const {
+        data: latestListingsData,
+        isLoading: latestListingsIsLoading,
+        status: latestListingsStatus,
+        error: latestListingsError,
+        isFetched: latestListingsIsFetched
+    } = useQuery({
+        queryKey: ['latestListings'],
+        async queryFn() {
+            return await querySubgraphs({
+                client,
+                query: GET_ALL_NFTS,
+                variables: { first: 10, skip: 0, orderBy: 'activeOrder__createdAt', orderDirection: 'desc' },
+            });
+        },
+    });
+
+    // Query the count of sales and volumes
+    const {
+        data: countSalesAndVolumesData,
+        isLoading: countSalesAndVolumesIsLoading,
+        status: countSalesAndVolumesStatus,
+        error: countSalesAndVolumesError,
+        isFetched: countSalesAndVolumesIsFetched
+    } = useQuery({
+        queryKey: ['countSalesAndVolumes'],
+        async queryFn() {
+            return await querySubgraphs({
+                client,
+                query: GET_COUNT
             });
         },
     });
@@ -99,7 +163,7 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                 </div >
             </div >
             {/* Trending */}
-            <div className="flex flex-col justify-center gap-5 h-fit" >
+            <div className="flex flex-col justify-center gap-5 h-fit w-full" >
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-col justify-center gap-3">
                         <span className='text-primary font-bold text-2xl'>Trending</span>
@@ -110,19 +174,45 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {changeTabLoading ? <div className="flex items-center justify-center h-44">
+                {changeTabLoading ? <div className="flex items-center justify-center h-44 w-full">
                     <LoadingTemplate />
-                </div> : <>
-                    <Carousel opts={
-                        {
-                            align: 'start',
-                        }
-                    }>
-                        <CarouselContent className='py-4 w-full'>
+                </div> : <div className='w-full px-12'>
+                    <Carousel
+                        opts={
                             {
-                                Array.from({ length: 10 }).map((_, index) => {
-                                    return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
+                                align: 'start',
+                            }
+                        }
+                        className='max-w-full'
+                    >
+                        <CarouselContent className='py-4 max-w-full'>
+                            {
+                                (trendingNFTsData as GraphQLDataProps).nfts.map(async (nft, index) => {
+                                    return <CarouselItem
+                                        key={index}
+                                        className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'
+                                    >
+                                        <CarouselCard
+                                            //TODO: Fix the image
+                                            // image="/carrot.jpg"
+                                            image={
+                                                accessToPinataImage({
+                                                    pinataURL: (await fetchMetadata({
+                                                        tokenURI: nft.tokenURI!,
+                                                        isTreasure: nft.searchIsTreasure,
+                                                        tokenId: nft.tokenId
+                                                    })).image
+                                                })
+                                            }
+                                            name={nft.name || "Unknown"}
+                                            category={nft.category}
+                                            // TODO: Fix the description
+                                            description="Carrot is very kind"
+                                            price={nft.searchOrderPrice || 0}
+                                            rarity={nft.rarity!}
+                                            type={""}
+                                            className='w-full'
+                                        />
                                     </CarouselItem>
                                 })
                             }
@@ -130,8 +220,8 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                         <CarouselPrevious />
                         <CarouselNext />
                     </Carousel>
-                </>}
-            </div>
+                </div>}
+            </div >
             {/* Newest */}
             <div className="flex flex-col justify-center gap-5" >
                 <div className="flex flex-row items-center justify-between">
@@ -143,31 +233,57 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {changeTabLoading ? <div className="flex items-center justify-center h-44">
-                    <LoadingTemplate />
-                </div> : <>
-                    <Carousel opts={
-                        {
-                            align: 'start',
-                        }
-                    }>
-                        <CarouselContent className='py-4 w-full'>
-                            {
-                                Array.from({ length: 10 }).map((_, index) => {
-                                    return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
-                                    </CarouselItem>
-                                })
+                {
+                    changeTabLoading ? <div className="flex items-center justify-center h-44">
+                        <LoadingTemplate />
+                    </div> : <div className='w-full px-12'>
+                        <Carousel
+                            opts={
+                                {
+                                    align: 'start',
+                                }
                             }
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
-                </>}
+                            className='max-w-full'
+                        >
+                            <CarouselContent className='py-4 w-fit self-center'>
+                                {
+                                    (newestNFTsData as GraphQLDataProps).nfts.map(async (nft, index) => {
+                                        return <CarouselItem
+                                            key={index}
+                                            className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
+                                            <CarouselCard
+                                                //TODO: Fix the image
+                                                // image="/carrot.jpg"
+                                                image={
+                                                    accessToPinataImage({
+                                                        pinataURL: (await fetchMetadata({
+                                                            tokenURI: nft.tokenURI!,
+                                                            isTreasure: nft.searchIsTreasure,
+                                                            tokenId: nft.tokenId
+                                                        })).image
+                                                    })
+                                                }
+                                                name={nft.name || "Unknown"}
+                                                category={nft.category}
+                                                // TODO: Fix the description
+                                                description="Carrot is very kind"
+                                                price={nft.searchOrderPrice || 0}
+                                                rarity={nft.rarity!}
+                                                type={""}
+                                            />
+                                        </CarouselItem>
+                                    })
+                                }
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                    </div>
+                }
 
             </div>
             {/* Latest Listing */}
-            <div className="flex flex-col justify-center gap-5" >
+            < div className="flex flex-col justify-center gap-5" >
                 <div className="flex flex-row items-center justify-between">
                     <div className="flex flex-col justify-center gap-3">
                         <span className='text-primary font-bold text-2xl'>Latest Listings</span>
@@ -178,29 +294,54 @@ export default function OverviewTab({ changeTabLoading }: OverviewTabProps) {
                         <ArrowRightCircleIcon size={24} />
                     </Button>
                 </div>
-                {changeTabLoading ? <div className="flex items-center justify-center h-44">
-                    <LoadingTemplate />
-                </div> : <>
-                    <Carousel opts={
-                        {
-                            align: 'start',
-                        }
-                    }>
-                        <CarouselContent className='py-4 w-full'>
-                            {
-                                Array.from({ length: 10 }).map((_, index) => {
-                                    return <CarouselItem key={index} className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
-                                        <CarouselCard image="/carrot.jpg" name="Carrot Warrior" category={Enums.Categories.Item} description="Carrot is very kind" price={1.90} rarity={Enums.Rarities.Diamond} type="" />
-                                    </CarouselItem>
-                                })
+                {
+                    changeTabLoading ? <div className="flex items-center justify-center h-44">
+                        <LoadingTemplate />
+                    </div> : <div className='w-full px-12'>
+                        <Carousel
+                            opts={
+                                {
+                                    align: 'start',
+                                }
                             }
-                        </CarouselContent>
-                        <CarouselPrevious />
-                        <CarouselNext />
-                    </Carousel>
-                </>}
-
-            </div>
+                            className='max-w-full'
+                        >
+                            <CarouselContent className='py-4 w-full'>
+                                {
+                                    (latestListingsData as GraphQLDataProps).nfts.map(async (nft, index) => {
+                                        return <CarouselItem
+                                            key={index}
+                                            className='basis-1/5 hover:-translate-y-4 cursor-pointer transition duration-150 delay-200'>
+                                            <CarouselCard
+                                                //TODO: Fix the image
+                                                // image="/carrot.jpg"
+                                                image={
+                                                    accessToPinataImage({
+                                                        pinataURL: (await fetchMetadata({
+                                                            tokenURI: nft.tokenURI!,
+                                                            isTreasure: nft.searchIsTreasure,
+                                                            tokenId: nft.tokenId
+                                                        })).image
+                                                    })
+                                                }
+                                                name={nft.name || "Unknown"}
+                                                category={nft.category}
+                                                // TODO: Fix the description
+                                                description="Carrot is very kind"
+                                                price={nft.searchOrderPrice || 0}
+                                                rarity={nft.rarity!}
+                                                type={""}
+                                            />
+                                        </CarouselItem>
+                                    })
+                                }
+                            </CarouselContent>
+                            <CarouselPrevious />
+                            <CarouselNext />
+                        </Carousel>
+                    </div>
+                }
+            </div >
         </div >
     )
 }

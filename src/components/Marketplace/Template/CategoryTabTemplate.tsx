@@ -18,11 +18,13 @@ import * as Mapping from '@/utils/mapping.util';
 import CarouselCard from '@/components/Marketplace/CarouselCard';
 import LoadingTemplate from '@/components/LoadingTemplate';
 import { Button } from '@/components/ui/button';
-import { Character } from '@/generated/graphql';
+import { Category, Character, Item, Treasure } from '@/generated/graphql';
+import { accessToPinataImage } from '@/utils/image.util';
+import fetchMetadata from '@/services/actions/fetchMetadata';
 
 interface CategoryTabTemplateProps {
     contractAddress: `0x${string}`;
-    category: Categories;
+    category: Category;
     queryIsLoading: boolean;
     queryData: any[],
 }
@@ -132,28 +134,38 @@ export default function CategoryTabTemplate({
                             ?
                             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 w-4/5 h-full">
                                 {
-                                    queryData.map(
-                                        (element, index) => {
+                                    (category == "character" ?
+                                        queryData as Character[]
+                                        : category == "item" ?
+                                            queryData as Item[]
+                                            : queryData as Treasure[]
+                                    ).map(
+                                        async (element, index) => {
                                             return <CarouselCard
                                                 key={index}
                                                 image={
-                                                    // element.metadata?.image
-                                                    //     ? accessToPinataImage(castingElement.metadata?.image) : "/secret_treasure.gif"
-                                                    "/secret_treasure.gif"
+                                                    accessToPinataImage({
+                                                        pinataURL: (await fetchMetadata({
+                                                            tokenURI: element.nft.tokenURI!,
+                                                            isTreasure: category == "treasure",
+                                                            tokenId: element.nft.tokenId
+                                                        })).image
+                                                    })
                                                 }
                                                 name={
                                                     element.nft.name || "Unknown"
                                                 }
                                                 category={category}
                                                 description={
-                                                    // TODO: Need to fetch the description from the metadata
-                                                    "This is a description"
+                                                    (await fetchMetadata({
+                                                        tokenURI: element.nft.tokenURI!,
+                                                        isTreasure: category == "treasure",
+                                                        tokenId: element.nft.tokenId
+                                                    })).description || "Unknown"
                                                 }
                                                 price={element.nft.searchOrderPrice}
                                                 rarity={
-                                                    Mapping.rarities.findIndex(
-                                                        (item) => item == element.nft.rarity
-                                                    ) as Enums.Rarities
+                                                    element.nft.rarity || "bronze"
                                                 }
                                                 // TODO: Need to implement `type`
                                                 type=""
@@ -167,7 +179,9 @@ export default function CategoryTabTemplate({
                             :
                             <div className="w-4/5 h-full flex flex-col items-center justify-center gap-5">
                                 <p className="text-2xl font-bold text-primary/75">
-                                    {`No any ${Mapping.categories[category]}...`}
+                                    {/* {`No any ${Mapping.categories[category]}...`} */}
+
+                                    Category
                                 </p>
                             </div>
                 }
